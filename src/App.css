@@ -1,0 +1,16 @@
+mark {
+  background-color: rgba(255, 255, 0, 0.5);
+}
+
+.card-header, .card-body {
+  padding: .75rem;
+}
+
+.prompt {
+  padding-right: 0px !important;
+}
+
+.faIconVerticalAlign {
+  vertical-align: baseline;
+  margin-bottom: -2px;
+}
