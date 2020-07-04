@@ -7,7 +7,6 @@ on:
 
 env:
   OUTPUT_PATH: ${{ github.workspace }}/build
-  REACT_APP_AZURESEARCH_KEY: ${{ secrets.REACT_APP_AZURESEARCH_KEY }}
   NODE_VERSION: '12'
 
 jobs:
@@ -28,6 +27,8 @@ jobs:
       run: npm ci
 
     - name: Build app
+      env:
+        REACT_APP_AZURESEARCH_KEY: ${{ secrets.REACT_APP_AZURESEARCH_KEY }}
       run: npm run build
 
     - name: Upload artifact
@@ -35,3 +36,11 @@ jobs:
       with:
         name: scoopsearch
         path: ${{ env.OUTPUT_PATH }}
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.GHPAGES_DEPLOY_KEY }}
+        external_repository: ScoopSearch/scoopsearch.github.io
+        publish_branch: master
+        publish_dir: ./build
