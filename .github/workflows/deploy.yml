@@ -7,7 +7,7 @@ on:
 
 env:
   OUTPUT_PATH: ${{ github.workspace }}/build
-  # REACT_APP_AZURESEARCH_KEY: '' # Secret in the repository settings
+  REACT_APP_AZURESEARCH_KEY: ${{ secrets.REACT_APP_AZURESEARCH_KEY }}
   NODE_VERSION: '12'
 
 jobs:
