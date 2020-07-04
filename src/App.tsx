@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactGA from 'react-ga';
 import { IAppState } from './interfaces/IApp.interfaces';
 import './App.css';
 
@@ -13,13 +12,10 @@ import { SearchResultsJson } from './serialization/SearchResultsJson';
 import { ManifestJson } from './serialization/ManifestJson';
 
 const RESULTS_PER_PAGE: number = 20;
-const GA_ID: string = 'UA-171643529-1';
 
 class App extends Component<{}, IAppState> {
   constructor(props: {}) {
     super(props);
-
-    ReactGA.initialize(GA_ID);
 
     const query = sessionStorage.getItem('query') || '';
     const currentPage = parseInt(sessionStorage.getItem('currentPage') || '1');
