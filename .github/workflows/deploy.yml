@@ -1,0 +1,37 @@
+name: Deploy app workflow
+on:
+  push:
+    branches:
+      - main
+
+
+env:
+  OUTPUT_PATH: ${{ github.workspace }}/build
+  # REACT_APP_AZURESEARCH_KEY: '' # Secret in the repository settings
+  NODE_VERSION: '12'
+
+jobs:
+  deploy:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build app
+      run: npm run build
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: scoopsearch
+        path: ${{ env.OUTPUT_PATH }}
