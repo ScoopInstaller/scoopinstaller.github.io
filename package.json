@@ -11,8 +11,8 @@
     "@types/react": "^16.9.37",
     "@types/react-dom": "^16.9.8",
     "bootstrap": "^4.5.0",
+    "dayjs": "^1.8.29",
     "json2typescript": "^1.4.1",
-    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
@@ -25,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,6 +44,7 @@
     ]
   },
   "devDependencies": {
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "source-map-explorer": "^2.4.2"
   }
 }

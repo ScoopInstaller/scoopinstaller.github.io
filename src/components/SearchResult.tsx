@@ -8,7 +8,9 @@ import {
   InputGroup,
   Button,
 } from 'react-bootstrap';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+
 import { Img } from 'react-image';
 import { FaExternalLinkAlt, FaClipboard, FaCheck } from 'react-icons/fa';
 import { GoVerified } from 'react-icons/go';
@@ -17,6 +19,7 @@ import {
   ISearchResultState,
 } from '../interfaces/ISearchResult.interfaces';
 
+dayjs.extend(localizedFormat);
 const CLIPBOARD_COPY_NOTIFICATION: number = 500;
 
 class SearchResult extends Component<ISearchResultProps, ISearchResultState> {
@@ -103,7 +106,7 @@ class SearchResult extends Component<ISearchResultProps, ISearchResultState> {
             <small>
               <Row>
                 <Col lg={6}>
-                  Updated: {moment(metadata.committed).calendar()}
+                  Updated: {dayjs(metadata.committed).format('LLL')}
                 </Col>
                 <Col lg={6}>
                   License: {this.displayHighlight(highlightedLicense)}
