@@ -14,3 +14,10 @@ mark {
   vertical-align: baseline;
   margin-bottom: -2px;
 }
+
+.copyToClipbardMiniButton {
+  padding: 0px 2px 2px 2px;
+  font-size: 11px;
+  line-height: 12px;
+  vertical-align: text-bottom;
+}

@@ -5,4 +5,5 @@ export interface IAppState {
   currentPage: number;
   sortIndex: number;
   searchResults?: SearchResultsJson;
+  contentToCopy?: string;
 }

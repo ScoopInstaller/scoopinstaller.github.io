@@ -1,57 +1,19 @@
-import React, { Component } from 'react';
-import {
-  Card,
-  Container,
-  Row,
-  Col,
-  Form,
-  InputGroup,
-  Button,
-} from 'react-bootstrap';
+import React, { PureComponent } from 'react';
+import { Card, Container, Row, Col, Form, InputGroup } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 import { Img } from 'react-image';
-import { FaExternalLinkAlt, FaClipboard, FaCheck } from 'react-icons/fa';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { GoVerified } from 'react-icons/go';
-import {
-  ISearchResultProps,
-  ISearchResultState,
-} from '../interfaces/ISearchResult.interfaces';
+import { ISearchResultProps } from '../interfaces/ISearchResult.interfaces';
+import CopyToClipboardButton from './CopyToClipboardButton';
 
 dayjs.extend(localizedFormat);
-const CLIPBOARD_COPY_NOTIFICATION: number = 500;
 
-class SearchResult extends Component<ISearchResultProps, ISearchResultState> {
-  commandInput: React.RefObject<HTMLInputElement>;
-
-  constructor(props: ISearchResultProps) {
-    super(props);
-
-    this.state = { copied: false };
-
-    this.commandInput = React.createRef<HTMLInputElement>();
-  }
-
-  componentDidUpdate(
-    prevProps: ISearchResultProps,
-    prevState: ISearchResultState
-  ) {
-    if (this.state.copied && this.state.copied !== prevState.copied) {
-      setTimeout(() => {
-        this.setState({ copied: false });
-      }, CLIPBOARD_COPY_NOTIFICATION);
-    }
-  }
-
-  handleCopyClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const input = this.commandInput.current!;
-    input.select();
-    document.execCommand('copy');
-    input.selectionEnd = input.selectionStart;
-    input.blur();
-
-    this.setState({ copied: true });
+class SearchResult extends PureComponent<ISearchResultProps> {
+  handleCopyToClipboard = (content: string) => {
+    this.props.onCopyToClipbard(content);
   };
 
   private displayHighlight = (content?: string) => {
@@ -122,6 +84,19 @@ class SearchResult extends Component<ISearchResultProps, ISearchResultState> {
                   {metadata.repositoryOfficial && (
                     <GoVerified className="ml-1" color="#2E86C1" />
                   )}
+                  {!metadata.repositoryOfficial && (
+                    <CopyToClipboardButton
+                      className="ml-1 ms copyToClipbardMiniButton"
+                      tooltipPlacement="right"
+                      onClick={() =>
+                        this.handleCopyToClipboard(
+                          `scoop bucket add ${metadata.repository
+                            .split('/')
+                            .pop()} ${metadata.repository}`
+                        )
+                      }
+                    />
+                  )}
                 </Col>
                 <Col lg={6}>
                   Commiter: {this.displayHighlight(highlightedAuthorName)}
@@ -153,27 +128,20 @@ class SearchResult extends Component<ISearchResultProps, ISearchResultState> {
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
-                      ref={this.commandInput}
                       className="border-left-0"
                       readOnly
                       type="text"
                       value={`scoop install ${name}`}
                     />
-                    {document.queryCommandSupported('copy') && (
-                      <InputGroup.Append>
-                        <Button
-                          variant="secondary"
-                          onClick={this.handleCopyClick}
-                          disabled={this.state.copied}
-                        >
-                          {this.state.copied ? (
-                            <FaCheck className="faIconVerticalAlign" />
-                          ) : (
-                            <FaClipboard className="faIconVerticalAlign" />
-                          )}
-                        </Button>
-                      </InputGroup.Append>
-                    )}
+
+                    <InputGroup.Append>
+                      <CopyToClipboardButton
+                        tooltipPlacement="left"
+                        onClick={() =>
+                          this.handleCopyToClipboard(`scoop install ${name}`)
+                        }
+                      />
+                    </InputGroup.Append>
                   </InputGroup>
                 </Col>
               </Row>

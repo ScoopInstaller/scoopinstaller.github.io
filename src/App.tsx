@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { IAppState } from './interfaces/IApp.interfaces';
 import './App.css';
 
+import { Container, Row, Col } from 'react-bootstrap';
 import NavBar from './components/NavBar';
 import SearchBar from './components/SearchBar';
-import { Container, Row, Col } from 'react-bootstrap';
 import SearchProcessor from './components/SearchProcessor';
 import SearchPagination from './components/SearchPagination';
 import SearchResult from './components/SearchResult';
 import { SearchResultsJson } from './serialization/SearchResultsJson';
 import { ManifestJson } from './serialization/ManifestJson';
+import CopyToClipboardHandler from './components/CopyToClipboardHandler';
 
 const RESULTS_PER_PAGE: number = 20;
 
-class App extends Component<{}, IAppState> {
+class App extends PureComponent<{}, IAppState> {
   constructor(props: {}) {
     super(props);
 
@@ -46,10 +47,23 @@ class App extends Component<{}, IAppState> {
     this.setState({ sortIndex: sortIndex });
   };
 
+  handleCopyToClipboard = (content: string) => {
+    this.setState({ contentToCopy: content });
+  };
+
+  handleContentCopied = () => {
+    this.setState({ contentToCopy: undefined });
+  };
+
   render() {
     return (
       <div className="App">
         <NavBar />
+
+        <CopyToClipboardHandler
+          content={this.state.contentToCopy}
+          onContentCopied={this.handleContentCopied}
+        />
 
         <Container className="mt-5 mb-5">
           <Row className="justify-content-center">
@@ -88,7 +102,11 @@ class App extends Component<{}, IAppState> {
             <Col>
               {this.state.searchResults?.results.map(
                 (searchResult: ManifestJson) => (
-                  <SearchResult key={searchResult.id} result={searchResult} />
+                  <SearchResult
+                    key={searchResult.id}
+                    result={searchResult}
+                    onCopyToClipbard={this.handleCopyToClipboard}
+                  />
                 )
               )}
             </Col>
