@@ -87,7 +87,6 @@ class SearchResult extends PureComponent<ISearchResultProps> {
                   {!metadata.repositoryOfficial && (
                     <CopyToClipboardButton
                       className="ml-1 ms copyToClipbardMiniButton"
-                      tooltipPlacement="right"
                       onClick={() =>
                         this.handleCopyToClipboard(
                           `scoop bucket add ${metadata.repository
@@ -136,7 +135,6 @@ class SearchResult extends PureComponent<ISearchResultProps> {
 
                     <InputGroup.Append>
                       <CopyToClipboardButton
-                        tooltipPlacement="left"
                         onClick={() =>
                           this.handleCopyToClipboard(`scoop install ${name}`)
                         }

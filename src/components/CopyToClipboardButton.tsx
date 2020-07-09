@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { FaClipboard, FaCheck } from 'react-icons/fa';
 import {
   ICopyToClipboardButtonProps,
@@ -30,23 +30,18 @@ class CopyToClipboardButton extends PureComponent<
 
   render() {
     return (
-      <OverlayTrigger
-        placement={this.props.tooltipPlacement}
-        overlay={<Tooltip id="tooltip">Copy to clipboard</Tooltip>}
+      <Button
+        className={this.props.className}
+        variant="secondary"
+        onClick={this.handleClick}
+        disabled={this.state.copied}
       >
-        <Button
-          className={this.props.className}
-          variant="secondary"
-          onClick={this.handleClick}
-          disabled={this.state.copied}
-        >
-          {this.state.copied ? (
-            <FaCheck className="faIconVerticalAlign" />
-          ) : (
-            <FaClipboard className="faIconVerticalAlign" />
-          )}
-        </Button>
-      </OverlayTrigger>
+        {this.state.copied ? (
+          <FaCheck className="faIconVerticalAlign" />
+        ) : (
+          <FaClipboard className="faIconVerticalAlign" />
+        )}
+      </Button>
     );
   }
 }
