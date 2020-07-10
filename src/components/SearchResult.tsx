@@ -91,7 +91,8 @@ class SearchResult extends PureComponent<ISearchResultProps> {
                         this.handleCopyToClipboard(
                           `scoop bucket add ${metadata.repository
                             .split('/')
-                            .pop()} ${metadata.repository}`
+                            .slice(-2)
+                            .join('-')} ${metadata.repository}`
                         )
                       }
                     />
