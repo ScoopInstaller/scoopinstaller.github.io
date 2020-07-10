@@ -9,8 +9,14 @@ export class ManifestJson {
   @JsonProperty('@search.score', Number)
   score: number = 0;
 
-  @JsonProperty('Name', String)
+  @JsonProperty('NameStandard', String)
   name: string = '';
+
+  @JsonProperty('NamePartial', String)
+  namePartial: string = '';
+
+  @JsonProperty('NameSuffix', String)
+  nameSuffix: string = '';
 
   @JsonProperty('Description', String, true)
   description?: string = undefined;
@@ -31,7 +37,10 @@ export class ManifestJson {
   private _highlights: any = undefined;
 
   get highlightedName() {
-    return this.tryGetHighlight('Name', this.name);
+    return this.tryGetHighlights(
+      ['NameStandard', 'NamePartial', 'NameSuffix'],
+      this.name
+    );
   }
 
   get highlightedLicense() {
@@ -61,9 +70,17 @@ export class ManifestJson {
   }
 
   tryGetHighlight(propertyName: string, fallback?: string) {
-    return this._highlights && this._highlights[propertyName]
-      ? this._highlights[propertyName][0]
-      : fallback;
+    return this.tryGetHighlights([propertyName], fallback);
+  }
+
+  tryGetHighlights(propertyNames: string[], fallback?: string) {
+    for (const propertyName of propertyNames) {
+      if (this._highlights && this._highlights[propertyName]) {
+        return this._highlights[propertyName][0];
+      }
+    }
+
+    return fallback;
   }
 
   get favicon() {

@@ -84,23 +84,20 @@ class SearchProcessor extends PureComponent<
     });
 
     const url = `${process.env.REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
-    const search = query
-      .trim()
-      .split(' ')
-      .map((word) => `${word}*`)
-      .join(' ');
 
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
         count: true,
-        search: search,
+        search: query.trim(),
         orderby: this.sortModes[this.props.sortIndex].OrderBy.join(', '),
         skip: (this.props.page - 1) * this.props.resultsPerPage,
         top: this.props.resultsPerPage,
         select: [
           'Id',
-          'Name',
+          'NameStandard',
+          'NamePartial',
+          'NameSuffix',
           'Description',
           'Homepage',
           'License',
@@ -113,7 +110,9 @@ class SearchProcessor extends PureComponent<
           'Metadata/Sha',
         ].join(','),
         highlight: [
-          'Name',
+          'NameStandard',
+          'NamePartial',
+          'NameSuffix',
           'Description',
           'Version',
           'License',
