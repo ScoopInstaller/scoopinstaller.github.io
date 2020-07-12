@@ -90,6 +90,7 @@ class SearchProcessor extends PureComponent<
       body: JSON.stringify({
         count: true,
         search: query.trim(),
+        searchMode: 'all',
         orderby: this.sortModes[this.props.sortIndex].OrderBy.join(', '),
         skip: (this.props.page - 1) * this.props.resultsPerPage,
         top: this.props.resultsPerPage,
