@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Spinner } from 'react-bootstrap';
-import { ISearchStatusProps } from '../interfaces/ISearchStatus.interfaces';
 
 class SearchStatus extends PureComponent<ISearchStatusProps> {
   render() {
@@ -32,6 +31,13 @@ class SearchStatus extends PureComponent<ISearchStatusProps> {
       );
     }
   }
+}
+
+interface ISearchStatusProps {
+  query?: string;
+  resultsCount: number;
+  searching: boolean;
+  type: string;
 }
 
 export default SearchStatus;

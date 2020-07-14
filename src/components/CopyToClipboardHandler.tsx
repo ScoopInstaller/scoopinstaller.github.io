@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { ICopyToClipboardHandlerProps } from '../interfaces/ICopyToClipboardHandler.interfaces';
 
 class CopyToClipboardHandler extends PureComponent<
   ICopyToClipboardHandlerProps
@@ -28,6 +27,11 @@ class CopyToClipboardHandler extends PureComponent<
       />
     );
   }
+}
+
+interface ICopyToClipboardHandlerProps {
+  content?: string;
+  onContentCopied: () => void;
 }
 
 export default CopyToClipboardHandler;

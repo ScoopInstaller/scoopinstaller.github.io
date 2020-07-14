@@ -1,8 +1,4 @@
 import React, { PureComponent } from 'react';
-import {
-  ISearchProcessorProps,
-  ISearchProcessorState,
-} from '../interfaces/ISearchProcessor.interfaces';
 
 import { Col, Row, Form, InputGroup } from 'react-bootstrap';
 import SearchStatus from './SearchStatus';
@@ -197,6 +193,20 @@ class SearchProcessor extends PureComponent<
 interface ISortMode {
   DisplayName: string;
   OrderBy: string[];
+}
+
+interface ISearchProcessorProps {
+  page: number;
+  query: string;
+  sortIndex: number;
+  resultsPerPage: number;
+  onResultsChange: (value?: SearchResultsJson) => void;
+  onSortIndexChange: (sortIndex: number) => void;
+}
+
+interface ISearchProcessorState {
+  resultsCount?: number;
+  searching: boolean;
 }
 
 export default SearchProcessor;

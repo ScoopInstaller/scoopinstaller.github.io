@@ -1,10 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Button } from 'react-bootstrap';
 import { FaClipboard, FaCheck } from 'react-icons/fa';
-import {
-  ICopyToClipboardButtonProps,
-  ICopyToClipboardButtonState,
-} from '../interfaces/ICopyToClipboardButton.interfaces';
 
 const CLIPBOARD_COPY_NOTIFICATION: number = 1500;
 
@@ -12,6 +8,11 @@ class CopyToClipboardButton extends PureComponent<
   ICopyToClipboardButtonProps,
   ICopyToClipboardButtonState
 > {
+  constructor(props: ICopyToClipboardButtonProps) {
+    super(props);
+    this.state = { copied: false };
+  }
+
   componentDidUpdate(
     prevProps: ICopyToClipboardButtonProps,
     prevState: ICopyToClipboardButtonState
@@ -44,6 +45,15 @@ class CopyToClipboardButton extends PureComponent<
       </Button>
     );
   }
+}
+
+interface ICopyToClipboardButtonState {
+  copied: boolean;
+}
+
+interface ICopyToClipboardButtonProps {
+  className?: string;
+  onClick: () => void;
 }
 
 export default CopyToClipboardButton;

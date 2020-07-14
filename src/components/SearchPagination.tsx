@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { ISearchPaginationProps } from '../interfaces/ISearchPagination.interfaces';
 
 import { Pagination } from 'react-bootstrap';
 
@@ -79,6 +78,13 @@ class SearchPagination extends PureComponent<ISearchPaginationProps> {
 
     return null;
   }
+}
+
+interface ISearchPaginationProps {
+  currentPage: number;
+  resultsCount?: number;
+  resultsPerPage: number;
+  onPageChange: (newPage: number) => void;
 }
 
 export default SearchPagination;

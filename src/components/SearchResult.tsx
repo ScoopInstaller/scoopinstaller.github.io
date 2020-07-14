@@ -6,8 +6,8 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { Img } from 'react-image';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { GoVerified } from 'react-icons/go';
-import { ISearchResultProps } from '../interfaces/ISearchResult.interfaces';
 import CopyToClipboardButton from './CopyToClipboardButton';
+import { ManifestJson } from '../serialization/ManifestJson';
 
 dayjs.extend(localizedFormat);
 
@@ -150,6 +150,11 @@ class SearchResult extends PureComponent<ISearchResultProps> {
       </Card>
     );
   }
+}
+
+interface ISearchResultProps {
+  result: ManifestJson;
+  onCopyToClipbard: (content: string) => void;
 }
 
 export default SearchResult;
