@@ -1,129 +1,30 @@
 import React, { PureComponent } from 'react';
-import { IAppState } from './interfaces/IApp.interfaces';
 import './App.css';
+import Search from './components/Search';
+import Buckets from './components/Buckets';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 
-import { Container, Row, Col } from 'react-bootstrap';
 import NavBar from './components/NavBar';
-import SearchBar from './components/SearchBar';
-import SearchProcessor from './components/SearchProcessor';
-import SearchPagination from './components/SearchPagination';
-import SearchResult from './components/SearchResult';
-import { SearchResultsJson } from './serialization/SearchResultsJson';
-import { ManifestJson } from './serialization/ManifestJson';
-import CopyToClipboardHandler from './components/CopyToClipboardHandler';
 
-const RESULTS_PER_PAGE: number = 20;
-
-class App extends PureComponent<{}, IAppState> {
-  constructor(props: {}) {
-    super(props);
-
-    const query = sessionStorage.getItem('query') || '';
-    const currentPage = parseInt(sessionStorage.getItem('currentPage') || '1');
-    const sortIndex = parseInt(sessionStorage.getItem('sortIndex') || '0');
-    this.state = {
-      query: query,
-      currentPage: currentPage,
-      sortIndex: sortIndex,
-    };
-  }
-
-  handleQueryChange = (query: string) => {
-    sessionStorage.setItem('query', query);
-    this.setState({ query, currentPage: 1 });
-  };
-
-  handleResultsChange = (e?: SearchResultsJson) => {
-    this.setState({ searchResults: e });
-  };
-
-  handlePageChange = (newPage: number) => {
-    sessionStorage.setItem('currentPage', newPage.toString());
-    this.setState({ currentPage: newPage });
-  };
-
-  handleSortChange = (sortIndex: number) => {
-    sessionStorage.setItem('sortIndex', sortIndex.toString());
-    this.setState({ sortIndex: sortIndex });
-  };
-
-  handleCopyToClipboard = (content: string) => {
-    this.setState({ contentToCopy: content });
-  };
-
-  handleContentCopied = () => {
-    this.setState({ contentToCopy: undefined });
-  };
-
+class App extends PureComponent {
   render() {
     return (
-      <div className="App">
+      <Router>
         <NavBar />
 
-        <CopyToClipboardHandler
-          content={this.state.contentToCopy}
-          onContentCopied={this.handleContentCopied}
-        />
-
-        <Container className="mt-5 mb-5">
-          <Row className="justify-content-center">
-            <Col sm={8}>
-              <SearchBar
-                query={this.state.query}
-                onQueryChange={this.handleQueryChange}
-              />
-            </Col>
-          </Row>
-
-          <Row className="mt-5 mb-1">
-            <Col>
-              <SearchProcessor
-                resultsPerPage={RESULTS_PER_PAGE}
-                page={this.state.currentPage}
-                query={this.state.query}
-                sortIndex={this.state.sortIndex}
-                onResultsChange={this.handleResultsChange}
-                onSortIndexChange={this.handleSortChange}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col className="d-flex justify-content-center">
-              <SearchPagination
-                resultsPerPage={RESULTS_PER_PAGE}
-                currentPage={this.state.currentPage}
-                resultsCount={this.state.searchResults?.count}
-                onPageChange={this.handlePageChange}
-              />
-            </Col>
-          </Row>
-
-          <Row className="mt-2">
-            <Col>
-              {this.state.searchResults?.results.map(
-                (searchResult: ManifestJson) => (
-                  <SearchResult
-                    key={searchResult.id}
-                    result={searchResult}
-                    onCopyToClipbard={this.handleCopyToClipboard}
-                  />
-                )
-              )}
-            </Col>
-          </Row>
-
-          <Row>
-            <Col className="d-flex justify-content-center">
-              <SearchPagination
-                resultsPerPage={RESULTS_PER_PAGE}
-                currentPage={this.state.currentPage}
-                resultsCount={this.state.searchResults?.count}
-                onPageChange={this.handlePageChange}
-              />
-            </Col>
-          </Row>
-        </Container>
-      </div>
+        <Switch>
+          <Route path="/apps/:page?" component={Search} />
+          <Route path="/buckets" component={Buckets} />
+          <Route path="/">
+            <Redirect to="/apps" />
+          </Route>
+        </Switch>
+      </Router>
     );
   }
 }

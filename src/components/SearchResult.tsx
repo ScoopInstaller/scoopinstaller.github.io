@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 import { Card, Container, Row, Col, Form, InputGroup } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-
 import { Img } from 'react-image';
 import { FaExternalLinkAlt } from 'react-icons/fa';
-import { GoVerified } from 'react-icons/go';
+
 import CopyToClipboardButton from './CopyToClipboardButton';
 import { ManifestJson } from '../serialization/ManifestJson';
+import { KnownBucketIcon } from './KnownBucketIcon';
 
 dayjs.extend(localizedFormat);
 
@@ -53,9 +53,7 @@ class SearchResult extends PureComponent<ISearchResultProps> {
           <strong>{this.displayHighlight(highlightedName)}</strong>
           {' - '}
           {this.displayHighlight(highlightedVersion)}
-          {metadata.repositoryOfficial && (
-            <GoVerified className="ml-2 faIconVerticalAlign" color="#2E86C1" />
-          )}
+          {metadata.repositoryOfficial && <KnownBucketIcon />}
           {process.env.NODE_ENV === 'development' && ` - @score: ${score}`}
         </Card.Header>
         <Card.Body>
@@ -81,9 +79,7 @@ class SearchResult extends PureComponent<ISearchResultProps> {
                   <a href={metadata.repository}>
                     {this.displayHighlight(highlightedRepository)}
                   </a>
-                  {metadata.repositoryOfficial && (
-                    <GoVerified className="ml-1" color="#2E86C1" />
-                  )}
+                  {metadata.repositoryOfficial && <KnownBucketIcon />}
                   {!metadata.repositoryOfficial && (
                     <CopyToClipboardButton
                       className="ml-1 ms copyToClipbardMiniButton"
@@ -92,7 +88,7 @@ class SearchResult extends PureComponent<ISearchResultProps> {
                           `scoop bucket add ${metadata.repository
                             .split('/')
                             .slice(-2)
-                            .join('-')} ${metadata.repository}`
+                            .join('_')} ${metadata.repository}`
                         )
                       }
                     />

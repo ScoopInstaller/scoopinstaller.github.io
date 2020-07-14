@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Button } from 'react-bootstrap';
+
 import { FaClipboard, FaCheck } from 'react-icons/fa';
 
 const CLIPBOARD_COPY_NOTIFICATION: number = 1500;

@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-
 import { Pagination } from 'react-bootstrap';
 
 const PAGINATION_OFFSET: number = 2;

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-
 import { Col, Row, Form, InputGroup } from 'react-bootstrap';
+
 import SearchStatus from './SearchStatus';
 import { SearchResultsJson } from '../serialization/SearchResultsJson';
 
@@ -162,6 +162,7 @@ class SearchProcessor extends PureComponent<
               query={this.props.query}
               resultsCount={this.state.resultsCount!}
               searching={this.state.searching!}
+              type="applications"
             />
           </Col>
           <Col lg={3}>

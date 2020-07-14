@@ -1,8 +1,4 @@
 import React, { PureComponent } from 'react';
-import {
-  ISearchBarProps,
-  ISearchBarState,
-} from '../interfaces/ISearchBar.interfaces';
 import { Form, InputGroup } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
 
@@ -31,6 +27,12 @@ class SearchBar extends PureComponent<ISearchBarProps, ISearchBarState> {
 
   componentWillUnmount() {
     this.clearDelayBeforeSearchTimeout();
+  }
+
+  componentDidUpdate(prevProps: ISearchBarProps) {
+    if (prevProps.query !== this.props.query) {
+      this.setState({ query: this.props.query });
+    }
   }
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,6 +80,15 @@ class SearchBar extends PureComponent<ISearchBarProps, ISearchBarState> {
       </Form>
     );
   }
+}
+
+interface ISearchBarProps {
+  query: string;
+  onQueryChange: (query: string) => void;
+}
+
+interface ISearchBarState {
+  query: string;
 }
 
 export default SearchBar;

@@ -6,14 +6,14 @@ class SearchStatus extends PureComponent<ISearchStatusProps> {
     if (this.props.searching) {
       return (
         <span>
-          <span>Searching for matching applications...</span>{' '}
+          <span>Searching for matching {this.props.type}...</span>{' '}
           <Spinner animation="border" size="sm" variant="secondary" />
         </span>
       );
     } else if (this.props.resultsCount) {
       return (
         <span>
-          Found {this.props.resultsCount} applications
+          Found {this.props.resultsCount} {this.props.type}
           {this.props.query && (
             <span>
               {' '}
@@ -26,7 +26,14 @@ class SearchStatus extends PureComponent<ISearchStatusProps> {
     } else {
       return (
         <span>
-          No result found for '<strong>{this.props.query}</strong>'
+          No result found
+          {this.props.query && (
+            <span>
+              {' '}
+              for '<strong>{this.props.query}</strong>'
+            </span>
+          )}
+          .
         </span>
       );
     }

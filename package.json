@@ -22,8 +22,8 @@
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
     "react-image": "^4.0.1",
-    "react-scripts": "3.4.1",
-    "typescript": "^3.7.5"
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -48,7 +48,9 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.1.5",
     "prettier": "2.0.5",
-    "source-map-explorer": "^2.4.2"
+    "source-map-explorer": "^2.4.2",
+    "typescript": "^3.9.6"
   }
 }

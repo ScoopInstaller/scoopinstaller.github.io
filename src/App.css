@@ -21,3 +21,8 @@ mark {
   line-height: 12px;
   vertical-align: text-bottom;
 }
+
+.pagination > li {
+  min-width: 2em;
+  text-align: center;
+}
