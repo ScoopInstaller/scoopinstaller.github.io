@@ -9,7 +9,7 @@ export class ManifestJson {
   @JsonProperty('@search.score', Number)
   score: number = 0;
 
-  @JsonProperty('NameStandard', String)
+  @JsonProperty('Name', String)
   name: string = '';
 
   @JsonProperty('NamePartial', String)
@@ -38,7 +38,7 @@ export class ManifestJson {
 
   get highlightedName() {
     return this.tryGetHighlights(
-      ['NameStandard', 'NamePartial', 'NameSuffix'],
+      ['Name', 'NamePartial', 'NameSuffix'],
       this.name
     );
   }

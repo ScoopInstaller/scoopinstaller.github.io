@@ -16,13 +16,13 @@ class SearchProcessor extends PureComponent<
       OrderBy: [
         'search.score() desc',
         'Metadata/OfficialRepositoryNumber desc',
-        'NameNormalized asc',
+        'NameSortable asc',
       ],
     },
     {
       DisplayName: 'Name',
       OrderBy: [
-        'NameNormalized asc',
+        'NameSortable asc',
         'Metadata/OfficialRepositoryNumber desc',
         'Metadata/RepositoryStars desc',
         'Metadata/Committed desc',
@@ -92,7 +92,7 @@ class SearchProcessor extends PureComponent<
         top: this.props.resultsPerPage,
         select: [
           'Id',
-          'NameStandard',
+          'Name',
           'NamePartial',
           'NameSuffix',
           'Description',
@@ -107,7 +107,7 @@ class SearchProcessor extends PureComponent<
           'Metadata/Sha',
         ].join(','),
         highlight: [
-          'NameStandard',
+          'Name',
           'NamePartial',
           'NameSuffix',
           'Description',
