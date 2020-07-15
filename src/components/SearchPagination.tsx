@@ -19,28 +19,32 @@ class SearchPagination extends PureComponent<ISearchPaginationProps> {
       if (totalPages > 1) {
         let paginationItems = [];
 
-        for (
-          let pageIdx = Math.max(2, currentPage - PAGINATION_OFFSET);
-          pageIdx <= Math.min(totalPages - 1, currentPage + PAGINATION_OFFSET);
-          pageIdx++
-        ) {
-          if (pageIdx === currentPage - PAGINATION_OFFSET) {
+        let minPage = Math.max(2, currentPage - PAGINATION_OFFSET);
+        let maxPage = Math.min(totalPages - 1, currentPage + PAGINATION_OFFSET);
+
+        // Offset minPage and maxPage to always have the same number of pagination items
+        let maxPageOffset = PAGINATION_OFFSET * 2 - (maxPage - minPage);
+        let minPageOffset = maxPage - (maxPage + maxPageOffset);
+        maxPage = Math.min(totalPages - 1, maxPage + maxPageOffset);
+        minPage = Math.max(2, minPage + minPageOffset);
+
+        for (let pageIdx = minPage; pageIdx <= maxPage; pageIdx++) {
+          if (
+            pageIdx === currentPage - PAGINATION_OFFSET + minPageOffset ||
+            pageIdx === currentPage + PAGINATION_OFFSET + maxPageOffset
+          ) {
             paginationItems.push(
-              <Pagination.Ellipsis key="ellipsis-before" disabled />
+              <Pagination.Ellipsis key={pageIdx} disabled />
             );
-          }
-          paginationItems.push(
-            <Pagination.Item
-              key={pageIdx}
-              active={pageIdx === currentPage}
-              onClick={() => this.changePage(pageIdx)}
-            >
-              {pageIdx}
-            </Pagination.Item>
-          );
-          if (pageIdx === currentPage + PAGINATION_OFFSET) {
+          } else {
             paginationItems.push(
-              <Pagination.Ellipsis key="ellipsis-after" disabled />
+              <Pagination.Item
+                key={pageIdx}
+                active={pageIdx === currentPage}
+                onClick={() => this.changePage(pageIdx)}
+              >
+                {pageIdx}
+              </Pagination.Item>
             );
           }
         }
