@@ -165,7 +165,7 @@ class Buckets extends PureComponent<{}, IBucketsState> {
                               search: encodeURIComponent(`"${item.bucket}"`),
                             }}
                           >
-                            {item.bucket}
+                            {item.bucket.split('/').slice(-2).join('/')}
                           </Link>{' '}
                           {item.official && <KnownBucketIcon />}
                         </td>
