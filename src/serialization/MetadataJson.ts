@@ -9,6 +9,9 @@ export class MetadataJson {
   @JsonProperty('OfficialRepository', Boolean)
   repositoryOfficial: boolean = false;
 
+  @JsonProperty('RepositoryStars', Number)
+  stars: number = 0;
+
   @JsonProperty('BranchName', String, true)
   branchName?: string = '';
 

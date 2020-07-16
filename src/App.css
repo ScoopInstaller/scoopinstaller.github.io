@@ -6,8 +6,8 @@ mark {
   padding: .75rem;
 }
 
-.prompt {
-  padding-right: 0px !important;
+.scoopCopyCommand {
+  padding-right: 0 !important;
 }
 
 .faIconVerticalAlign {
@@ -16,9 +16,18 @@ mark {
 }
 
 .copyToClipbardMiniButton {
-  padding: 0px 2px 2px 2px;
-  font-size: 11px;
-  line-height: 12px;
+  padding: 0 0.15rem 0.15rem 0.15rem;
+  font-size: 0.6rem;
+  line-height: 0.8rem;
+  vertical-align: text-bottom;
+}
+
+.starsBadge {
+  padding: 0.3em 0.4em;
+  vertical-align: text-bottom;
+}
+
+.starsBadge > span{
   vertical-align: text-bottom;
 }
 

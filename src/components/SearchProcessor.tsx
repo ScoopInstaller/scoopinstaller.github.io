@@ -103,6 +103,7 @@ class SearchProcessor extends PureComponent<
           'Metadata/FilePath',
           'Metadata/AuthorName',
           'Metadata/OfficialRepository',
+          'Metadata/RepositoryStars',
           'Metadata/Committed',
           'Metadata/Sha',
         ].join(','),

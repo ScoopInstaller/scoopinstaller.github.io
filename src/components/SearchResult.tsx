@@ -8,6 +8,8 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import CopyToClipboardButton from './CopyToClipboardButton';
 import { ManifestJson } from '../serialization/ManifestJson';
 import { KnownBucketIcon } from './KnownBucketIcon';
+import { StarsBadge } from './StarsBadge';
+import { Utils } from '../utils';
 
 dayjs.extend(localizedFormat);
 
@@ -79,16 +81,17 @@ class SearchResult extends PureComponent<ISearchResultProps> {
                   <a href={metadata.repository}>
                     {this.displayHighlight(highlightedRepository)}
                   </a>
+                  <StarsBadge stars={metadata.stars} />
                   {metadata.repositoryOfficial && <KnownBucketIcon />}
                   {!metadata.repositoryOfficial && (
                     <CopyToClipboardButton
                       className="ml-1 ms copyToClipbardMiniButton"
                       onClick={() =>
                         this.handleCopyToClipboard(
-                          `scoop bucket add ${metadata.repository
-                            .split('/')
-                            .slice(-2)
-                            .join('_')} ${metadata.repository}`
+                          `scoop bucket add ${Utils.extractPathFromUrl(
+                            metadata.repository,
+                            '_'
+                          )} ${metadata.repository}`
                         )
                       }
                     />
@@ -119,7 +122,7 @@ class SearchResult extends PureComponent<ISearchResultProps> {
                 <Col lg={5}>
                   <InputGroup size="sm">
                     <InputGroup.Prepend>
-                      <InputGroup.Text className="prompt border-right-0">
+                      <InputGroup.Text className="scoopCopyCommand border-right-0">
                         &gt;
                       </InputGroup.Text>
                     </InputGroup.Prepend>

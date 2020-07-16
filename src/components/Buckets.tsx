@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { BucketsResultsJson } from '../serialization/BucketsResultsJson';
 import SearchStatus from './SearchStatus';
 import { KnownBucketIcon } from './KnownBucketIcon';
+import { Utils } from '../utils';
 
 class Buckets extends PureComponent<{}, IBucketsState> {
   private abortController: AbortController = new AbortController();
@@ -165,7 +166,7 @@ class Buckets extends PureComponent<{}, IBucketsState> {
                               search: encodeURIComponent(`"${item.bucket}"`),
                             }}
                           >
-                            {item.bucket.split('/').slice(-2).join('/')}
+                            {Utils.extractPathFromUrl(item.bucket)}
                           </Link>{' '}
                           {item.official && <KnownBucketIcon />}
                         </td>

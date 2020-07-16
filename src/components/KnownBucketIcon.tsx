@@ -9,7 +9,7 @@ export const KnownBucketIcon: React.FC = () => {
       delay={250}
       overlay={<Tooltip id="tooltip">Well known bucket</Tooltip>}
     >
-      <GoVerified className="ml-1" color="#2E86C1" />
+      <GoVerified className="ml-1 faIconVerticalAlign" color="#2E86C1" />
     </OverlayTrigger>
   );
 };
