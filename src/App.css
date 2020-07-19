@@ -24,11 +24,12 @@ mark {
 
 .starsBadge {
   padding: 0.3em 0.4em;
-  vertical-align: text-bottom;
+  vertical-align: text-top;
 }
 
 .starsBadge > span{
   vertical-align: text-bottom;
+  line-height: 0.7rem;
 }
 
 .pagination > li {
