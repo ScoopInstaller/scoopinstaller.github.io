@@ -1,8 +1,9 @@
-const { override, addWebpackAlias } = require('customize-cra');
+// Code to switch from React to Preact
+// const { override, addWebpackAlias } = require('customize-cra');
 
-module.exports = override(
-  addWebpackAlias({
-    'react': 'preact/compat',
-    'react-dom': 'preact/compat'
-  })
-);
+// module.exports = override(
+//   addWebpackAlias({
+//     'react': 'preact/compat',
+//     'react-dom': 'preact/compat'
+//   })
+// );
