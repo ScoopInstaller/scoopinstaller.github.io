@@ -1,88 +1,133 @@
 import React, { PureComponent } from 'react';
+
 import { Container, Row, Col } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 
-import SearchBar from './SearchBar';
-import SearchProcessor from './SearchProcessor';
-import SearchPagination from './SearchPagination';
-import SearchResult from './SearchResult';
-import { SearchResultsJson } from '../serialization/SearchResultsJson';
-import { ManifestJson } from '../serialization/ManifestJson';
+import ManifestJson from '../serialization/ManifestJson';
+import SearchResultsJson from '../serialization/SearchResultsJson';
 import CopyToClipboardHandler from './CopyToClipboardHandler';
+import SearchBar from './SearchBar';
+import SearchPagination from './SearchPagination';
+import SearchProcessor from './SearchProcessor';
+import SearchResult from './SearchResult';
 
-const RESULTS_PER_PAGE: number = 20;
+const RESULTS_PER_PAGE = 20;
 
-class Search extends PureComponent<ISearchProps, ISearchState> {
-  constructor(props: ISearchProps) {
+type SearchParams = {
+  page?: string;
+};
+
+type SearchProps = RouteComponentProps<SearchParams>;
+
+type SearchState = {
+  searchBarQuery: string;
+  query: string;
+  currentPage: number;
+  sortIndex: number;
+  searchResults?: SearchResultsJson;
+  contentToCopy?: string;
+};
+
+class Search extends PureComponent<SearchProps, SearchState> {
+  constructor(props: SearchProps) {
     super(props);
 
-    const sortIndex = parseInt(sessionStorage.getItem('sortIndex') || '0');
+    const sortIndex = parseInt(sessionStorage.getItem('sortIndex') || '0', 10);
+    const queryfromUri = this.getQueryFromUri();
 
     this.state = {
-      query: this.getCurrentQuery(),
-      currentPage: this.getCurrentPage(),
-      sortIndex: sortIndex,
+      searchBarQuery: queryfromUri,
+      query: queryfromUri,
+      currentPage: this.getCurrentPageFromUri(),
+      sortIndex,
     };
   }
 
-  componentDidUpdate(prevProps: ISearchProps) {
-    if (prevProps.location.search !== this.props.location.search) {
-      this.setState({ query: this.getCurrentQuery() });
+  componentDidUpdate(prevProps: SearchProps): void {
+    // Used when url is updated manually
+    const { location } = this.props;
+    const queryfromUri = this.getQueryFromUri();
+    if (prevProps.location.search !== location.search) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        searchBarQuery: queryfromUri,
+        query: queryfromUri,
+      });
     }
-    if (prevProps.location.pathname !== this.props.location.pathname) {
-      this.setState({ currentPage: this.getCurrentPage() });
+    if (prevProps.location.pathname !== location.pathname) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ currentPage: this.getCurrentPageFromUri() });
     }
   }
 
-  getCurrentQuery = () => {
-    return this.props.location.search.length > 1
-      ? decodeURIComponent(this.props.location.search.substr(1))
+  getQueryFromUri = (): string => {
+    const { location } = this.props;
+    return location.search.length > 1
+      ? decodeURIComponent(location.search.substr(1))
       : '';
   };
 
-  getCurrentPage = () => {
-    return parseInt(this.props.match.params.page || '1');
+  getCurrentPageFromUri = (): number => {
+    const { match } = this.props;
+    return parseInt(match.params.page || '1', 10);
   };
 
-  handleQueryChange = (query: string) => {
-    this.props.history.replace({
-      search: encodeURIComponent(query),
-      pathname: '/apps',
+  updateHistory = (
+    search: string | undefined = undefined,
+    pathname: string | undefined = undefined
+  ): void => {
+    const { history, location } = this.props;
+    history.replace({
+      search: search ?? location.search,
+      pathname: pathname ?? '/apps',
     });
-    this.setState({ query, currentPage: 1 });
   };
 
-  handleResultsChange = (e?: SearchResultsJson) => {
+  handleQueryChange = (query: string): void => {
+    this.updateHistory(encodeURIComponent(query), undefined);
+    this.setState({ searchBarQuery: query, currentPage: 1 });
+  };
+
+  handleQuerySubmit = (): void => {
+    const { searchBarQuery } = this.state;
+    this.setState({ query: searchBarQuery });
+  };
+
+  handleResultsChange = (e?: SearchResultsJson): void => {
     this.setState({ searchResults: e });
   };
 
-  handlePageChange = (newPage: number) => {
-    this.props.history.replace({
-      pathname: `/apps/${newPage}`,
-      search: this.props.location.search,
-    });
-
+  handlePageChange = (newPage: number): void => {
+    this.updateHistory(undefined, `/apps/${newPage}`);
     this.setState({ currentPage: newPage });
   };
 
-  handleSortChange = (sortIndex: number) => {
+  handleSortChange = (sortIndex: number): void => {
     sessionStorage.setItem('sortIndex', sortIndex.toString());
-    this.setState({ sortIndex: sortIndex });
+    this.setState({ sortIndex });
   };
 
-  handleCopyToClipboard = (content: string) => {
+  handleCopyToClipboard = (content: string): void => {
     this.setState({ contentToCopy: content });
   };
 
-  handleContentCopied = () => {
+  handleContentCopied = (): void => {
     this.setState({ contentToCopy: undefined });
   };
 
-  render() {
+  render(): JSX.Element {
+    const {
+      contentToCopy,
+      searchBarQuery,
+      query,
+      currentPage,
+      sortIndex,
+      searchResults,
+    } = this.state;
     return (
       <div className="Search">
         <CopyToClipboardHandler
-          content={this.state.contentToCopy}
+          content={contentToCopy}
           onContentCopied={this.handleContentCopied}
         />
 
@@ -90,8 +135,9 @@ class Search extends PureComponent<ISearchProps, ISearchState> {
           <Row className="justify-content-center">
             <Col sm={8}>
               <SearchBar
-                query={this.state.query}
+                query={searchBarQuery}
                 onQueryChange={this.handleQueryChange}
+                onSubmit={this.handleQuerySubmit}
               />
             </Col>
           </Row>
@@ -100,9 +146,9 @@ class Search extends PureComponent<ISearchProps, ISearchState> {
             <Col>
               <SearchProcessor
                 resultsPerPage={RESULTS_PER_PAGE}
-                page={this.state.currentPage}
-                query={this.state.query}
-                sortIndex={this.state.sortIndex}
+                page={currentPage}
+                query={query}
+                sortIndex={sortIndex}
                 onResultsChange={this.handleResultsChange}
                 onSortIndexChange={this.handleSortChange}
               />
@@ -112,8 +158,8 @@ class Search extends PureComponent<ISearchProps, ISearchState> {
             <Col className="d-flex justify-content-center">
               <SearchPagination
                 resultsPerPage={RESULTS_PER_PAGE}
-                currentPage={this.state.currentPage}
-                resultsCount={this.state.searchResults?.count}
+                currentPage={currentPage}
+                resultsCount={searchResults?.count ?? 0}
                 onPageChange={this.handlePageChange}
               />
             </Col>
@@ -121,15 +167,13 @@ class Search extends PureComponent<ISearchProps, ISearchState> {
 
           <Row className="mt-2">
             <Col>
-              {this.state.searchResults?.results.map(
-                (searchResult: ManifestJson) => (
-                  <SearchResult
-                    key={searchResult.id}
-                    result={searchResult}
-                    onCopyToClipbard={this.handleCopyToClipboard}
-                  />
-                )
-              )}
+              {searchResults?.results.map((searchResult: ManifestJson) => (
+                <SearchResult
+                  key={searchResult.id}
+                  result={searchResult}
+                  onCopyToClipbard={this.handleCopyToClipboard}
+                />
+              ))}
             </Col>
           </Row>
 
@@ -137,8 +181,8 @@ class Search extends PureComponent<ISearchProps, ISearchState> {
             <Col className="d-flex justify-content-center">
               <SearchPagination
                 resultsPerPage={RESULTS_PER_PAGE}
-                currentPage={this.state.currentPage}
-                resultsCount={this.state.searchResults?.count}
+                currentPage={currentPage}
+                resultsCount={searchResults?.count ?? 0}
                 onPageChange={this.handlePageChange}
               />
             </Col>
@@ -147,20 +191,6 @@ class Search extends PureComponent<ISearchProps, ISearchState> {
       </div>
     );
   }
-}
-
-interface ISearchParams {
-  page?: string;
-}
-
-interface ISearchProps extends RouteComponentProps<ISearchParams> {}
-
-interface ISearchState {
-  query: string;
-  currentPage: number;
-  sortIndex: number;
-  searchResults?: SearchResultsJson;
-  contentToCopy?: string;
 }
 
 export default Search;

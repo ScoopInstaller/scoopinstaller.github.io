@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
+
 import { Navbar, Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { FaGithub } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 class NavBar extends PureComponent {
-  render() {
+  render(): JSX.Element {
     return (
       <Navbar expand="sm" bg="dark" variant="dark">
         <Navbar.Brand as={Link} to="/">

@@ -1,24 +1,31 @@
 import React, { PureComponent } from 'react';
 
+type CopyToClipboardHandlerProps = {
+  content?: string;
+  onContentCopied: () => void;
+};
+
 class CopyToClipboardHandler extends PureComponent<
-  ICopyToClipboardHandlerProps
+  CopyToClipboardHandlerProps
 > {
   private textAreaRef = React.createRef<HTMLTextAreaElement>();
 
-  componentDidUpdate() {
-    if (this.props.content) {
-      const textArea = this.textAreaRef.current!;
+  componentDidUpdate(): void {
+    const { content, onContentCopied } = this.props;
+    if (content) {
+      const textArea = this.textAreaRef.current;
+      if (textArea) {
+        textArea.value = content;
+        textArea.select();
+        document.execCommand('copy');
+        textArea.blur();
 
-      textArea.value = this.props.content;
-      textArea.select();
-      document.execCommand('copy');
-      textArea.blur();
-
-      this.props.onContentCopied();
+        onContentCopied();
+      }
     }
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <textarea
         ref={this.textAreaRef}
@@ -27,11 +34,6 @@ class CopyToClipboardHandler extends PureComponent<
       />
     );
   }
-}
-
-interface ICopyToClipboardHandlerProps {
-  content?: string;
-  onContentCopied: () => void;
 }
 
 export default CopyToClipboardHandler;

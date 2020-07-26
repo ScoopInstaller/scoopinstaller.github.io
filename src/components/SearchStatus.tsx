@@ -1,50 +1,59 @@
 import React, { PureComponent } from 'react';
+
 import { Spinner } from 'react-bootstrap';
 
-class SearchStatus extends PureComponent<ISearchStatusProps> {
-  render() {
-    if (this.props.searching) {
-      return (
-        <span>
-          <span>Searching for matching {this.props.type}...</span>{' '}
-          <Spinner animation="border" size="sm" variant="secondary" />
-        </span>
-      );
-    } else if (this.props.resultsCount) {
-      return (
-        <span>
-          Found {this.props.resultsCount} {this.props.type}
-          {this.props.query && (
-            <span>
-              {' '}
-              for '<strong>{this.props.query}</strong>'
-            </span>
-          )}
-          .
-        </span>
-      );
-    } else {
-      return (
-        <span>
-          No result found
-          {this.props.query && (
-            <span>
-              {' '}
-              for '<strong>{this.props.query}</strong>'
-            </span>
-          )}
-          .
-        </span>
-      );
-    }
-  }
+export enum SearchStatusType {
+  Applications,
+  Buckets,
 }
 
-interface ISearchStatusProps {
+const SearchStatusTypeMap: Record<SearchStatusType, string> = {
+  [SearchStatusType.Applications]: 'applications',
+  [SearchStatusType.Buckets]: 'buckets',
+};
+
+type SearchStatusProps = {
   query?: string;
   resultsCount: number;
   searching: boolean;
-  type: string;
+  type: SearchStatusType;
+};
+
+class SearchStatus extends PureComponent<SearchStatusProps> {
+  render(): JSX.Element {
+    const { searching, resultsCount, query, type } = this.props;
+    const typeDescription = SearchStatusTypeMap[type];
+
+    if (searching) {
+      return (
+        <span>
+          <span>Searching for matching {typeDescription}...</span>{' '}
+          <Spinner animation="border" size="sm" variant="secondary" />
+        </span>
+      );
+    }
+
+    let formattedQuery = <span />;
+    if (query) {
+      formattedQuery = (
+        <span>
+          {' '}
+          for &apos;<strong>{query}</strong>&apos;
+        </span>
+      );
+    }
+
+    if (resultsCount) {
+      return (
+        <span>
+          Found {resultsCount} {typeDescription}
+          {formattedQuery}.
+        </span>
+      );
+    }
+
+    return <span>No result found{formattedQuery}.</span>;
+  }
 }
 
 export default SearchStatus;

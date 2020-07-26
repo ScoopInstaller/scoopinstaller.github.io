@@ -1,27 +1,35 @@
 import React, { PureComponent } from 'react';
-import { Card, Container, Row, Col, Form, InputGroup } from 'react-bootstrap';
+
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { Img } from 'react-image';
+import { Card, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import { FaExternalLinkAlt } from 'react-icons/fa';
+import { Img } from 'react-image';
 
+import ManifestJson from '../serialization/ManifestJson';
+import Utils from '../utils';
 import CopyToClipboardButton from './CopyToClipboardButton';
-import { ManifestJson } from '../serialization/ManifestJson';
-import { KnownBucketIcon } from './KnownBucketIcon';
-import { StarsBadge } from './StarsBadge';
-import { Utils } from '../utils';
+import KnownBucketIcon from './KnownBucketIcon';
+import StarsBadge from './StarsBadge';
 
 dayjs.extend(localizedFormat);
 
-class SearchResult extends PureComponent<ISearchResultProps> {
-  handleCopyToClipboard = (content: string) => {
-    this.props.onCopyToClipbard(content);
+type SearchResultProps = {
+  result: ManifestJson;
+  onCopyToClipbard: (content: string) => void;
+};
+
+class SearchResult extends PureComponent<SearchResultProps> {
+  handleCopyToClipboard = (content: string): void => {
+    const { onCopyToClipbard } = this.props;
+    onCopyToClipbard(content);
   };
 
   private displayHighlight = (content?: string) => {
     return (
       content && (
         <span
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
             __html: content,
           }}
@@ -30,7 +38,8 @@ class SearchResult extends PureComponent<ISearchResultProps> {
     );
   };
 
-  render() {
+  render(): JSX.Element {
+    const { result } = this.props;
     const {
       id,
       score,
@@ -44,7 +53,7 @@ class SearchResult extends PureComponent<ISearchResultProps> {
       highlightedVersion,
       metadata,
       homepage,
-    } = this.props.result;
+    } = result;
 
     return (
       <Card key={id} className="mb-2">
@@ -149,11 +158,6 @@ class SearchResult extends PureComponent<ISearchResultProps> {
       </Card>
     );
   }
-}
-
-interface ISearchResultProps {
-  result: ManifestJson;
-  onCopyToClipbard: (content: string) => void;
 }
 
 export default SearchResult;

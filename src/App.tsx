@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
+
 import './App.css';
-import Search from './components/Search';
-import Buckets from './components/Buckets';
 import {
   HashRouter as Router,
   Switch,
@@ -9,10 +8,12 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+import Buckets from './components/Buckets';
 import NavBar from './components/NavBar';
+import Search from './components/Search';
 
 class App extends PureComponent {
-  render() {
+  render(): JSX.Element {
     return (
       <Router>
         <NavBar />

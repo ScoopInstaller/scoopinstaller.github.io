@@ -1,16 +1,36 @@
 import React, { PureComponent } from 'react';
+
 import { Col, Row, Form, InputGroup } from 'react-bootstrap';
 
-import SearchStatus from './SearchStatus';
-import { SearchResultsJson } from '../serialization/SearchResultsJson';
+import SearchResultsJson from '../serialization/SearchResultsJson';
+import SearchStatus, { SearchStatusType } from './SearchStatus';
+
+type SortMode = {
+  DisplayName: string;
+  OrderBy: string[];
+};
+
+type SearchProcessorProps = {
+  page: number;
+  query: string;
+  sortIndex: number;
+  resultsPerPage: number;
+  onResultsChange: (value?: SearchResultsJson) => void;
+  onSortIndexChange: (sortIndex: number) => void;
+};
+
+type SearchProcessorState = {
+  resultsCount: number;
+  searching: boolean;
+};
 
 class SearchProcessor extends PureComponent<
-  ISearchProcessorProps,
-  ISearchProcessorState
+  SearchProcessorProps,
+  SearchProcessorState
 > {
   private abortController: AbortController = new AbortController();
 
-  private sortModes: ISortMode[] = [
+  private sortModes: SortMode[] = [
     {
       DisplayName: 'Best match',
       OrderBy: [
@@ -38,58 +58,75 @@ class SearchProcessor extends PureComponent<
     },
   ];
 
-  constructor(props: ISearchProcessorProps) {
+  constructor(props: SearchProcessorProps) {
     super(props);
 
     this.state = {
-      resultsCount: undefined,
+      resultsCount: 0,
       searching: false,
     };
   }
 
-  componentDidMount() {
-    this.fetchDataAsync(this.abortController.signal, this.props.query);
+  componentDidMount(): void {
+    const { query } = this.props;
+    this.fetchDataAsync(this.abortController.signal, query);
   }
 
   componentDidUpdate(
-    prevProps: ISearchProcessorProps,
-    prevState: ISearchProcessorState
-  ) {
+    prevProps: SearchProcessorProps,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    prevState: SearchProcessorState
+  ): void {
+    const { query, page, sortIndex } = this.props;
     if (
-      this.props.query !== prevProps.query ||
-      this.props.page !== prevProps.page ||
-      this.props.sortIndex !== prevProps.sortIndex
+      query !== prevProps.query ||
+      page !== prevProps.page ||
+      sortIndex !== prevProps.sortIndex
     ) {
       this.abortController.abort();
       this.abortController = new AbortController();
-      this.fetchDataAsync(this.abortController.signal, this.props.query);
+      this.fetchDataAsync(this.abortController.signal, query);
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this.abortController.abort();
   }
 
-  handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    this.props.onSortIndexChange(e.target.selectedIndex);
+  handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    const { onSortIndexChange } = this.props;
+    onSortIndexChange(e.target.selectedIndex);
   };
 
-  fetchDataAsync(abortSignal: AbortSignal, query: string) {
+  fetchDataAsync(abortSignal: AbortSignal, query: string): void {
     this.setState({
       searching: true,
     });
 
-    const url = `${process.env.REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
+    const {
+      REACT_APP_AZURESEARCH_URL,
+      REACT_APP_AZURESEARCH_KEY,
+    } = process.env;
 
+    if (!REACT_APP_AZURESEARCH_URL) {
+      throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
+    }
+
+    if (!REACT_APP_AZURESEARCH_KEY) {
+      throw new Error('REACT_APP_AZURESEARCH_KEY is not defined');
+    }
+
+    const url = `${REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
+    const { sortIndex, page, resultsPerPage, onResultsChange } = this.props;
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
         count: true,
         search: query.trim(),
         searchMode: 'all',
-        orderby: this.sortModes[this.props.sortIndex].OrderBy.join(', '),
-        skip: (this.props.page - 1) * this.props.resultsPerPage,
-        top: this.props.resultsPerPage,
+        orderby: this.sortModes[sortIndex].OrderBy.join(', '),
+        skip: (page - 1) * resultsPerPage,
+        top: resultsPerPage,
         select: [
           'Id',
           'Name',
@@ -121,7 +158,7 @@ class SearchProcessor extends PureComponent<
         highlightPostTag: '</mark>',
       }),
       headers: {
-        'api-key': process.env.REACT_APP_AZURESEARCH_KEY!,
+        'api-key': REACT_APP_AZURESEARCH_KEY,
         'Content-Type': 'application/json',
       },
       signal: abortSignal,
@@ -140,30 +177,31 @@ class SearchProcessor extends PureComponent<
           searching: false,
           resultsCount: results.count,
         });
-        this.props.onResultsChange(results);
+        onResultsChange(results);
       })
       .catch((error: Error) => {
         if (error.name !== 'AbortError') {
           this.setState({
             searching: false,
-            resultsCount: undefined,
+            resultsCount: 0,
           });
-          this.props.onResultsChange(undefined);
-          console.error(error);
+          onResultsChange(undefined);
         }
       });
   }
 
-  render() {
+  render(): JSX.Element {
+    const { query, sortIndex } = this.props;
+    const { resultsCount, searching } = this.state;
     return (
       <Form>
         <Row>
           <Col className="my-auto">
             <SearchStatus
-              query={this.props.query}
-              resultsCount={this.state.resultsCount!}
-              searching={this.state.searching!}
-              type="applications"
+              query={query}
+              resultsCount={resultsCount}
+              searching={searching}
+              type={SearchStatusType.Applications}
             />
           </Col>
           <Col lg={3}>
@@ -175,11 +213,11 @@ class SearchProcessor extends PureComponent<
                 as="select"
                 size="sm"
                 custom
-                value={this.props.sortIndex}
+                value={sortIndex}
                 onChange={this.handleSortChange}
               >
                 {this.sortModes.map((item, idx) => (
-                  <option key={idx} value={idx}>
+                  <option key={item.DisplayName} value={idx}>
                     {item.DisplayName}
                   </option>
                 ))}
@@ -190,25 +228,6 @@ class SearchProcessor extends PureComponent<
       </Form>
     );
   }
-}
-
-interface ISortMode {
-  DisplayName: string;
-  OrderBy: string[];
-}
-
-interface ISearchProcessorProps {
-  page: number;
-  query: string;
-  sortIndex: number;
-  resultsPerPage: number;
-  onResultsChange: (value?: SearchResultsJson) => void;
-  onSortIndexChange: (sortIndex: number) => void;
-}
-
-interface ISearchProcessorState {
-  resultsCount?: number;
-  searching: boolean;
 }
 
 export default SearchProcessor;

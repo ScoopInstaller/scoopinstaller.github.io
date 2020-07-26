@@ -1,11 +1,12 @@
 import { JsonObject, JsonConvert, JsonProperty } from 'json2typescript';
-import { ManifestJson } from './ManifestJson';
+
+import ManifestJson from './ManifestJson';
 
 @JsonObject('SearchResultsJson')
-export class SearchResultsJson {
+class SearchResultsJson {
   private static jsonConvert = new JsonConvert();
 
-  static Create(jsonObject: any) {
+  static Create(jsonObject: unknown): SearchResultsJson {
     return SearchResultsJson.jsonConvert.deserializeObject(
       jsonObject,
       SearchResultsJson
@@ -13,8 +14,10 @@ export class SearchResultsJson {
   }
 
   @JsonProperty('@odata.count', Number)
-  count: number = 0;
+  count = 0;
 
   @JsonProperty('value', [ManifestJson])
   results: ManifestJson[] = Array<ManifestJson>();
 }
+
+export default SearchResultsJson;

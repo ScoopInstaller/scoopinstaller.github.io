@@ -1,22 +1,27 @@
 import { JsonObject, JsonProperty, Any } from 'json2typescript';
-import { MetadataJson } from './MetadataJson';
+
+import MetadataJson from './MetadataJson';
+
+type HighLight = string | undefined;
+
+type HighLights = { [propertyName: string]: string } | undefined;
 
 @JsonObject('ManifestJson')
-export class ManifestJson {
+class ManifestJson {
   @JsonProperty('Id', String)
-  id: string = '';
+  id = '';
 
   @JsonProperty('@search.score', Number)
-  score: number = 0;
+  score = 0;
 
   @JsonProperty('Name', String)
-  name: string = '';
+  name = '';
 
   @JsonProperty('NamePartial', String)
-  namePartial: string = '';
+  namePartial = '';
 
   @JsonProperty('NameSuffix', String)
-  nameSuffix: string = '';
+  nameSuffix = '';
 
   @JsonProperty('Description', String, true)
   description?: string = undefined;
@@ -28,69 +33,69 @@ export class ManifestJson {
   license?: string = undefined;
 
   @JsonProperty('Version', String, true)
-  version: string = '';
+  version = '';
 
   @JsonProperty('Metadata', MetadataJson)
   metadata: MetadataJson = new MetadataJson();
 
   @JsonProperty('@search.highlights', Any, true)
-  private _highlights: any = undefined;
+  private highlights: HighLights = undefined;
 
-  get highlightedName() {
+  get highlightedName(): HighLight {
     return this.tryGetHighlights(
       ['Name', 'NamePartial', 'NameSuffix'],
       this.name
     );
   }
 
-  get highlightedLicense() {
+  get highlightedLicense(): HighLight {
     return this.tryGetHighlight('License', this.license);
   }
 
-  get highlightedRepository() {
+  get highlightedRepository(): HighLight {
     return this.tryGetHighlight(
       'Metadata/Repository',
       this.metadata.repository.replace('https://github.com/', '')
     );
   }
 
-  get highlightedAuthorName() {
+  get highlightedAuthorName(): HighLight {
     return this.tryGetHighlight(
       'Metadata/AuthorName',
       this.metadata.authorName
     );
   }
 
-  get highlightedDescription() {
+  get highlightedDescription(): HighLight {
     return this.tryGetHighlight('Description', this.description);
   }
 
-  get highlightedVersion() {
+  get highlightedVersion(): HighLight {
     return this.tryGetHighlight('Version', this.version);
   }
 
-  tryGetHighlight(propertyName: string, fallback?: string) {
+  tryGetHighlight(propertyName: string, fallback?: string): HighLight {
     return this.tryGetHighlights([propertyName], fallback);
   }
 
-  tryGetHighlights(propertyNames: string[], fallback?: string) {
-    for (const propertyName of propertyNames) {
-      if (this._highlights && this._highlights[propertyName]) {
-        return this._highlights[propertyName][0];
-      }
-    }
+  tryGetHighlights(propertyNames: string[], fallback?: string): HighLight {
+    const match = propertyNames.find((value: string) => {
+      return this.highlights && this.highlights[value];
+    });
 
-    return fallback;
+    return match && this.highlights ? this.highlights[match] : fallback;
   }
 
-  get favicon() {
+  get favicon(): HighLight {
     if (this.homepage) {
-      var parser = document.createElement('a');
+      const parser = document.createElement('a');
       parser.href = this.homepage;
 
-      return parser.origin + '/favicon.ico';
+      return `${parser.origin}/favicon.ico`;
     }
 
     return undefined;
   }
 }
+
+export default ManifestJson;

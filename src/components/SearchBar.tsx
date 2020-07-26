@@ -1,65 +1,60 @@
 import React, { PureComponent } from 'react';
+
 import { Form, InputGroup } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
 
-const DELAY_SEARCH_AFTER_KEYPRESS: number = 250;
+const DELAY_SEARCH_AFTER_KEYPRESS = 250;
 
-class SearchBar extends PureComponent<ISearchBarProps, ISearchBarState> {
-  static defaultProps = {
-    query: '',
-  };
+type SearchBarProps = {
+  query: string;
+  onQueryChange: (query: string) => void;
+  onSubmit: () => void;
+};
 
+class SearchBar extends PureComponent<SearchBarProps> {
   searchInput: React.RefObject<HTMLInputElement>;
-  delayBeforeSearch?: NodeJS.Timeout;
 
-  constructor(props: ISearchBarProps) {
+  delayBeforeSubmit?: NodeJS.Timeout;
+
+  constructor(props: SearchBarProps) {
     super(props);
     this.searchInput = React.createRef<HTMLInputElement>();
-
-    this.state = {
-      query: this.props.query,
-    };
   }
 
-  componentDidMount() {
-    this.searchInput.current!.focus();
+  componentDidMount(): void {
+    this.searchInput.current?.focus();
   }
 
-  componentWillUnmount() {
-    this.clearDelayBeforeSearchTimeout();
+  componentWillUnmount(): void {
+    this.clearDelayBeforeSubmitTimeout();
   }
 
-  componentDidUpdate(prevProps: ISearchBarProps) {
-    if (prevProps.query !== this.props.query) {
-      this.setState({ query: this.props.query });
-    }
-  }
+  handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { onQueryChange, onSubmit } = this.props;
+    onQueryChange(e.target.value);
 
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ query: e.target.value });
-
-    this.clearDelayBeforeSearchTimeout();
-
-    this.delayBeforeSearch = setTimeout(
-      (query) => this.props.onQueryChange(query),
-      DELAY_SEARCH_AFTER_KEYPRESS,
-      e.target.value
-    );
+    this.clearDelayBeforeSubmitTimeout();
+    this.delayBeforeSubmit = setTimeout(onSubmit, DELAY_SEARCH_AFTER_KEYPRESS);
   };
 
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    const { onSubmit } = this.props;
     e.preventDefault();
-    this.props.onQueryChange(this.state.query);
+
+    this.clearDelayBeforeSubmitTimeout();
+    onSubmit();
   };
 
-  clearDelayBeforeSearchTimeout() {
-    if (this.delayBeforeSearch) {
-      clearTimeout(this.delayBeforeSearch);
-      this.delayBeforeSearch = undefined;
+  clearDelayBeforeSubmitTimeout(): void {
+    if (this.delayBeforeSubmit) {
+      clearTimeout(this.delayBeforeSubmit);
+      this.delayBeforeSubmit = undefined;
     }
   }
 
-  render() {
+  render(): JSX.Element {
+    const { query } = this.props;
+
     return (
       <Form onSubmit={this.handleSubmit}>
         <InputGroup>
@@ -73,22 +68,13 @@ class SearchBar extends PureComponent<ISearchBarProps, ISearchBarState> {
             size="lg"
             type="text"
             placeholder="Search an app"
-            value={this.state.query}
+            value={query}
             onChange={this.handleChange}
           />
         </InputGroup>
       </Form>
     );
   }
-}
-
-interface ISearchBarProps {
-  query: string;
-  onQueryChange: (query: string) => void;
-}
-
-interface ISearchBarState {
-  query: string;
 }
 
 export default SearchBar;

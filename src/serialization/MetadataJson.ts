@@ -1,29 +1,32 @@
 import { JsonObject, JsonProperty } from 'json2typescript';
-import { DateConverter } from './DateConverter';
+
+import DateConverter from './DateConverter';
 
 @JsonObject('MetadataJson')
-export class MetadataJson {
+class MetadataJson {
   @JsonProperty('Repository', String)
-  repository: string = '';
+  repository = '';
 
   @JsonProperty('OfficialRepository', Boolean)
-  repositoryOfficial: boolean = false;
+  repositoryOfficial = false;
 
   @JsonProperty('RepositoryStars', Number)
-  stars: number = 0;
+  stars = 0;
 
   @JsonProperty('BranchName', String, true)
   branchName?: string = '';
 
   @JsonProperty('FilePath', String)
-  filePath: string = '';
+  filePath = '';
 
   @JsonProperty('AuthorName', String)
-  authorName: string = '';
+  authorName = '';
 
   @JsonProperty('Committed', DateConverter)
   committed: Date = new Date();
 
   @JsonProperty('Sha', String)
-  sha: string = '';
+  sha = '';
 }
+
+export default MetadataJson;

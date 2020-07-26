@@ -1,17 +1,32 @@
 import React, { PureComponent } from 'react';
-import Table from 'react-bootstrap/Table';
+
 import { Container, Col, Row, InputGroup, Form } from 'react-bootstrap';
+import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
 
-import { BucketsResultsJson } from '../serialization/BucketsResultsJson';
-import SearchStatus from './SearchStatus';
-import { KnownBucketIcon } from './KnownBucketIcon';
-import { Utils } from '../utils';
+import BucketsResultsJson from '../serialization/BucketsResultsJson';
+import Utils from '../utils';
+import KnownBucketIcon from './KnownBucketIcon';
+import SearchStatus, { SearchStatusType } from './SearchStatus';
 
-class Buckets extends PureComponent<{}, IBucketsState> {
+type Bucket = {
+  bucket: string;
+  manifests: number;
+  official: boolean;
+};
+
+type BucketsState = {
+  searching: boolean;
+  sortIndex: number;
+  results: Bucket[];
+};
+
+class Buckets extends PureComponent<unknown, BucketsState> {
   private abortController: AbortController = new AbortController();
 
-  constructor(props: {}) {
+  private sortModes: string[] = ['Default', 'Name', 'Manifests'];
+
+  constructor(props: unknown) {
     super(props);
 
     this.state = {
@@ -21,9 +36,9 @@ class Buckets extends PureComponent<{}, IBucketsState> {
     };
   }
 
-  private sortModes: string[] = ['Default', 'Name', 'Manifests'];
+  async componentDidMount(): Promise<void> {
+    const { sortIndex } = this.state;
 
-  async componentDidMount() {
     this.setState({
       searching: true,
       results: [],
@@ -38,31 +53,57 @@ class Buckets extends PureComponent<{}, IBucketsState> {
       false
     );
 
-    let results: IBucket[] = officialBuckets.results['Metadata/Repository']
-      .map<IBucket>((item) => {
+    let results: Bucket[] = officialBuckets.results['Metadata/Repository']
+      .map<Bucket>((item) => {
         return { bucket: item.value, manifests: item.count, official: true };
       })
       .concat(
-        communityBuckets.results['Metadata/Repository'].map<IBucket>((item) => {
+        communityBuckets.results['Metadata/Repository'].map<Bucket>((item) => {
           return { bucket: item.value, manifests: item.count, official: false };
         })
       );
 
-    results = this.sortResults(results, this.state.sortIndex);
+    results = this.sortResults(results, sortIndex);
     this.setState({
       searching: false,
-      results: results,
+      results,
     });
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this.abortController.abort();
   }
 
-  async fetchDataAsync(abortSignal: AbortSignal, officialRepository: boolean) {
-    const url = `${process.env.REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
+  handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    const { results } = this.state;
+    const sortOrder = e.target.selectedIndex;
+    this.setState({
+      sortIndex: sortOrder,
+      results: this.sortResults(results, sortOrder),
+    });
+  };
 
-    let response = await fetch(url, {
+  // eslint-disable-next-line class-methods-use-this
+  async fetchDataAsync(
+    abortSignal: AbortSignal,
+    officialRepository: boolean
+  ): Promise<BucketsResultsJson> {
+    const {
+      REACT_APP_AZURESEARCH_URL,
+      REACT_APP_AZURESEARCH_KEY,
+    } = process.env;
+
+    if (!REACT_APP_AZURESEARCH_URL) {
+      throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
+    }
+
+    if (!REACT_APP_AZURESEARCH_KEY) {
+      throw new Error('REACT_APP_AZURESEARCH_KEY is not defined');
+    }
+
+    const url = `${REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
+
+    const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify({
         count: true,
@@ -73,56 +114,60 @@ class Buckets extends PureComponent<{}, IBucketsState> {
         top: 0, // Don't retrieve actual data
       }),
       headers: {
-        'api-key': process.env.REACT_APP_AZURESEARCH_KEY!,
+        'api-key': REACT_APP_AZURESEARCH_KEY,
         'Content-Type': 'application/json',
       },
       signal: abortSignal,
     });
-    const data = await response.json();
+    const data = (await response.json()) as unknown;
     return BucketsResultsJson.Create(data);
   }
 
-  sortResults(results: IBucket[], sortOrder: number): IBucket[] {
+  // eslint-disable-next-line class-methods-use-this
+  sortResults(results: Bucket[], sortOrder: number): Bucket[] {
     switch (sortOrder) {
       case 0:
-        return results.sort((x, y) =>
-          x.official === y.official
-            ? x.bucket.localeCompare(y.bucket)
-            : x.official < y.official
-            ? 1
-            : -1
-        );
+        return results.sort((x, y) => {
+          if (x.official === y.official) {
+            return x.bucket.localeCompare(y.bucket);
+          }
+          if (x.official < y.official) {
+            return 1;
+          }
+
+          return -1;
+        });
 
       case 1:
         return results.sort((x, y) => x.bucket.localeCompare(y.bucket));
 
       case 2:
-        return results.sort((x, y) =>
-          x.manifests === y.manifests ? 0 : x.manifests < y.manifests ? 1 : -1
-        );
+        return results.sort((x, y) => {
+          if (x.manifests === y.manifests) {
+            return 0;
+          }
+          if (x.manifests < y.manifests) {
+            return 1;
+          }
+
+          return -1;
+        });
       default:
         throw new Error('Unexpected sort');
     }
   }
 
-  handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const sortOrder = e.target.selectedIndex;
-    this.setState({
-      sortIndex: sortOrder,
-      results: this.sortResults(this.state.results, sortOrder),
-    });
-  };
-
-  render() {
+  render(): JSX.Element {
+    const { results, searching } = this.state;
     return (
-      <React.Fragment>
+      <>
         <Container className="mt-5 mb-5">
           <Row>
             <Col className="my-auto">
               <SearchStatus
-                resultsCount={this.state.results.length}
-                searching={this.state.searching}
-                type="buckets"
+                resultsCount={results.length}
+                searching={searching}
+                type={SearchStatusType.Buckets}
               />
             </Col>
             <Col lg={3}>
@@ -137,7 +182,7 @@ class Buckets extends PureComponent<{}, IBucketsState> {
                   onChange={this.handleSortChange}
                 >
                   {this.sortModes.map((item, idx) => (
-                    <option key={idx} value={idx}>
+                    <option key={item} value={idx}>
                       {item}
                     </option>
                   ))}
@@ -146,7 +191,7 @@ class Buckets extends PureComponent<{}, IBucketsState> {
             </Col>
           </Row>
 
-          {this.state.results && (
+          {results && (
             <Row className="mt-2">
               <Col>
                 <Table striped bordered hover>
@@ -157,8 +202,8 @@ class Buckets extends PureComponent<{}, IBucketsState> {
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.results.map((item: IBucket) => (
-                      <tr>
+                    {results.map((item: Bucket) => (
+                      <tr key={item.bucket}>
                         <td>
                           <Link
                             to={{
@@ -179,21 +224,9 @@ class Buckets extends PureComponent<{}, IBucketsState> {
             </Row>
           )}
         </Container>
-      </React.Fragment>
+      </>
     );
   }
-}
-
-interface IBucket {
-  bucket: string;
-  manifests: number;
-  official: boolean;
-}
-
-interface IBucketsState {
-  searching: boolean;
-  sortIndex: number;
-  results: IBucket[];
 }
 
 export default Buckets;

@@ -1,44 +1,58 @@
 import React, { PureComponent } from 'react';
-import { Button } from 'react-bootstrap';
 
+import { Button } from 'react-bootstrap';
 import { FaClipboard, FaCheck } from 'react-icons/fa';
 
-const CLIPBOARD_COPY_NOTIFICATION: number = 1500;
+const CLIPBOARD_COPY_NOTIFICATION = 1500;
+
+type CopyToClipboardButtonState = {
+  copied: boolean;
+};
+
+type CopyToClipboardButtonProps = {
+  className?: string;
+  onClick: () => void;
+};
 
 class CopyToClipboardButton extends PureComponent<
-  ICopyToClipboardButtonProps,
-  ICopyToClipboardButtonState
+  CopyToClipboardButtonProps,
+  CopyToClipboardButtonState
 > {
-  constructor(props: ICopyToClipboardButtonProps) {
+  constructor(props: CopyToClipboardButtonProps) {
     super(props);
     this.state = { copied: false };
   }
 
   componentDidUpdate(
-    prevProps: ICopyToClipboardButtonProps,
-    prevState: ICopyToClipboardButtonState
-  ) {
-    if (this.state.copied && this.state.copied !== prevState.copied) {
+    prevProps: CopyToClipboardButtonProps,
+    prevState: CopyToClipboardButtonState
+  ): void {
+    const { copied } = this.state;
+    if (copied && copied !== prevState.copied) {
       setTimeout(() => {
         this.setState({ copied: false });
       }, CLIPBOARD_COPY_NOTIFICATION);
     }
   }
 
-  handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.props.onClick();
+  handleClick = (): void => {
+    const { onClick } = this.props;
+    onClick();
     this.setState({ copied: true });
   };
 
-  render() {
+  render(): JSX.Element {
+    const { className } = this.props;
+    const { copied } = this.state;
+
     return (
       <Button
-        className={this.props.className}
+        className={className}
         variant="secondary"
         onClick={this.handleClick}
-        disabled={this.state.copied}
+        disabled={copied}
       >
-        {this.state.copied ? (
+        {copied ? (
           <FaCheck className="faIconVerticalAlign" />
         ) : (
           <FaClipboard className="faIconVerticalAlign" />
@@ -46,15 +60,6 @@ class CopyToClipboardButton extends PureComponent<
       </Button>
     );
   }
-}
-
-interface ICopyToClipboardButtonState {
-  copied: boolean;
-}
-
-interface ICopyToClipboardButtonProps {
-  className?: string;
-  onClick: () => void;
 }
 
 export default CopyToClipboardButton;
