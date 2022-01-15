@@ -8,8 +8,8 @@ import { Img } from 'react-image';
 
 import ManifestJson from '../serialization/ManifestJson';
 import Utils from '../utils';
+import BucketTypeIcon from './BucketTypeIcon';
 import CopyToClipboardButton from './CopyToClipboardButton';
-import KnownBucketIcon from './KnownBucketIcon';
 import StarsBadge from './StarsBadge';
 
 dayjs.extend(localizedFormat);
@@ -64,7 +64,7 @@ class SearchResult extends PureComponent<SearchResultProps> {
           <strong>{this.displayHighlight(highlightedName)}</strong>
           {' - '}
           {this.displayHighlight(highlightedVersion)}
-          {metadata.repositoryOfficial && <KnownBucketIcon />}
+          <BucketTypeIcon official={metadata.repositoryOfficial} />
           {process.env.NODE_ENV === 'development' && ` - @score: ${score}`}
         </Card.Header>
         <Card.Body>
@@ -91,7 +91,7 @@ class SearchResult extends PureComponent<SearchResultProps> {
                     {this.displayHighlight(highlightedRepository)}
                   </a>
                   <StarsBadge stars={metadata.stars} />
-                  {metadata.repositoryOfficial && <KnownBucketIcon />}
+                  <BucketTypeIcon official={metadata.repositoryOfficial} />
                   {!metadata.repositoryOfficial && (
                     <CopyToClipboardButton
                       className="ml-1 ms copyToClipbardMiniButton"

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import BucketsResultsJson from '../serialization/BucketsResultsJson';
 import Utils from '../utils';
-import KnownBucketIcon from './KnownBucketIcon';
+import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
 
 type Bucket = {
@@ -213,7 +213,7 @@ class Buckets extends PureComponent<unknown, BucketsState> {
                           >
                             {Utils.extractPathFromUrl(item.bucket)}
                           </Link>{' '}
-                          {item.official && <KnownBucketIcon />}
+                          <BucketTypeIcon official={item.official} />
                         </td>
                         <td>{item.manifests}</td>
                       </tr>
