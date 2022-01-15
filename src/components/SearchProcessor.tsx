@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import { Col, Row, Form, InputGroup } from 'react-bootstrap';
 
 import SearchResultsJson from '../serialization/SearchResultsJson';
+import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
 
 type SortMode = {
@@ -14,9 +15,11 @@ type SearchProcessorProps = {
   page: number;
   query: string;
   sortIndex: number;
+  searchOfficialOnly: boolean;
   resultsPerPage: number;
   onResultsChange: (value?: SearchResultsJson) => void;
   onSortIndexChange: (sortIndex: number) => void;
+  onSearchOfficialOnlyChange: (searchOfficialOnly: boolean) => void;
 };
 
 type SearchProcessorState = {
@@ -77,11 +80,12 @@ class SearchProcessor extends PureComponent<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     prevState: SearchProcessorState
   ): void {
-    const { query, page, sortIndex } = this.props;
+    const { query, page, sortIndex, searchOfficialOnly } = this.props;
     if (
       query !== prevProps.query ||
       page !== prevProps.page ||
-      sortIndex !== prevProps.sortIndex
+      sortIndex !== prevProps.sortIndex ||
+      searchOfficialOnly !== prevProps.searchOfficialOnly
     ) {
       this.abortController.abort();
       this.abortController = new AbortController();
@@ -98,15 +102,20 @@ class SearchProcessor extends PureComponent<
     onSortIndexChange(e.target.selectedIndex);
   };
 
+  handleSearchOfficialOnlyChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const { onSearchOfficialOnlyChange } = this.props;
+    onSearchOfficialOnlyChange(e.target.checked);
+  };
+
   fetchDataAsync(abortSignal: AbortSignal, query: string): void {
     this.setState({
       searching: true,
     });
 
-    const {
-      REACT_APP_AZURESEARCH_URL,
-      REACT_APP_AZURESEARCH_KEY,
-    } = process.env;
+    const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } =
+      process.env;
 
     if (!REACT_APP_AZURESEARCH_URL) {
       throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
@@ -117,13 +126,22 @@ class SearchProcessor extends PureComponent<
     }
 
     const url = `${REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
-    const { sortIndex, page, resultsPerPage, onResultsChange } = this.props;
+    const {
+      sortIndex,
+      searchOfficialOnly,
+      page,
+      resultsPerPage,
+      onResultsChange,
+    } = this.props;
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
         count: true,
         search: query.trim(),
         searchMode: 'all',
+        filter: searchOfficialOnly
+          ? 'Metadata/OfficialRepositoryNumber eq 1'
+          : '',
         orderby: this.sortModes[sortIndex].OrderBy.join(', '),
         skip: (page - 1) * resultsPerPage,
         top: resultsPerPage,
@@ -191,7 +209,7 @@ class SearchProcessor extends PureComponent<
   }
 
   render(): JSX.Element {
-    const { query, sortIndex } = this.props;
+    const { query, sortIndex, searchOfficialOnly } = this.props;
     const { resultsCount, searching } = this.state;
     return (
       <Form>
@@ -203,6 +221,20 @@ class SearchProcessor extends PureComponent<
               searching={searching}
               type={SearchStatusType.Applications}
             />
+          </Col>
+          <Col lg={3} className="my-auto text-right">
+            <Form.Check type="switch" id="only-official-buckets">
+              <Form.Check.Input
+                checked={searchOfficialOnly}
+                onChange={this.handleSearchOfficialOnlyChange}
+              />
+              <Form.Check.Label>
+                <span style={{ display: 'flex', alignItems: 'center' }}>
+                  Search only
+                  <BucketTypeIcon official />
+                </span>
+              </Form.Check.Label>
+            </Form.Check>
           </Col>
           <Col lg={3}>
             <InputGroup size="sm">

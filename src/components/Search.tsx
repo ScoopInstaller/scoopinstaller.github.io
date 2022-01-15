@@ -24,6 +24,7 @@ type SearchState = {
   query: string;
   currentPage: number;
   sortIndex: number;
+  searchOfficialOnly: boolean;
   searchResults?: SearchResultsJson;
   contentToCopy?: string;
 };
@@ -33,6 +34,8 @@ class Search extends PureComponent<SearchProps, SearchState> {
     super(props);
 
     const sortIndex = parseInt(sessionStorage.getItem('sortIndex') || '0', 10);
+    const searchOfficialOnly =
+      sessionStorage.getItem('searchOfficialOnly') === 'true';
     const queryfromUri = this.getQueryFromUri();
 
     this.state = {
@@ -40,6 +43,7 @@ class Search extends PureComponent<SearchProps, SearchState> {
       query: queryfromUri,
       currentPage: this.getCurrentPageFromUri(),
       sortIndex,
+      searchOfficialOnly,
     };
   }
 
@@ -107,6 +111,11 @@ class Search extends PureComponent<SearchProps, SearchState> {
     this.setState({ sortIndex });
   };
 
+  handleSearchOfficialOnlyChange = (searchOfficialOnly: boolean): void => {
+    sessionStorage.setItem('searchOfficialOnly', searchOfficialOnly.toString());
+    this.setState({ searchOfficialOnly });
+  };
+
   handleCopyToClipboard = (content: string): void => {
     this.setState({ contentToCopy: content });
   };
@@ -122,6 +131,7 @@ class Search extends PureComponent<SearchProps, SearchState> {
       query,
       currentPage,
       sortIndex,
+      searchOfficialOnly,
       searchResults,
     } = this.state;
     return (
@@ -149,8 +159,10 @@ class Search extends PureComponent<SearchProps, SearchState> {
                 page={currentPage}
                 query={query}
                 sortIndex={sortIndex}
+                searchOfficialOnly={searchOfficialOnly}
                 onResultsChange={this.handleResultsChange}
                 onSortIndexChange={this.handleSortChange}
+                onSearchOfficialOnlyChange={this.handleSearchOfficialOnlyChange}
               />
             </Col>
           </Row>
