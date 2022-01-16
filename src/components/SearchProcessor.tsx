@@ -222,39 +222,50 @@ class SearchProcessor extends PureComponent<
               type={SearchStatusType.Applications}
             />
           </Col>
-          <Col lg={3} className="my-auto text-right">
-            <Form.Check type="switch" id="only-official-buckets">
-              <Form.Check.Input
-                checked={searchOfficialOnly}
-                onChange={this.handleSearchOfficialOnlyChange}
-              />
-              <Form.Check.Label>
-                <span style={{ display: 'flex', alignItems: 'center' }}>
-                  Search only
-                  <BucketTypeIcon official />
-                </span>
-              </Form.Check.Label>
-            </Form.Check>
-          </Col>
           <Col lg={3}>
-            <InputGroup size="sm">
-              <InputGroup.Prepend>
-                <InputGroup.Text>Sort by</InputGroup.Text>
-              </InputGroup.Prepend>
-              <Form.Control
-                as="select"
-                size="sm"
-                custom
-                value={sortIndex}
-                onChange={this.handleSortChange}
-              >
-                {this.sortModes.map((item, idx) => (
-                  <option key={item.DisplayName} value={idx}>
-                    {item.DisplayName}
-                  </option>
-                ))}
-              </Form.Control>
-            </InputGroup>
+            <Row>
+              <Col>
+                <InputGroup size="sm">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text>Sort by</InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <Form.Control
+                    as="select"
+                    size="sm"
+                    custom
+                    value={sortIndex}
+                    onChange={this.handleSortChange}
+                  >
+                    {this.sortModes.map((item, idx) => (
+                      <option key={item.DisplayName} value={idx}>
+                        {item.DisplayName}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </InputGroup>
+              </Col>
+            </Row>
+            <Row className="custom-select-sm text-right">
+              <Col>
+                <Form.Check type="switch" id="only-official-buckets">
+                  <Form.Check.Input
+                    checked={searchOfficialOnly}
+                    onChange={this.handleSearchOfficialOnlyChange}
+                  />
+                  <Form.Check.Label>
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      Search only known buckets
+                      <BucketTypeIcon official showTooltip={false} />
+                    </span>
+                  </Form.Check.Label>
+                </Form.Check>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Form>

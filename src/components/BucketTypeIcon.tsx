@@ -9,19 +9,24 @@ const COMMUNITY_ICON_COLOR = '#CCCCCC';
 
 type BucketTypeIconProps = {
   official: boolean;
+  showTooltip?: boolean;
 };
 
 class BucketTypeIcon extends PureComponent<BucketTypeIconProps> {
   render(): JSX.Element {
-    const { official } = this.props;
+    const { official, showTooltip = true } = this.props;
     return (
       <OverlayTrigger
         placement="auto"
         delay={DELAY_TOOLTIP}
         overlay={
-          <Tooltip id="tooltip">
-            {official ? 'Official bucket' : 'Community bucket'}
-          </Tooltip>
+          showTooltip ? (
+            <Tooltip id="tooltip">
+              {official ? 'Known bucket' : 'Community bucket'}
+            </Tooltip>
+          ) : (
+            <span />
+          )
         }
       >
         {official ? (
