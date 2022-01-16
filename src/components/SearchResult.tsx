@@ -91,7 +91,6 @@ class SearchResult extends PureComponent<SearchResultProps> {
                     {this.displayHighlight(highlightedRepository)}
                   </a>
                   <StarsBadge stars={metadata.stars} />
-                  <BucketTypeIcon official={metadata.repositoryOfficial} />
                   {!metadata.repositoryOfficial && (
                     <CopyToClipboardButton
                       className="ml-1 ms copyToClipbardMiniButton"
@@ -105,6 +104,7 @@ class SearchResult extends PureComponent<SearchResultProps> {
                       }
                     />
                   )}
+                  <BucketTypeIcon official={metadata.repositoryOfficial} />
                 </Col>
                 <Col lg={6}>
                   Commiter: {this.displayHighlight(highlightedAuthorName)}
