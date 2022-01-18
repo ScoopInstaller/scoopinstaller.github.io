@@ -1,28 +1,35 @@
 {
+  "root": true,
   "extends": [
     "airbnb-typescript",
-    "airbnb/hooks",
+    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
     "plugin:prettier/recommended",
-    "prettier/react",
-    "prettier/@typescript-eslint"
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:prettier/recommended"
   ],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.eslint.json"
   },
   "settings": {
     "import/resolver": {
       "node": {
         "paths": ["./src"]
       }
+    },
+    "react": {
+      "version": "detect"
     }
   },
-  "ignorePatterns": [ "build", "config-overrides.js" ],
+  "ignorePatterns": [ "src/reportWebVitals.ts" ],
 
   "rules": {
-    "max-len": ["warn", {"code": 80, "ignoreUrls": true, "ignoreTemplateLiterals": true }],
+    "max-len": ["warn", {"code": 120, "ignoreUrls": true, "ignoreTemplateLiterals": true }],
     "quotes": [
       "error",
       "single",

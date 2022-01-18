@@ -88,10 +88,8 @@ class Buckets extends PureComponent<unknown, BucketsState> {
     abortSignal: AbortSignal,
     officialRepository: boolean
   ): Promise<BucketsResultsJson> {
-    const {
-      REACT_APP_AZURESEARCH_URL,
-      REACT_APP_AZURESEARCH_KEY,
-    } = process.env;
+    const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } =
+      process.env;
 
     if (!REACT_APP_AZURESEARCH_URL) {
       throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
@@ -172,21 +170,14 @@ class Buckets extends PureComponent<unknown, BucketsState> {
             </Col>
             <Col lg={3}>
               <InputGroup size="sm">
-                <InputGroup.Prepend>
-                  <InputGroup.Text>Sort by</InputGroup.Text>
-                </InputGroup.Prepend>
-                <Form.Control
-                  as="select"
-                  size="sm"
-                  custom
-                  onChange={this.handleSortChange}
-                >
+                <InputGroup.Text>Sort by</InputGroup.Text>
+                <Form.Select size="sm" onChange={this.handleSortChange}>
                   {this.sortModes.map((item, idx) => (
                     <option key={item} value={idx}>
                       {item}
                     </option>
                   ))}
-                </Form.Control>
+                </Form.Select>
               </InputGroup>
             </Col>
           </Row>

@@ -5,9 +5,7 @@ type CopyToClipboardHandlerProps = {
   onContentCopied: () => void;
 };
 
-class CopyToClipboardHandler extends PureComponent<
-  CopyToClipboardHandlerProps
-> {
+class CopyToClipboardHandler extends PureComponent<CopyToClipboardHandlerProps> {
   private textAreaRef = React.createRef<HTMLTextAreaElement>();
 
   componentDidUpdate(): void {

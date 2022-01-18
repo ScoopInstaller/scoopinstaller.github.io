@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 
 import { Badge } from 'react-bootstrap';
 import { FaStar } from 'react-icons/fa';
@@ -12,7 +12,7 @@ class StarsBadge extends PureComponent<StarsBadgeProps> {
     const { stars } = this.props;
 
     return (
-      <Badge variant="secondary" className="ml-1 starsBadge">
+      <Badge bg="secondary" className="ms-1 starsBadge">
         <span>{stars}</span> <FaStar />
       </Badge>
     );

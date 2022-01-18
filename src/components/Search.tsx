@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
