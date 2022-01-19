@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -59,7 +59,7 @@ class SearchResult extends PureComponent<SearchResultProps> {
       <Card key={id} className="mb-2">
         <Card.Header>
           {favicon && (
-            <Img className="mr-2" src={favicon} width={20} height={20} />
+            <Img className="me-2" src={favicon} width={20} height={20} />
           )}
           <strong>{this.displayHighlight(highlightedName)}</strong>
           {' - '}
@@ -93,7 +93,7 @@ class SearchResult extends PureComponent<SearchResultProps> {
                   <StarsBadge stars={metadata.stars} />
                   {!metadata.repositoryOfficial && (
                     <CopyToClipboardButton
-                      className="ml-1 ms copyToClipbardMiniButton"
+                      className="ms-1 ms copyToClipbardMiniButton"
                       onClick={() =>
                         this.handleCopyToClipboard(
                           `scoop bucket add ${Utils.extractPathFromUrl(
@@ -110,7 +110,7 @@ class SearchResult extends PureComponent<SearchResultProps> {
                   Commiter: {this.displayHighlight(highlightedAuthorName)}
                 </Col>
               </Row>
-              <Row className="text-center" noGutters>
+              <Row className="text-center g-0">
                 <Col lg xs={4} className="mt-1 mb-2">
                   <a href={homepage}>
                     Homepage <FaExternalLinkAlt />
@@ -130,25 +130,21 @@ class SearchResult extends PureComponent<SearchResultProps> {
                 </Col>
                 <Col lg={5}>
                   <InputGroup size="sm">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text className="scoopCopyCommand border-right-0">
-                        &gt;
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
+                    <InputGroup.Text className="scoopCopyCommand border-end-0">
+                      &gt;
+                    </InputGroup.Text>
                     <Form.Control
-                      className="border-left-0"
+                      className="border-start-0"
                       readOnly
                       type="text"
                       value={`scoop install ${name}`}
                     />
 
-                    <InputGroup.Append>
-                      <CopyToClipboardButton
-                        onClick={() =>
-                          this.handleCopyToClipboard(`scoop install ${name}`)
-                        }
-                      />
-                    </InputGroup.Append>
+                    <CopyToClipboardButton
+                      onClick={() =>
+                        this.handleCopyToClipboard(`scoop install ${name}`)
+                      }
+                    />
                   </InputGroup>
                 </Col>
               </Row>

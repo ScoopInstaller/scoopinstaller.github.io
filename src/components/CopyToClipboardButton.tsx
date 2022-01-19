@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 
 import { Button } from 'react-bootstrap';
 import { FaClipboard, FaCheck } from 'react-icons/fa';

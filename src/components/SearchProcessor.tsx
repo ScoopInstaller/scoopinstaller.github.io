@@ -226,13 +226,9 @@ class SearchProcessor extends PureComponent<
             <Row>
               <Col>
                 <InputGroup size="sm">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>Sort by</InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <Form.Control
-                    as="select"
+                  <InputGroup.Text>Sort by</InputGroup.Text>
+                  <Form.Select
                     size="sm"
-                    custom
                     value={sortIndex}
                     onChange={this.handleSortChange}
                   >
@@ -241,11 +237,11 @@ class SearchProcessor extends PureComponent<
                         {item.DisplayName}
                       </option>
                     ))}
-                  </Form.Control>
+                  </Form.Select>
                 </InputGroup>
               </Col>
             </Row>
-            <Row className="custom-select-sm text-right">
+            <Row className="form-select-sm float-end">
               <Col>
                 <Form.Check type="switch" id="only-official-buckets">
                   <Form.Check.Input

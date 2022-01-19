@@ -58,11 +58,9 @@ class SearchBar extends PureComponent<SearchBarProps> {
     return (
       <Form onSubmit={this.handleSubmit}>
         <InputGroup>
-          <InputGroup.Prepend>
-            <InputGroup.Text>
-              <FaSearch />
-            </InputGroup.Text>
-          </InputGroup.Prepend>
+          <InputGroup.Text>
+            <FaSearch />
+          </InputGroup.Text>
           <Form.Control
             ref={this.searchInput}
             size="lg"

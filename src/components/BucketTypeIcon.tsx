@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { GoVerified, GoUnverified } from 'react-icons/go';
@@ -29,17 +29,19 @@ class BucketTypeIcon extends PureComponent<BucketTypeIconProps> {
           )
         }
       >
-        {official ? (
-          <GoVerified
-            className="ml-1 faIconVerticalAlign"
-            color={OFFICIAL_ICON_COLOR}
-          />
-        ) : (
-          <GoUnverified
-            className="ml-1 faIconVerticalAlign"
-            color={COMMUNITY_ICON_COLOR}
-          />
-        )}
+        <span>
+          {official ? (
+            <GoVerified
+              className="ms-1 faIconVerticalAlign"
+              color={OFFICIAL_ICON_COLOR}
+            />
+          ) : (
+            <GoUnverified
+              className="ms-1 faIconVerticalAlign"
+              color={COMMUNITY_ICON_COLOR}
+            />
+          )}
+        </span>
       </OverlayTrigger>
     );
   }

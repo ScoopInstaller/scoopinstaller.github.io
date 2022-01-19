@@ -16,23 +16,38 @@ mark {
 }
 
 .copyToClipbardMiniButton {
-  padding: 0 0.15rem 0.15rem 0.15rem;
-  font-size: 0.6rem;
-  line-height: 0.8rem;
-  vertical-align: text-bottom;
+  padding: 0.15rem 0.2rem;
+  font-size: 0.7rem;
+  line-height: 0.75rem;
+  vertical-align: text-top;
 }
 
 .starsBadge {
   padding: 0.3em 0.4em;
   vertical-align: text-top;
+  line-height: 0.75rem;
 }
 
 .starsBadge > span{
   vertical-align: text-bottom;
-  line-height: 0.7rem;
+}
+.starsBadge > svg{
+  margin-top: 1px;
+  vertical-align: top;
 }
 
 .pagination > li {
   min-width: 2em;
   text-align: center;
+}
+
+a:not([class*="btn"]) {
+  text-decoration: none;
+}
+a:not([class*="btn"]):hover {
+  text-decoration: underline;
+}
+
+body {
+  overflow-y: scroll;
 }
