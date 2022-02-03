@@ -24,13 +24,7 @@ class CopyToClipboardHandler extends PureComponent<CopyToClipboardHandlerProps> 
   }
 
   render(): JSX.Element {
-    return (
-      <textarea
-        ref={this.textAreaRef}
-        readOnly
-        style={{ position: 'absolute', left: -9999 }}
-      />
-    );
+    return <textarea ref={this.textAreaRef} readOnly style={{ position: 'absolute', left: -9999 }} />;
   }
 }
 

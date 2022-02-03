@@ -42,10 +42,7 @@ class ManifestJson {
   private highlights: HighLights = undefined;
 
   get highlightedName(): HighLight {
-    return this.tryGetHighlights(
-      ['Name', 'NamePartial', 'NameSuffix'],
-      this.name
-    );
+    return this.tryGetHighlights(['Name', 'NamePartial', 'NameSuffix'], this.name);
   }
 
   get highlightedLicense(): HighLight {
@@ -53,17 +50,11 @@ class ManifestJson {
   }
 
   get highlightedRepository(): HighLight {
-    return this.tryGetHighlight(
-      'Metadata/Repository',
-      this.metadata.repository.replace('https://github.com/', '')
-    );
+    return this.tryGetHighlight('Metadata/Repository', this.metadata.repository.replace('https://github.com/', ''));
   }
 
   get highlightedAuthorName(): HighLight {
-    return this.tryGetHighlight(
-      'Metadata/AuthorName',
-      this.metadata.authorName
-    );
+    return this.tryGetHighlight('Metadata/AuthorName', this.metadata.authorName);
   }
 
   get highlightedDescription(): HighLight {

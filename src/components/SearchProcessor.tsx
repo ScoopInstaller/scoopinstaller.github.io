@@ -27,20 +27,13 @@ type SearchProcessorState = {
   searching: boolean;
 };
 
-class SearchProcessor extends PureComponent<
-  SearchProcessorProps,
-  SearchProcessorState
-> {
+class SearchProcessor extends PureComponent<SearchProcessorProps, SearchProcessorState> {
   private abortController: AbortController = new AbortController();
 
   private sortModes: SortMode[] = [
     {
       DisplayName: 'Best match',
-      OrderBy: [
-        'search.score() desc',
-        'Metadata/OfficialRepositoryNumber desc',
-        'NameSortable asc',
-      ],
+      OrderBy: ['search.score() desc', 'Metadata/OfficialRepositoryNumber desc', 'NameSortable asc'],
     },
     {
       DisplayName: 'Name',
@@ -53,11 +46,7 @@ class SearchProcessor extends PureComponent<
     },
     {
       DisplayName: 'Newest',
-      OrderBy: [
-        'Metadata/Committed desc',
-        'Metadata/OfficialRepositoryNumber desc',
-        'Metadata/RepositoryStars desc',
-      ],
+      OrderBy: ['Metadata/Committed desc', 'Metadata/OfficialRepositoryNumber desc', 'Metadata/RepositoryStars desc'],
     },
   ];
 
@@ -102,9 +91,7 @@ class SearchProcessor extends PureComponent<
     onSortIndexChange(e.target.selectedIndex);
   };
 
-  handleSearchOfficialOnlyChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
+  handleSearchOfficialOnlyChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { onSearchOfficialOnlyChange } = this.props;
     onSearchOfficialOnlyChange(e.target.checked);
   };
@@ -114,8 +101,7 @@ class SearchProcessor extends PureComponent<
       searching: true,
     });
 
-    const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } =
-      process.env;
+    const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } = process.env;
 
     if (!REACT_APP_AZURESEARCH_URL) {
       throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
@@ -126,22 +112,14 @@ class SearchProcessor extends PureComponent<
     }
 
     const url = `${REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
-    const {
-      sortIndex,
-      searchOfficialOnly,
-      page,
-      resultsPerPage,
-      onResultsChange,
-    } = this.props;
+    const { sortIndex, searchOfficialOnly, page, resultsPerPage, onResultsChange } = this.props;
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
         count: true,
         search: query.trim(),
         searchMode: 'all',
-        filter: searchOfficialOnly
-          ? 'Metadata/OfficialRepositoryNumber eq 1'
-          : '',
+        filter: searchOfficialOnly ? 'Metadata/OfficialRepositoryNumber eq 1' : '',
         orderby: this.sortModes[sortIndex].OrderBy.join(', '),
         skip: (page - 1) * resultsPerPage,
         top: resultsPerPage,
@@ -227,11 +205,7 @@ class SearchProcessor extends PureComponent<
               <Col>
                 <InputGroup size="sm">
                   <InputGroup.Text>Sort by</InputGroup.Text>
-                  <Form.Select
-                    size="sm"
-                    value={sortIndex}
-                    onChange={this.handleSortChange}
-                  >
+                  <Form.Select size="sm" value={sortIndex} onChange={this.handleSortChange}>
                     {this.sortModes.map((item, idx) => (
                       <option key={item.DisplayName} value={idx}>
                         {item.DisplayName}
@@ -244,10 +218,7 @@ class SearchProcessor extends PureComponent<
             <Row className="form-select-sm float-end">
               <Col>
                 <Form.Check type="switch" id="only-official-buckets">
-                  <Form.Check.Input
-                    checked={searchOfficialOnly}
-                    onChange={this.handleSearchOfficialOnlyChange}
-                  />
+                  <Form.Check.Input checked={searchOfficialOnly} onChange={this.handleSearchOfficialOnlyChange} />
                   <Form.Check.Label>
                     <span
                       style={{

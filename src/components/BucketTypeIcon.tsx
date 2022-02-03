@@ -20,26 +20,14 @@ class BucketTypeIcon extends PureComponent<BucketTypeIconProps> {
         placement="auto"
         delay={DELAY_TOOLTIP}
         overlay={
-          showTooltip ? (
-            <Tooltip id="tooltip">
-              {official ? 'Known bucket' : 'Community bucket'}
-            </Tooltip>
-          ) : (
-            <span />
-          )
+          showTooltip ? <Tooltip id="tooltip">{official ? 'Known bucket' : 'Community bucket'}</Tooltip> : <span />
         }
       >
         <span>
           {official ? (
-            <GoVerified
-              className="ms-1 faIconVerticalAlign"
-              color={OFFICIAL_ICON_COLOR}
-            />
+            <GoVerified className="ms-1 faIconVerticalAlign" color={OFFICIAL_ICON_COLOR} />
           ) : (
-            <GoUnverified
-              className="ms-1 faIconVerticalAlign"
-              color={COMMUNITY_ICON_COLOR}
-            />
+            <GoUnverified className="ms-1 faIconVerticalAlign" color={COMMUNITY_ICON_COLOR} />
           )}
         </span>
       </OverlayTrigger>

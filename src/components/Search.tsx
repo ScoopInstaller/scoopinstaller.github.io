@@ -34,8 +34,7 @@ class Search extends PureComponent<SearchProps, SearchState> {
     super(props);
 
     const sortIndex = parseInt(sessionStorage.getItem('sortIndex') || '0', 10);
-    const searchOfficialOnly =
-      sessionStorage.getItem('searchOfficialOnly') === 'true';
+    const searchOfficialOnly = sessionStorage.getItem('searchOfficialOnly') === 'true';
     const queryfromUri = this.getQueryFromUri();
 
     this.state = {
@@ -66,9 +65,7 @@ class Search extends PureComponent<SearchProps, SearchState> {
 
   getQueryFromUri = (): string => {
     const { location } = this.props;
-    return location.search.length > 1
-      ? decodeURIComponent(location.search.substr(1))
-      : '';
+    return location.search.length > 1 ? decodeURIComponent(location.search.substr(1)) : '';
   };
 
   getCurrentPageFromUri = (): number => {
@@ -76,10 +73,7 @@ class Search extends PureComponent<SearchProps, SearchState> {
     return parseInt(match.params.page || '1', 10);
   };
 
-  updateHistory = (
-    search: string | undefined = undefined,
-    pathname: string | undefined = undefined
-  ): void => {
+  updateHistory = (search: string | undefined = undefined, pathname: string | undefined = undefined): void => {
     const { history, location } = this.props;
     history.replace({
       search: search ?? location.search,
@@ -125,21 +119,11 @@ class Search extends PureComponent<SearchProps, SearchState> {
   };
 
   render(): JSX.Element {
-    const {
-      contentToCopy,
-      searchBarQuery,
-      query,
-      currentPage,
-      sortIndex,
-      searchOfficialOnly,
-      searchResults,
-    } = this.state;
+    const { contentToCopy, searchBarQuery, query, currentPage, sortIndex, searchOfficialOnly, searchResults } =
+      this.state;
     return (
       <div className="Search">
-        <CopyToClipboardHandler
-          content={contentToCopy}
-          onContentCopied={this.handleContentCopied}
-        />
+        <CopyToClipboardHandler content={contentToCopy} onContentCopied={this.handleContentCopied} />
 
         <Container className="mt-5 mb-5">
           <Row className="justify-content-center">

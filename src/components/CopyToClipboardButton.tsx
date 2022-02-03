@@ -14,19 +14,13 @@ type CopyToClipboardButtonProps = {
   onClick: () => void;
 };
 
-class CopyToClipboardButton extends PureComponent<
-  CopyToClipboardButtonProps,
-  CopyToClipboardButtonState
-> {
+class CopyToClipboardButton extends PureComponent<CopyToClipboardButtonProps, CopyToClipboardButtonState> {
   constructor(props: CopyToClipboardButtonProps) {
     super(props);
     this.state = { copied: false };
   }
 
-  componentDidUpdate(
-    prevProps: CopyToClipboardButtonProps,
-    prevState: CopyToClipboardButtonState
-  ): void {
+  componentDidUpdate(prevProps: CopyToClipboardButtonProps, prevState: CopyToClipboardButtonState): void {
     const { copied } = this.state;
     if (copied && copied !== prevState.copied) {
       setTimeout(() => {
@@ -46,17 +40,8 @@ class CopyToClipboardButton extends PureComponent<
     const { copied } = this.state;
 
     return (
-      <Button
-        className={className}
-        variant="secondary"
-        onClick={this.handleClick}
-        disabled={copied}
-      >
-        {copied ? (
-          <FaCheck className="faIconVerticalAlign" />
-        ) : (
-          <FaClipboard className="faIconVerticalAlign" />
-        )}
+      <Button className={className} variant="secondary" onClick={this.handleClick} disabled={copied}>
+        {copied ? <FaCheck className="faIconVerticalAlign" /> : <FaClipboard className="faIconVerticalAlign" />}
       </Button>
     );
   }

@@ -1,12 +1,7 @@
 import { PureComponent } from 'react';
 
 import './App.css';
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import Buckets from './components/Buckets';
 import NavBar from './components/NavBar';

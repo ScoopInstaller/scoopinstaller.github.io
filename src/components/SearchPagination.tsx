@@ -41,16 +41,10 @@ class SearchPagination extends PureComponent<SearchPaginationProps> {
             pageIdx === currentPage - PAGINATION_OFFSET + minPageOffset ||
             pageIdx === currentPage + PAGINATION_OFFSET + maxPageOffset
           ) {
-            paginationItems.push(
-              <Pagination.Ellipsis key={pageIdx} disabled />
-            );
+            paginationItems.push(<Pagination.Ellipsis key={pageIdx} disabled />);
           } else {
             paginationItems.push(
-              <Pagination.Item
-                key={pageIdx}
-                active={pageIdx === currentPage}
-                onClick={() => this.changePage(pageIdx)}
-              >
+              <Pagination.Item key={pageIdx} active={pageIdx === currentPage} onClick={() => this.changePage(pageIdx)}>
                 {pageIdx}
               </Pagination.Item>
             );
@@ -59,15 +53,8 @@ class SearchPagination extends PureComponent<SearchPaginationProps> {
 
         return (
           <Pagination size="sm">
-            <Pagination.Prev
-              key="prev"
-              onClick={() => this.changePage(currentPage - 1)}
-            />
-            <Pagination.Item
-              key={1}
-              active={currentPage === 1}
-              onClick={() => this.changePage(1)}
-            >
+            <Pagination.Prev key="prev" onClick={() => this.changePage(currentPage - 1)} />
+            <Pagination.Item key={1} active={currentPage === 1} onClick={() => this.changePage(1)}>
               {1}
             </Pagination.Item>
             {paginationItems}
@@ -78,10 +65,7 @@ class SearchPagination extends PureComponent<SearchPaginationProps> {
             >
               {totalPages}
             </Pagination.Item>
-            <Pagination.Next
-              key="next"
-              onClick={() => this.changePage(currentPage + 1)}
-            />
+            <Pagination.Next key="next" onClick={() => this.changePage(currentPage + 1)} />
           </Pagination>
         );
       }

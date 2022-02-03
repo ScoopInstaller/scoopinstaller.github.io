@@ -58,9 +58,7 @@ class SearchResult extends PureComponent<SearchResultProps> {
     return (
       <Card key={id} className="mb-2">
         <Card.Header>
-          {favicon && (
-            <Img className="me-2" src={favicon} width={20} height={20} />
-          )}
+          {favicon && <Img className="me-2" src={favicon} width={20} height={20} />}
           <strong>{this.displayHighlight(highlightedName)}</strong>
           {' - '}
           {this.displayHighlight(highlightedVersion)}
@@ -76,39 +74,29 @@ class SearchResult extends PureComponent<SearchResultProps> {
             )}
             <small>
               <Row>
-                <Col lg={6}>
-                  Updated: {dayjs(metadata.committed).format('LLL')}
-                </Col>
-                <Col lg={6}>
-                  License: {this.displayHighlight(highlightedLicense)}
-                </Col>
+                <Col lg={6}>Updated: {dayjs(metadata.committed).format('LLL')}</Col>
+                <Col lg={6}>License: {this.displayHighlight(highlightedLicense)}</Col>
               </Row>
 
               <Row className="mb-2">
                 <Col lg={6}>
-                  Bucket:{' '}
-                  <a href={metadata.repository}>
-                    {this.displayHighlight(highlightedRepository)}
-                  </a>
+                  Bucket: <a href={metadata.repository}>{this.displayHighlight(highlightedRepository)}</a>
                   <StarsBadge stars={metadata.stars} />
                   {!metadata.repositoryOfficial && (
                     <CopyToClipboardButton
                       className="ms-1 ms copyToClipbardMiniButton"
                       onClick={() =>
                         this.handleCopyToClipboard(
-                          `scoop bucket add ${Utils.extractPathFromUrl(
-                            metadata.repository,
-                            '_'
-                          )} ${metadata.repository}`
+                          `scoop bucket add ${Utils.extractPathFromUrl(metadata.repository, '_')} ${
+                            metadata.repository
+                          }`
                         )
                       }
                     />
                   )}
                   <BucketTypeIcon official={metadata.repositoryOfficial} />
                 </Col>
-                <Col lg={6}>
-                  Commiter: {this.displayHighlight(highlightedAuthorName)}
-                </Col>
+                <Col lg={6}>Commiter: {this.displayHighlight(highlightedAuthorName)}</Col>
               </Row>
               <Row className="text-center g-0">
                 <Col lg xs={4} className="mt-1 mb-2">
@@ -117,9 +105,7 @@ class SearchResult extends PureComponent<SearchResultProps> {
                   </a>
                 </Col>
                 <Col lg xs={4} className="mt-1 mb-2">
-                  <a
-                    href={`${metadata.repository}/blob/master/${metadata.filePath}`}
-                  >
+                  <a href={`${metadata.repository}/blob/master/${metadata.filePath}`}>
                     Manifest <FaExternalLinkAlt />
                   </a>
                 </Col>
@@ -130,21 +116,10 @@ class SearchResult extends PureComponent<SearchResultProps> {
                 </Col>
                 <Col lg={5}>
                   <InputGroup size="sm">
-                    <InputGroup.Text className="scoopCopyCommand border-end-0">
-                      &gt;
-                    </InputGroup.Text>
-                    <Form.Control
-                      className="border-start-0"
-                      readOnly
-                      type="text"
-                      value={`scoop install ${name}`}
-                    />
+                    <InputGroup.Text className="scoopCopyCommand border-end-0">&gt;</InputGroup.Text>
+                    <Form.Control className="border-start-0" readOnly type="text" value={`scoop install ${name}`} />
 
-                    <CopyToClipboardButton
-                      onClick={() =>
-                        this.handleCopyToClipboard(`scoop install ${name}`)
-                      }
-                    />
+                    <CopyToClipboardButton onClick={() => this.handleCopyToClipboard(`scoop install ${name}`)} />
                   </InputGroup>
                 </Col>
               </Row>

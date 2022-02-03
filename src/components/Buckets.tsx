@@ -44,14 +44,8 @@ class Buckets extends PureComponent<unknown, BucketsState> {
       results: [],
     });
 
-    const officialBuckets = await this.fetchDataAsync(
-      this.abortController.signal,
-      true
-    );
-    const communityBuckets = await this.fetchDataAsync(
-      this.abortController.signal,
-      false
-    );
+    const officialBuckets = await this.fetchDataAsync(this.abortController.signal, true);
+    const communityBuckets = await this.fetchDataAsync(this.abortController.signal, false);
 
     let results: Bucket[] = officialBuckets.results['Metadata/Repository']
       .map<Bucket>((item) => {
@@ -84,12 +78,8 @@ class Buckets extends PureComponent<unknown, BucketsState> {
   };
 
   // eslint-disable-next-line class-methods-use-this
-  async fetchDataAsync(
-    abortSignal: AbortSignal,
-    officialRepository: boolean
-  ): Promise<BucketsResultsJson> {
-    const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } =
-      process.env;
+  async fetchDataAsync(abortSignal: AbortSignal, officialRepository: boolean): Promise<BucketsResultsJson> {
+    const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } = process.env;
 
     if (!REACT_APP_AZURESEARCH_URL) {
       throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
@@ -106,9 +96,7 @@ class Buckets extends PureComponent<unknown, BucketsState> {
       body: JSON.stringify({
         count: true,
         facets: ['Metadata/Repository,count:10000'],
-        filter: `Metadata/OfficialRepositoryNumber eq ${
-          officialRepository ? '1' : '0'
-        }`,
+        filter: `Metadata/OfficialRepositoryNumber eq ${officialRepository ? '1' : '0'}`,
         top: 0, // Don't retrieve actual data
       }),
       headers: {
@@ -162,11 +150,7 @@ class Buckets extends PureComponent<unknown, BucketsState> {
         <Container className="mt-5 mb-5">
           <Row>
             <Col className="my-auto">
-              <SearchStatus
-                resultsCount={results.length}
-                searching={searching}
-                type={SearchStatusType.Buckets}
-              />
+              <SearchStatus resultsCount={results.length} searching={searching} type={SearchStatusType.Buckets} />
             </Col>
             <Col lg={3}>
               <InputGroup size="sm">
