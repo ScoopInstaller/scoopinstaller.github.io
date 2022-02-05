@@ -64,6 +64,7 @@ const SearchBar = (props: SearchBarProps): JSX.Element => {
           size="lg"
           type="text"
           placeholder="Search an app"
+          spellCheck={false}
           value={query}
           onChange={handleChange}
         />
