@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
@@ -19,174 +19,148 @@ type SearchParams = {
 
 type SearchProps = RouteComponentProps<SearchParams>;
 
-type SearchState = {
-  searchBarQuery: string;
-  query: string;
-  currentPage: number;
-  sortIndex: number;
-  searchOfficialOnly: boolean;
-  searchResults?: SearchResultsJson;
-  contentToCopy?: string;
+const Search = (props: SearchProps): JSX.Element => {
+  const { history, location, match } = props;
+
+  const initialSortIndex = parseInt(sessionStorage.getItem('sortIndex') || '0', 10);
+  const initialSearchOfficialOnly = sessionStorage.getItem('searchOfficialOnly') === 'true';
+
+  const getQueryFromUri = useCallback((): string => {
+    return location.search.length > 1 ? decodeURIComponent(location.search.substr(1)) : '';
+  }, [location.search]);
+
+  const getCurrentPageFromUri = useCallback((): number => {
+    return parseInt(match.params.page || '1', 10);
+  }, [match]);
+
+  const [searchBarQuery, setSearchBarQuery] = useState<string>(getQueryFromUri());
+  const [query, setQuery] = useState<string>(getQueryFromUri());
+  const [currentPage, setCurrentPage] = useState<number>(getCurrentPageFromUri);
+  const [sortIndex, setSortIndex] = useState<number>(initialSortIndex);
+  const [searchOfficialOnly, setSearchOfficialOnly] = useState<boolean>(initialSearchOfficialOnly);
+  const [searchResults, setSearchResults] = useState<SearchResultsJson>();
+  const [contentToCopy, setContentToCopy] = useState<string>();
+
+  useEffect(() => {
+    const queryfromUri = getQueryFromUri();
+    setSearchBarQuery(queryfromUri);
+    setQuery(queryfromUri);
+  }, [location.search, getQueryFromUri]);
+
+  useEffect(() => {
+    setCurrentPage(getCurrentPageFromUri());
+  }, [location.pathname, getCurrentPageFromUri]);
+
+  const updateHistory = useCallback(
+    (search: string | undefined = undefined, pathname: string | undefined = undefined): void => {
+      history.replace({
+        search: search ?? location.search,
+        pathname: pathname ?? '/apps',
+      });
+    },
+    [location.search, history]
+  );
+
+  const handleQueryChange = useCallback(
+    (newQuery: string): void => {
+      updateHistory(encodeURIComponent(newQuery), undefined);
+      setSearchBarQuery(newQuery);
+      setCurrentPage(1);
+    },
+    [updateHistory]
+  );
+
+  const handleQuerySubmit = useCallback((): void => {
+    setQuery(searchBarQuery);
+  }, [searchBarQuery]);
+
+  const handleResultsChange = useCallback((e?: SearchResultsJson): void => {
+    setSearchResults(e);
+  }, []);
+
+  const handlePageChange = useCallback(
+    (newCurrentPage: number): void => {
+      updateHistory(undefined, `/apps/${newCurrentPage}`);
+      setCurrentPage(newCurrentPage);
+    },
+    [updateHistory]
+  );
+
+  const handleSortChange = useCallback((newSortIndex: number): void => {
+    sessionStorage.setItem('sortIndex', newSortIndex.toString());
+    setSortIndex(newSortIndex);
+  }, []);
+
+  const handleSearchOfficialOnlyChange = useCallback((newSearchOfficialOnly: boolean): void => {
+    sessionStorage.setItem('searchOfficialOnly', newSearchOfficialOnly.toString());
+    setSearchOfficialOnly(newSearchOfficialOnly);
+  }, []);
+
+  const handleCopyToClipboard = useCallback((newContentToCopy: string): void => {
+    setContentToCopy(newContentToCopy);
+  }, []);
+
+  const handleContentCopied = useCallback((): void => {
+    setContentToCopy(undefined);
+  }, []);
+
+  return (
+    <div className="Search">
+      <CopyToClipboardHandler content={contentToCopy} onContentCopied={handleContentCopied} />
+
+      <Container className="mt-5 mb-5">
+        <Row className="justify-content-center">
+          <Col sm={8}>
+            <SearchBar query={searchBarQuery} onQueryChange={handleQueryChange} onSubmit={handleQuerySubmit} />
+          </Col>
+        </Row>
+
+        <Row className="mt-5 mb-1">
+          <Col>
+            <SearchProcessor
+              resultsPerPage={RESULTS_PER_PAGE}
+              page={currentPage}
+              query={query}
+              sortIndex={sortIndex}
+              searchOfficialOnly={searchOfficialOnly}
+              onResultsChange={handleResultsChange}
+              onSortIndexChange={handleSortChange}
+              onSearchOfficialOnlyChange={handleSearchOfficialOnlyChange}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col className="d-flex justify-content-center">
+            <SearchPagination
+              resultsPerPage={RESULTS_PER_PAGE}
+              currentPage={currentPage}
+              resultsCount={searchResults?.count ?? 0}
+              onPageChange={handlePageChange}
+            />
+          </Col>
+        </Row>
+
+        <Row className="mt-2">
+          <Col>
+            {searchResults?.results.map((searchResult: ManifestJson) => (
+              <SearchResult key={searchResult.id} result={searchResult} onCopyToClipbard={handleCopyToClipboard} />
+            ))}
+          </Col>
+        </Row>
+
+        <Row>
+          <Col className="d-flex justify-content-center">
+            <SearchPagination
+              resultsPerPage={RESULTS_PER_PAGE}
+              currentPage={currentPage}
+              resultsCount={searchResults?.count ?? 0}
+              onPageChange={handlePageChange}
+            />
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
 };
 
-class Search extends PureComponent<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
-
-    const sortIndex = parseInt(sessionStorage.getItem('sortIndex') || '0', 10);
-    const searchOfficialOnly = sessionStorage.getItem('searchOfficialOnly') === 'true';
-    const queryfromUri = this.getQueryFromUri();
-
-    this.state = {
-      searchBarQuery: queryfromUri,
-      query: queryfromUri,
-      currentPage: this.getCurrentPageFromUri(),
-      sortIndex,
-      searchOfficialOnly,
-    };
-  }
-
-  componentDidUpdate(prevProps: SearchProps): void {
-    // Used when url is updated manually
-    const { location } = this.props;
-    const queryfromUri = this.getQueryFromUri();
-    if (prevProps.location.search !== location.search) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        searchBarQuery: queryfromUri,
-        query: queryfromUri,
-      });
-    }
-    if (prevProps.location.pathname !== location.pathname) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ currentPage: this.getCurrentPageFromUri() });
-    }
-  }
-
-  getQueryFromUri = (): string => {
-    const { location } = this.props;
-    return location.search.length > 1 ? decodeURIComponent(location.search.substr(1)) : '';
-  };
-
-  getCurrentPageFromUri = (): number => {
-    const { match } = this.props;
-    return parseInt(match.params.page || '1', 10);
-  };
-
-  updateHistory = (search: string | undefined = undefined, pathname: string | undefined = undefined): void => {
-    const { history, location } = this.props;
-    history.replace({
-      search: search ?? location.search,
-      pathname: pathname ?? '/apps',
-    });
-  };
-
-  handleQueryChange = (query: string): void => {
-    this.updateHistory(encodeURIComponent(query), undefined);
-    this.setState({ searchBarQuery: query, currentPage: 1 });
-  };
-
-  handleQuerySubmit = (): void => {
-    const { searchBarQuery } = this.state;
-    this.setState({ query: searchBarQuery });
-  };
-
-  handleResultsChange = (e?: SearchResultsJson): void => {
-    this.setState({ searchResults: e });
-  };
-
-  handlePageChange = (newPage: number): void => {
-    this.updateHistory(undefined, `/apps/${newPage}`);
-    this.setState({ currentPage: newPage });
-  };
-
-  handleSortChange = (sortIndex: number): void => {
-    sessionStorage.setItem('sortIndex', sortIndex.toString());
-    this.setState({ sortIndex });
-  };
-
-  handleSearchOfficialOnlyChange = (searchOfficialOnly: boolean): void => {
-    sessionStorage.setItem('searchOfficialOnly', searchOfficialOnly.toString());
-    this.setState({ searchOfficialOnly });
-  };
-
-  handleCopyToClipboard = (content: string): void => {
-    this.setState({ contentToCopy: content });
-  };
-
-  handleContentCopied = (): void => {
-    this.setState({ contentToCopy: undefined });
-  };
-
-  render(): JSX.Element {
-    const { contentToCopy, searchBarQuery, query, currentPage, sortIndex, searchOfficialOnly, searchResults } =
-      this.state;
-    return (
-      <div className="Search">
-        <CopyToClipboardHandler content={contentToCopy} onContentCopied={this.handleContentCopied} />
-
-        <Container className="mt-5 mb-5">
-          <Row className="justify-content-center">
-            <Col sm={8}>
-              <SearchBar
-                query={searchBarQuery}
-                onQueryChange={this.handleQueryChange}
-                onSubmit={this.handleQuerySubmit}
-              />
-            </Col>
-          </Row>
-
-          <Row className="mt-5 mb-1">
-            <Col>
-              <SearchProcessor
-                resultsPerPage={RESULTS_PER_PAGE}
-                page={currentPage}
-                query={query}
-                sortIndex={sortIndex}
-                searchOfficialOnly={searchOfficialOnly}
-                onResultsChange={this.handleResultsChange}
-                onSortIndexChange={this.handleSortChange}
-                onSearchOfficialOnlyChange={this.handleSearchOfficialOnlyChange}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col className="d-flex justify-content-center">
-              <SearchPagination
-                resultsPerPage={RESULTS_PER_PAGE}
-                currentPage={currentPage}
-                resultsCount={searchResults?.count ?? 0}
-                onPageChange={this.handlePageChange}
-              />
-            </Col>
-          </Row>
-
-          <Row className="mt-2">
-            <Col>
-              {searchResults?.results.map((searchResult: ManifestJson) => (
-                <SearchResult
-                  key={searchResult.id}
-                  result={searchResult}
-                  onCopyToClipbard={this.handleCopyToClipboard}
-                />
-              ))}
-            </Col>
-          </Row>
-
-          <Row>
-            <Col className="d-flex justify-content-center">
-              <SearchPagination
-                resultsPerPage={RESULTS_PER_PAGE}
-                currentPage={currentPage}
-                resultsCount={searchResults?.count ?? 0}
-                onPageChange={this.handlePageChange}
-              />
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    );
-  }
-}
-
-export default Search;
+export default React.memo(Search);

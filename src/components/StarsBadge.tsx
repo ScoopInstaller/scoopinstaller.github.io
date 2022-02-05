@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import React from 'react';
 
 import { Badge } from 'react-bootstrap';
 import { FaStar } from 'react-icons/fa';
@@ -7,16 +7,14 @@ type StarsBadgeProps = {
   stars: number;
 };
 
-class StarsBadge extends PureComponent<StarsBadgeProps> {
-  render(): JSX.Element {
-    const { stars } = this.props;
+const StarsBadge = (props: StarsBadgeProps): JSX.Element => {
+  const { stars } = props;
 
-    return (
-      <Badge bg="secondary" className="ms-1 starsBadge">
-        <span>{stars}</span> <FaStar />
-      </Badge>
-    );
-  }
-}
+  return (
+    <Badge bg="secondary" className="ms-1 starsBadge">
+      <span>{stars}</span> <FaStar />
+    </Badge>
+  );
+};
 
-export default StarsBadge;
+export default React.memo(StarsBadge);

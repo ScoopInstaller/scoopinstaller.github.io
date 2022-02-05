@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import React from 'react';
 
 import { Spinner } from 'react-bootstrap';
 
@@ -19,41 +19,39 @@ type SearchStatusProps = {
   type: SearchStatusType;
 };
 
-class SearchStatus extends PureComponent<SearchStatusProps> {
-  render(): JSX.Element {
-    const { searching, resultsCount, query, type } = this.props;
-    const typeDescription = SearchStatusTypeMap[type];
+const SearchStatus = (props: SearchStatusProps): JSX.Element => {
+  const { searching, resultsCount, query, type } = props;
+  const typeDescription = SearchStatusTypeMap[type];
 
-    if (searching) {
-      return (
-        <span>
-          <span>Searching for matching {typeDescription}...</span>{' '}
-          <Spinner animation="border" size="sm" variant="secondary" />
-        </span>
-      );
-    }
-
-    let formattedQuery = <span />;
-    if (query) {
-      formattedQuery = (
-        <span>
-          {' '}
-          for &apos;<strong>{query}</strong>&apos;
-        </span>
-      );
-    }
-
-    if (resultsCount) {
-      return (
-        <span>
-          Found {resultsCount} {typeDescription}
-          {formattedQuery}.
-        </span>
-      );
-    }
-
-    return <span>No result found{formattedQuery}.</span>;
+  if (searching) {
+    return (
+      <span>
+        <span>Searching for matching {typeDescription}...</span>{' '}
+        <Spinner animation="border" size="sm" variant="secondary" />
+      </span>
+    );
   }
-}
 
-export default SearchStatus;
+  let formattedQuery = <span />;
+  if (query) {
+    formattedQuery = (
+      <span>
+        {' '}
+        for &apos;<strong>{query}</strong>&apos;
+      </span>
+    );
+  }
+
+  if (resultsCount) {
+    return (
+      <span>
+        Found {resultsCount} {typeDescription}
+        {formattedQuery}.
+      </span>
+    );
+  }
+
+  return <span>No result found{formattedQuery}.</span>;
+};
+
+export default React.memo(SearchStatus);
