@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-
+      - develop
 
 env:
   OUTPUT_PATH: ${{ github.workspace }}/build
@@ -11,7 +11,6 @@ env:
 
 jobs:
   deploy:
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
     runs-on: ubuntu-latest
 
     steps:
@@ -37,7 +36,17 @@ jobs:
         name: scoopsearch
         path: ${{ env.OUTPUT_PATH }}
 
-    - name: Deploy
+    - name: Deploy to scoopsearch-dev.github.io
+      if: github.ref == 'refs/heads/develop'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.GHPAGES_DEPLOY_KEY_DEV }}
+        external_repository: ScoopSearch/scoopsearch-dev.github.io
+        publish_branch: master
+        publish_dir: ./build
+
+    - name: Deploy to scoopsearch.github.io
+      if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.GHPAGES_DEPLOY_KEY }}
