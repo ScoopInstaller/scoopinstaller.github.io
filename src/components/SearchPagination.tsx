@@ -22,6 +22,10 @@ const SearchPagination = (props: SearchPaginationProps): JSX.Element => {
 
   if (resultsCount > 0) {
     const totalPages = Math.ceil(resultsCount / resultsPerPage);
+    if (currentPage > totalPages) {
+      onPageChange(totalPages);
+    }
+
     if (totalPages > 1) {
       const paginationItems = [];
 
