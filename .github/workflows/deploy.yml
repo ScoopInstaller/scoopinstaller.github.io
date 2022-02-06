@@ -25,9 +25,18 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build app
+    - name: Build app (main => https://scoopsearch.github.io)
+      if: github.ref == 'refs/heads/main'
       env:
         REACT_APP_AZURESEARCH_KEY: ${{ secrets.REACT_APP_AZURESEARCH_KEY }}
+        PUBLIC_URL: "https://scoopsearch.github.io"
+      run: npm run build
+
+    - name: Build app (develop => https://scoopsearch.github.io/scoopsearch-dev.github.io)
+      if: github.ref == 'refs/heads/develop'
+      env:
+        REACT_APP_AZURESEARCH_KEY: ${{ secrets.REACT_APP_AZURESEARCH_KEY }}
+        PUBLIC_URL: "https://scoopsearch.github.io/scoopsearch-dev.github.io"
       run: npm run build
 
     - name: Upload artifact
@@ -36,7 +45,16 @@ jobs:
         name: scoopsearch
         path: ${{ env.OUTPUT_PATH }}
 
-    - name: Deploy to scoopsearch-dev.github.io
+    - name: Deploy app (main => https://scoopsearch.github.io)
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.GHPAGES_DEPLOY_KEY }}
+        external_repository: ScoopSearch/scoopsearch.github.io
+        publish_branch: master
+        publish_dir: ./build
+
+    - name: Deploy app (develop => https://scoopsearch.github.io/scoopsearch-dev.github.io)
       if: github.ref == 'refs/heads/develop'
       uses: peaceiris/actions-gh-pages@v3
       with:
@@ -45,11 +63,3 @@ jobs:
         publish_branch: master
         publish_dir: ./build
 
-    - name: Deploy to scoopsearch.github.io
-      if: github.ref == 'refs/heads/main'
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        deploy_key: ${{ secrets.GHPAGES_DEPLOY_KEY }}
-        external_repository: ScoopSearch/scoopsearch.github.io
-        publish_branch: master
-        publish_dir: ./build
