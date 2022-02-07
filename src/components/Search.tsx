@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
-import { RouteComponentProps } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import ManifestJson from '../serialization/ManifestJson';
 import SearchResultsJson from '../serialization/SearchResultsJson';
@@ -13,61 +13,63 @@ import SearchResult from './SearchResult';
 
 const RESULTS_PER_PAGE = 20;
 
-type SearchParams = {
-  page?: string;
-};
+const Search = (): JSX.Element => {
+  const [searchParams, setSearchParams] = useSearchParams();
 
-type SearchProps = RouteComponentProps<SearchParams>;
+  const getQueryFromSearchParams = useCallback((): string => {
+    return searchParams.get('q') ?? '';
+  }, [searchParams]);
 
-const Search = (props: SearchProps): JSX.Element => {
-  const { history, location, match } = props;
+  const getCurrentPageFromSearchParams = useCallback((): number => {
+    return parseInt(searchParams.get('p') || '1', 10);
+  }, [searchParams]);
 
-  const initialSortIndex = parseInt(sessionStorage.getItem('sortIndex') || '0', 10);
-  const initialSearchOfficialOnly = sessionStorage.getItem('searchOfficialOnly') === 'true';
+  const getSortIndexFromSearchParams = useCallback((): number => {
+    return parseInt(searchParams.get('s') || '0', 10);
+  }, [searchParams]);
 
-  const getQueryFromUri = useCallback((): string => {
-    return location.search.length > 1 ? decodeURIComponent(location.search.substr(1)) : '';
-  }, [location.search]);
+  const getSearchOfficialOnlyFromSearchParams = useCallback((): boolean => {
+    return searchParams.get('o') === 'true';
+  }, [searchParams]);
 
-  const getCurrentPageFromUri = useCallback((): number => {
-    return parseInt(match.params.page || '1', 10);
-  }, [match]);
+  const updateSearchParams = useCallback(
+    (name: string, value: string, shouldSet: () => boolean): void => {
+      if (shouldSet()) {
+        searchParams.set(name, value);
+      } else {
+        searchParams.delete(name);
+      }
 
-  const [searchBarQuery, setSearchBarQuery] = useState<string>(getQueryFromUri());
-  const [query, setQuery] = useState<string>(getQueryFromUri());
-  const [currentPage, setCurrentPage] = useState<number>(getCurrentPageFromUri);
-  const [sortIndex, setSortIndex] = useState<number>(initialSortIndex);
-  const [searchOfficialOnly, setSearchOfficialOnly] = useState<boolean>(initialSearchOfficialOnly);
+      setSearchParams(searchParams, { replace: true });
+    },
+    [searchParams, setSearchParams]
+  );
+
+  const [searchBarQuery, setSearchBarQuery] = useState<string>(getQueryFromSearchParams);
+  const [query, setQuery] = useState<string>(getQueryFromSearchParams);
+  const [currentPage, setCurrentPage] = useState<number>(getCurrentPageFromSearchParams);
+  const [sortIndex, setSortIndex] = useState<number>(getSortIndexFromSearchParams);
+  const [searchOfficialOnly, setSearchOfficialOnly] = useState<boolean>(getSearchOfficialOnlyFromSearchParams);
   const [searchResults, setSearchResults] = useState<SearchResultsJson>();
   const [contentToCopy, setContentToCopy] = useState<string>();
 
   useEffect(() => {
-    const queryfromUri = getQueryFromUri();
-    setSearchBarQuery(queryfromUri);
-    setQuery(queryfromUri);
-  }, [location.search, getQueryFromUri]);
+    const queryfromSearchParams = getQueryFromSearchParams();
+    setSearchBarQuery(queryfromSearchParams);
+    setQuery(queryfromSearchParams);
+  }, [getQueryFromSearchParams]);
 
   useEffect(() => {
-    setCurrentPage(getCurrentPageFromUri());
-  }, [location.pathname, getCurrentPageFromUri]);
-
-  const updateHistory = useCallback(
-    (search: string | undefined = undefined, pathname: string | undefined = undefined): void => {
-      history.replace({
-        search: search ?? location.search,
-        pathname: pathname ?? '/apps',
-      });
-    },
-    [location.search, history]
-  );
+    setCurrentPage(getCurrentPageFromSearchParams());
+  }, [getCurrentPageFromSearchParams]);
 
   const handleQueryChange = useCallback(
     (newQuery: string): void => {
-      updateHistory(encodeURIComponent(newQuery), undefined);
+      updateSearchParams('q', newQuery, () => newQuery.length > 0);
       setSearchBarQuery(newQuery);
       setCurrentPage(1);
     },
-    [updateHistory]
+    [updateSearchParams]
   );
 
   const handleQuerySubmit = useCallback((): void => {
@@ -80,21 +82,27 @@ const Search = (props: SearchProps): JSX.Element => {
 
   const handlePageChange = useCallback(
     (newCurrentPage: number): void => {
-      updateHistory(undefined, `/apps/${newCurrentPage}`);
+      updateSearchParams('p', newCurrentPage.toString(), () => newCurrentPage > 1);
       setCurrentPage(newCurrentPage);
     },
-    [updateHistory]
+    [updateSearchParams]
   );
 
-  const handleSortChange = useCallback((newSortIndex: number): void => {
-    sessionStorage.setItem('sortIndex', newSortIndex.toString());
-    setSortIndex(newSortIndex);
-  }, []);
+  const handleSortChange = useCallback(
+    (newSortIndex: number): void => {
+      updateSearchParams('s', newSortIndex.toString(), () => newSortIndex > 0);
+      setSortIndex(newSortIndex);
+    },
+    [updateSearchParams]
+  );
 
-  const handleSearchOfficialOnlyChange = useCallback((newSearchOfficialOnly: boolean): void => {
-    sessionStorage.setItem('searchOfficialOnly', newSearchOfficialOnly.toString());
-    setSearchOfficialOnly(newSearchOfficialOnly);
-  }, []);
+  const handleSearchOfficialOnlyChange = useCallback(
+    (newSearchOfficialOnly: boolean): void => {
+      updateSearchParams('o', newSearchOfficialOnly.toString(), () => newSearchOfficialOnly);
+      setSearchOfficialOnly(newSearchOfficialOnly);
+    },
+    [updateSearchParams]
+  );
 
   const handleCopyToClipboard = useCallback((newContentToCopy: string): void => {
     setContentToCopy(newContentToCopy);

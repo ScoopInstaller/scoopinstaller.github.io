@@ -163,7 +163,7 @@ const Buckets = (): JSX.Element => {
                         <Link
                           to={{
                             pathname: '/apps',
-                            search: encodeURIComponent(`"${item.bucket}"`),
+                            search: `?q="${encodeURIComponent(item.bucket)}"`,
                           }}
                         >
                           {Utils.extractPathFromUrl(item.bucket)}
