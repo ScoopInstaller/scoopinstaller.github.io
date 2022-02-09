@@ -84,6 +84,7 @@ const Search = (): JSX.Element => {
     (newCurrentPage: number): void => {
       updateSearchParams('p', newCurrentPage.toString(), () => newCurrentPage > 1);
       setCurrentPage(newCurrentPage);
+      window.scrollTo(0, 0);
     },
     [updateSearchParams]
   );
@@ -134,16 +135,6 @@ const Search = (): JSX.Element => {
               onResultsChange={handleResultsChange}
               onSortIndexChange={handleSortChange}
               onSearchOfficialOnlyChange={handleSearchOfficialOnlyChange}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col className="d-flex justify-content-center">
-            <SearchPagination
-              resultsPerPage={RESULTS_PER_PAGE}
-              currentPage={currentPage}
-              resultsCount={searchResults?.count ?? 0}
-              onPageChange={handlePageChange}
             />
           </Col>
         </Row>
