@@ -58,7 +58,11 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
         </InputGroup.Text>
         <Form.Control className="border-start-0" readOnly type="text" style={{ opacity }} value={value} />
 
-        <CopyToClipboardButton variant="outline-secondary" onClick={() => handleCopyToClipboard(value)} />
+        <CopyToClipboardButton
+          title="Copy to clipboard"
+          variant="outline-secondary"
+          onClick={() => handleCopyToClipboard(value)}
+        />
       </InputGroup>
     );
   };
