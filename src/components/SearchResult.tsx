@@ -107,7 +107,7 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
     <Card key={id} className="mb-2">
       <Card.Header>
         <Row>
-          <Col lg={7} className="text-truncate valign-items">
+          <Col lg={7} className="valign-items">
             {favicon && <Img className="me-2" src={favicon} width={20} height={20} />}
             <span className="fw-bold">{displayInnerHtml(highlightedName)}</span>
             <span className="me-1 ms-1">in</span>

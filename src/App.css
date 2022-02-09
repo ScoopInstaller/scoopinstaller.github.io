@@ -24,6 +24,7 @@ mark {
 div.valign-items {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 svg.react-icon {
