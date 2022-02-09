@@ -14,11 +14,8 @@ mark {
 }
 
 .scoopCopyGroupCommand > button, .btn-outline-secondary:disabled {
-  background-color: rgba(0,0,0,.06);
-  border-color: rgba(0,0,0,.06);
-  border-top: 0;
-  border-bottom: 0;
-  border-right: 0;
+  background-color: rgba(0,0,0,.08);
+  border: 0;
 }
 
 div.valign-items {
