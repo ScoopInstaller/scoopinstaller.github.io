@@ -2,24 +2,32 @@ mark {
   background-color: rgba(255, 255, 0, 0.5);
 }
 
-.card-header, .card-body {
-  padding: .75rem;
-}
-
-.scoopCopyCommand {
+.scoopCopyGroupCommand > .scoopCopyCommand {
   padding-right: 0 !important;
+  background-color: rgba(0,0,0,.03);
+  border: 0;
 }
 
-.faIconVerticalAlign {
-  vertical-align: baseline;
-  margin-bottom: -2px;
+.scoopCopyGroupCommand > .form-control[readonly] {
+  background-color: rgba(0,0,0,.03);
+  border: 0;
 }
 
-.copyToClipbardMiniButton {
-  padding: 0.15rem 0.2rem;
-  font-size: 0.7rem;
-  line-height: 0.75rem;
-  vertical-align: text-top;
+.scoopCopyGroupCommand > button, .btn-outline-secondary:disabled {
+  background-color: rgba(0,0,0,.06);
+  border-color: rgba(0,0,0,.06);
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
+}
+
+div.valign-items {
+  display: flex;
+  align-items: center;
+}
+
+svg.react-icon {
+  margin-top: -3px;
 }
 
 .pagination > li {
@@ -36,4 +44,8 @@ a:not([class*="btn"]):hover {
 
 body {
   overflow-y: scroll;
+}
+
+.tooltip-inner {
+  max-width: none;
 }

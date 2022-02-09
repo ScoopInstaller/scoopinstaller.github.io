@@ -50,7 +50,7 @@ class ManifestJson {
   }
 
   get highlightedRepository(): HighLight {
-    return this.tryGetHighlight('Metadata/Repository', this.metadata.repository.replace('https://github.com/', ''));
+    return this.tryGetHighlight('Metadata/Repository', this.metadata.repository);
   }
 
   get highlightedAuthorName(): HighLight {
@@ -62,7 +62,18 @@ class ManifestJson {
   }
 
   get highlightedVersion(): HighLight {
-    return this.tryGetHighlight('Version', this.version);
+    return this.tryGetHighlight('Version', this.version.length ? this.version : 'Unknown');
+  }
+
+  get favicon(): HighLight {
+    if (this.homepage) {
+      const parser = document.createElement('a');
+      parser.href = this.homepage;
+
+      return `${parser.origin}/favicon.ico`;
+    }
+
+    return undefined;
   }
 
   tryGetHighlight(propertyName: string, fallback?: string): HighLight {
@@ -75,17 +86,6 @@ class ManifestJson {
     });
 
     return match && this.highlights ? this.highlights[match] : fallback;
-  }
-
-  get favicon(): HighLight {
-    if (this.homepage) {
-      const parser = document.createElement('a');
-      parser.href = this.homepage;
-
-      return `${parser.origin}/favicon.ico`;
-    }
-
-    return undefined;
   }
 }
 

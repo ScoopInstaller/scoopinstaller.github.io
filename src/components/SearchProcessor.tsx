@@ -194,15 +194,8 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
               <Form.Check type="switch" id="only-official-buckets">
                 <Form.Check.Input checked={searchOfficialOnly} onChange={handleSearchOfficialOnlyChange} />
                 <Form.Check.Label>
-                  <span
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    Search only known buckets
-                    <BucketTypeIcon official showTooltip={false} />
-                  </span>
+                  Search only known buckets
+                  <BucketTypeIcon className="ms-1" official showTooltip={false} />
                 </Form.Check.Label>
               </Form.Check>
             </Col>
