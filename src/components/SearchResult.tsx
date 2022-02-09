@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Card, Col, Container, Form, InputGroup, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
-import { GoLinkExternal, GoBook, GoPackage } from 'react-icons/go';
+import { GoLinkExternal, GoBook, GoPackage, GoClock } from 'react-icons/go';
 import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
 import supportedSpdxLicenses from 'spdx-license-ids/index.json';
@@ -115,18 +115,19 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
             <BucketTypeIcon className="ms-1" official={metadata.repositoryOfficial} stars={metadata.stars} />
           </Col>
           <Col lg={5} className="text-lg-end text-truncate">
-            <GoPackage className="me-1" />
+            <GoClock title="Updated" className="me-1" />
+            <OverlayTrigger
+              placement="bottom"
+              delay={DELAY_TOOLTIP}
+              overlay={<Tooltip id="date-tooltip">{dayjs(metadata.committed).format('LLL')}</Tooltip>}
+            >
+              <span>{dayjs(metadata.committed).fromNow()}</span>
+            </OverlayTrigger>
+            <span className="ms-1 me-1">|</span>
+            <GoPackage title="Version" className="me-1" />
             <a href={`${metadata.repository}/blob/master/${metadata.filePath}`}>
               {versionPrefix}
               {displayInnerHtml(highlightedVersion)}
-              <span className="ms-1 me-1">|</span>
-              <OverlayTrigger
-                placement="bottom"
-                delay={DELAY_TOOLTIP}
-                overlay={<Tooltip id="date-tooltip">{dayjs(metadata.committed).format('LLL')}</Tooltip>}
-              >
-                <span>updated {dayjs(metadata.committed).fromNow()}</span>
-              </OverlayTrigger>
             </a>
           </Col>
         </Row>
