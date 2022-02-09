@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { FaGithub } from 'react-icons/fa';
+import { GoMarkGithub } from 'react-icons/go';
 import { Link } from 'react-router-dom';
 
 const NavBar = (): JSX.Element => {
@@ -23,7 +23,7 @@ const NavBar = (): JSX.Element => {
           </Nav>
           <Nav>
             <Nav.Link href="https://github.com/ScoopSearch">
-              <FaGithub size="1.2em" />
+              <GoMarkGithub size="1.2em" />
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
