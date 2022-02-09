@@ -22,20 +22,6 @@ mark {
   vertical-align: text-top;
 }
 
-.starsBadge {
-  padding: 0.3em 0.4em;
-  vertical-align: text-top;
-  line-height: 0.75rem;
-}
-
-.starsBadge > span{
-  vertical-align: text-bottom;
-}
-.starsBadge > svg{
-  margin-top: 1px;
-  vertical-align: top;
-}
-
 .pagination > li {
   min-width: 2em;
   text-align: center;
