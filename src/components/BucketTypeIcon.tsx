@@ -20,7 +20,7 @@ const BucketTypeIcon = (props: BucketTypeIconProps): JSX.Element => {
   const { official, stars = 0, showTooltip = true } = props;
   return (
     <OverlayTrigger
-      placement="auto"
+      placement="bottom"
       delay={DELAY_TOOLTIP}
       overlay={
         showTooltip ? (
@@ -32,9 +32,11 @@ const BucketTypeIcon = (props: BucketTypeIconProps): JSX.Element => {
                 ? 'Popular community bucket'
                 : 'Community bucket'}
             </span>
-            <span className="ms-1">
-              ({stars} <GoStar />)
-            </span>
+            {props.stars && (
+              <span className="ms-1">
+                ({stars} <GoStar />)
+              </span>
+            )}
           </Tooltip>
         ) : (
           <span />
