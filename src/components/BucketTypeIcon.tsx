@@ -3,7 +3,8 @@ import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { GoVerified, GoUnverified } from 'react-icons/go';
 
-const DELAY_TOOLTIP = 250;
+import { DELAY_TOOLTIP } from '../constants';
+
 const OFFICIAL_ICON_COLOR = '#2E86C1';
 const COMMUNITY_ICON_COLOR = '#CCCCCC';
 
