@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { Button, ButtonProps } from 'react-bootstrap';
-import { FaClipboard, FaCheck } from 'react-icons/fa';
+import { Button } from 'react-bootstrap';
+import { FaRegClipboard, FaCheck } from 'react-icons/fa';
 
 const CLIPBOARD_COPY_NOTIFICATION_DELAY = 1500;
 
-const CopyToClipboardButton = (props: ButtonProps): JSX.Element => {
+type Props = { title: string; variant: string; id: string; onClick: React.MouseEventHandler<HTMLButtonElement> };
+
+const CopyToClipboardButton = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
   const [copied, setCopied] = useState<boolean>(false);
   const { onClick } = props;
 
@@ -26,10 +28,11 @@ const CopyToClipboardButton = (props: ButtonProps): JSX.Element => {
   );
 
   return (
-    <Button {...props} onClick={handleClick} disabled={copied}>
-      {copied ? <FaCheck /> : <FaClipboard />}
+    <Button {...props} onClick={handleClick} disabled={copied} ref={ref}>
+      {copied ? <FaCheck /> : <FaRegClipboard />}
     </Button>
   );
-};
+});
 
+CopyToClipboardButton.displayName = 'CopyToClipboardButton';
 export default React.memo(CopyToClipboardButton);

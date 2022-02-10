@@ -3,7 +3,7 @@ import React, { useCallback, useState, useRef } from 'react';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Card, Col, Container, Form, InputGroup, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Card, Col, Container, Form, InputGroup, InputGroupProps, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import { GoLinkExternal, GoBook, GoPackage, GoClock } from 'react-icons/go';
 import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
@@ -49,16 +49,31 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
     );
   };
 
-  const CopyToClipboardComponent = (copyToClipboardProps: { value: string; opacity?: number }): JSX.Element => {
-    const { value, opacity = 1 } = copyToClipboardProps;
+  const CopyToClipboardComponent = (copyToClipboardProps: { value: string } & InputGroupProps): JSX.Element => {
+    const { value } = copyToClipboardProps;
+    const copyToClipboardButtonRef = useRef<HTMLButtonElement>(null);
+
+    const handleClickCommand = () => {
+      copyToClipboardButtonRef.current?.click();
+    };
+
     return (
-      <InputGroup size="sm" className="scoopCopyGroupCommand">
-        <InputGroup.Text className="scoopCopyCommand border-end-0" style={{ opacity }}>
+      <InputGroup size="sm" className="copy-command-group" {...copyToClipboardProps}>
+        <InputGroup.Text id="copy-command-prefix" className="border-end-0">
           &gt;
         </InputGroup.Text>
-        <Form.Control className="border-start-0" readOnly type="text" style={{ opacity }} value={value} />
+        <Form.Control
+          id="copy-command-text"
+          className="border-start-0"
+          readOnly
+          type="text"
+          value={value}
+          onClick={handleClickCommand}
+        />
 
         <CopyToClipboardButton
+          id="copy-command-button"
+          ref={copyToClipboardButtonRef}
           title="Copy to clipboard"
           variant="outline-secondary"
           onClick={() => handleCopyToClipboard(value)}
@@ -101,11 +116,11 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
 
   const versionPrefix = version.length > 0 && /^\d/.test(version) && 'v';
 
-  const bucketAddCommandLine = metadata.repositoryOfficial
+  const bucketCommandLine = metadata.repositoryOfficial
     ? `scoop bucket add ${metadata.repository.substring(metadata.repository.lastIndexOf('/') + 1).toLowerCase()}`
     : `scoop bucket add ${Utils.extractPathFromUrl(metadata.repository, '_')} ${metadata.repository}`;
 
-  const appInstallCommandLine = `scoop install ${name}`;
+  const appCommandLine = `scoop install ${name}`;
 
   return (
     <Card key={id} className="mb-2">
@@ -174,10 +189,10 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
             </Col>
             <Col lg={6} className="mt-4 mt-lg-0">
               <Row>
-                <CopyToClipboardComponent value={bucketAddCommandLine} opacity={0.7} />
+                <CopyToClipboardComponent value={bucketCommandLine} id="bucket-command" />
               </Row>
               <Row className="mt-2">
-                <CopyToClipboardComponent value={appInstallCommandLine} />
+                <CopyToClipboardComponent value={appCommandLine} id="app-command" />
               </Row>
             </Col>
           </Row>

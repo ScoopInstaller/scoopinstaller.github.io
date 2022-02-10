@@ -2,20 +2,35 @@ mark {
   background-color: rgba(255, 255, 0, 0.5);
 }
 
-.scoopCopyGroupCommand > .scoopCopyCommand {
+.copy-command-group > #copy-command-prefix {
   padding-right: 0 !important;
   background-color: rgba(0,0,0,.03);
   border: 0;
 }
 
-.scoopCopyGroupCommand > .form-control[readonly] {
+.copy-command-group > #copy-command-text {
   background-color: rgba(0,0,0,.03);
+  border: 0;
+
+  font-family: Consolas, 'Lucida Console', 'Courier New', Courier, monospace;
+  line-height: 2.0;
+  cursor: pointer;
+}
+
+.copy-command-group > button, .btn-outline-secondary:disabled {
+  background-color: rgba(0,0,0,.08);
   border: 0;
 }
 
-.scoopCopyGroupCommand > button, .btn-outline-secondary:disabled {
-  background-color: rgba(0,0,0,.08);
-  border: 0;
+#app-command.copy-command-group > input, #app-command.copy-command-group > span {
+  font-weight: bold;
+}
+
+#copy-command-text:hover + #copy-command-button {
+  /* .btn-outline-secondary:hover */
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
 }
 
 div.valign-items {
