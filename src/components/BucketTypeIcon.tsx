@@ -17,7 +17,7 @@ type BucketTypeIconProps = {
 } & React.HTMLAttributes<SVGElement>;
 
 const BucketTypeIcon = (props: BucketTypeIconProps): JSX.Element => {
-  const { official, stars = 0, showTooltip = true } = props;
+  const { official, stars = 0, showTooltip = true, ...rest } = props;
   return (
     <OverlayTrigger
       placement="bottom"
@@ -44,10 +44,10 @@ const BucketTypeIcon = (props: BucketTypeIconProps): JSX.Element => {
       }
     >
       <span>
-        {(official && <GoVerified {...props} color={OFFICIAL_ICON_COLOR} />) ||
+        {(official && <GoVerified {...rest} color={OFFICIAL_ICON_COLOR} />) ||
           (stars >= POPULAR_REPOSITORY_THRESHOLD && (
-            <GoUnverified {...props} color={POPULAR_COMMUNITY_ICON_COLOR} />
-          )) || <GoUnverified {...props} color={COMMUNITY_ICON_COLOR} />}
+            <GoUnverified {...rest} color={POPULAR_COMMUNITY_ICON_COLOR} />
+          )) || <GoUnverified {...rest} color={COMMUNITY_ICON_COLOR} />}
       </span>
     </OverlayTrigger>
   );

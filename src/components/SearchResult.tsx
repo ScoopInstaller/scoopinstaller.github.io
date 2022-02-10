@@ -50,7 +50,7 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
   };
 
   const CopyToClipboardComponent = (copyToClipboardProps: { value: string } & InputGroupProps): JSX.Element => {
-    const { value } = copyToClipboardProps;
+    const { value, ...copyToClipboardRest } = copyToClipboardProps;
     const copyToClipboardButtonRef = useRef<HTMLButtonElement>(null);
 
     const handleClickCommand = () => {
@@ -58,7 +58,7 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
     };
 
     return (
-      <InputGroup size="sm" className="copy-command-group" {...copyToClipboardProps}>
+      <InputGroup size="sm" className="copy-command-group" {...copyToClipboardRest}>
         <InputGroup.Text id="copy-command-prefix" className="border-end-0">
           &gt;
         </InputGroup.Text>

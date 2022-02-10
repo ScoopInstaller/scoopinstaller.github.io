@@ -9,7 +9,7 @@ type Props = { title: string; variant: string; id: string; onClick: React.MouseE
 
 const CopyToClipboardButton = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
   const [copied, setCopied] = useState<boolean>(false);
-  const { onClick } = props;
+  const { onClick, ...rest } = props;
 
   useEffect(() => {
     if (copied) {
@@ -28,7 +28,7 @@ const CopyToClipboardButton = React.forwardRef<HTMLButtonElement, Props>((props,
   );
 
   return (
-    <Button {...props} onClick={handleClick} disabled={copied} ref={ref}>
+    <Button {...rest} onClick={handleClick} disabled={copied} ref={ref}>
       {copied ? <FaCheck /> : <FaRegClipboard />}
     </Button>
   );
