@@ -59,20 +59,18 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
 
     return (
       <InputGroup size="sm" className="copy-command-group" {...copyToClipboardRest}>
-        <InputGroup.Text id="copy-command-prefix" className="border-end-0">
-          &gt;
-        </InputGroup.Text>
+        <InputGroup.Text className="border-end-0 copy-command-prefix">&gt;</InputGroup.Text>
         <Form.Control
-          id="copy-command-text"
-          className="border-start-0"
+          className="border-start-0 copy-command-text"
           readOnly
+          title="Copy to clipboard"
           type="text"
           value={value}
           onClick={handleClickCommand}
         />
 
         <CopyToClipboardButton
-          id="copy-command-button"
+          className="copy-command-button"
           ref={copyToClipboardButtonRef}
           title="Copy to clipboard"
           variant="outline-secondary"

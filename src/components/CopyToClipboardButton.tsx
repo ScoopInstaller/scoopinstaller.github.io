@@ -5,7 +5,7 @@ import { FaRegClipboard, FaCheck } from 'react-icons/fa';
 
 const CLIPBOARD_COPY_NOTIFICATION_DELAY = 1500;
 
-type Props = { title: string; variant: string; id: string; onClick: React.MouseEventHandler<HTMLButtonElement> };
+type Props = { title: string; variant: string; className: string; onClick: React.MouseEventHandler<HTMLButtonElement> };
 
 const CopyToClipboardButton = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
   const [copied, setCopied] = useState<boolean>(false);

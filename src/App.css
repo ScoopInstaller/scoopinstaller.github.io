@@ -2,35 +2,48 @@ mark {
   background-color: rgba(255, 255, 0, 0.5);
 }
 
-.copy-command-group > #copy-command-prefix {
-  padding-right: 0 !important;
-  background-color: rgba(0,0,0,.03);
+.copy-command-prefix, .copy-command-text {
+  background-color: var(--bs-gray-100) !important;
   border: 0;
+  font-family: var(--bs-font-monospace);
+  line-height: 2.0;
+  user-select: none;
+  box-shadow: none !important;
 }
 
-.copy-command-group > #copy-command-text {
-  background-color: rgba(0,0,0,.03);
-  border: 0;
+.copy-command-prefix {
+  padding-right: 0 !important;
+}
 
-  font-family: Consolas, 'Lucida Console', 'Courier New', Courier, monospace;
-  line-height: 2.0;
+.copy-command-text {
   cursor: pointer;
 }
 
-.copy-command-group > button, .btn-outline-secondary:disabled {
-  background-color: rgba(0,0,0,.08);
-  border: 0;
-}
-
-#app-command.copy-command-group > input, #app-command.copy-command-group > span {
+#app-command > * {
   font-weight: bold;
 }
 
-#copy-command-text:hover + #copy-command-button {
-  /* .btn-outline-secondary:hover */
-  color: #fff;
-  background-color: #6c757d;
-  border-color: #6c757d;
+.copy-command-group > button {
+  border: 0;
+  margin-left: 0 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+.copy-command-group > button:not(:hover) {
+  background-color: var(--bs-gray-200);
+  transition: none;
+}
+
+.copy-command-text:hover + .copy-command-button:not(:disabled) {
+  color: var(--bs-white);
+  background-color: var(--bs-secondary);
+  border-color: var(--bs-secondary);
+}
+
+.copy-command-button:disabled {
+  color: var(--bs-gray-200);
+  background-color: rgba(var(--bs-success-rgb), 0.8) !important;
 }
 
 div.valign-items {
