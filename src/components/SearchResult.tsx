@@ -133,16 +133,15 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
           </Col>
           <Col lg={5} className="text-lg-end text-truncate">
             <GoClock title="Updated" className="me-1" />
-            <OverlayTrigger
-              placement="bottom"
-              delay={DELAY_TOOLTIP}
-              overlay={<Tooltip id="date-tooltip">{dayjs(metadata.committed).format('LLL')}</Tooltip>}
+            <a
+              href={`${metadata.repository}/commit/${metadata.sha}`}
+              title={`Diff (${dayjs(metadata.committed).format('LLL')})`}
             >
-              <span>{dayjs(metadata.committed).fromNow()}</span>
-            </OverlayTrigger>
+              {dayjs(metadata.committed).fromNow()}
+            </a>
             <span className="ms-1 me-1">|</span>
             <GoPackage title="Version" className="me-1" />
-            <a href={`${metadata.repository}/blob/master/${metadata.filePath}`}>
+            <a href={`${metadata.repository}/blob/master/${metadata.filePath}`} title="Manifest file">
               {versionPrefix}
               {displayInnerHtml(highlightedVersion)}
             </a>
