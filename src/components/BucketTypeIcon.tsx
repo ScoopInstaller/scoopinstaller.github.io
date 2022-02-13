@@ -32,7 +32,7 @@ const BucketTypeIcon = (props: BucketTypeIconProps): JSX.Element => {
                 ? 'Popular community bucket'
                 : 'Community bucket'}
             </span>
-            {props.stars && (
+            {props.stars !== undefined && (
               <span className="ms-1">
                 ({stars} <GoStar />)
               </span>
