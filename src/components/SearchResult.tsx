@@ -3,13 +3,12 @@ import React, { useCallback, useState, useRef } from 'react';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Card, Col, Container, Form, InputGroup, InputGroupProps, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Card, Col, Container, Form, InputGroup, InputGroupProps, Row } from 'react-bootstrap';
 import { GoLinkExternal, GoBook, GoPackage, GoClock } from 'react-icons/go';
 import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
 import supportedSpdxLicenses from 'spdx-license-ids/index.json';
 
-import { DELAY_TOOLTIP } from '../constants';
 import ManifestJson from '../serialization/ManifestJson';
 import Utils from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
