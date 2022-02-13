@@ -158,20 +158,13 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
                 {homepage && (
                   <span className="text-truncate" ref={homepageRef}>
                     <GoLinkExternal title="Homepage" className="me-1" />
-                    <OverlayTrigger
-                      placement="bottom"
-                      delay={DELAY_TOOLTIP}
-                      onEntering={handleHomepageOverlayEntering}
-                      overlay={
-                        <Tooltip hidden={homepageTooltipHidden} id="homepage-tooltip">
-                          {homepage}
-                        </Tooltip>
-                      }
+                    <a
+                      href={homepage}
+                      onMouseOver={handleHomepageOverlayEntering}
+                      title={homepageTooltipHidden ? '' : homepage}
                     >
-                      <a href={homepage}>
-                        <span>{displayInnerHtml(formattedHomepage)}</span>
-                      </a>
-                    </OverlayTrigger>
+                      <span>{displayInnerHtml(formattedHomepage)}</span>
+                    </a>
                   </span>
                 )}
                 {license && (
