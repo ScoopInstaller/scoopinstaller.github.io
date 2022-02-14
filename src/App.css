@@ -2,6 +2,8 @@ mark {
   background-color: rgba(255, 255, 0, 0.5);
 }
 
+
+
 .copy-command-prefix, .copy-command-text {
   background-color: var(--bs-gray-100) !important;
   border: 0;
@@ -45,6 +47,39 @@ mark {
   color: var(--bs-gray-200);
   background-color: rgba(var(--bs-success-rgb), 0.8) !important;
 }
+
+
+
+.sorting-filtering-button > button:not(:hover) {
+  background-color: var(--bs-gray-200);
+  border-color: var(--bs-gray-200);
+  color: var(--bs-dark);
+}
+
+.sorting-filtering-menu .btn:focus, .sorting-filtering-menu .btn:active, .sorting-filtering-menu .form-check-input:focus, .sorting-filtering-menu .form-check-input:active {
+  box-shadow: none;
+}
+
+.sorting-filtering-menu > .dropdown-item:active {
+  background-color: var(--bs-gray-200);
+  color: var(--bs-body-color);
+}
+
+.sorting-filtering-menu svg {
+  width: 24px;
+}
+
+.sorting-filtering-menu .form-switch {
+  padding-left: 0;
+}
+
+.sorting-filtering-menu .form-switch > input {
+  width: 24px;
+  margin-right: 8px;
+  margin-left: 0px;
+}
+
+
 
 div.valign-items {
   display: flex;

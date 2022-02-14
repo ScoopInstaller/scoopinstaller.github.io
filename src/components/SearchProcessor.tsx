@@ -1,44 +1,79 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-import { Col, Row, Form, InputGroup } from 'react-bootstrap';
+import { Col, Row, Form, Dropdown, Button } from 'react-bootstrap';
+import { IconBaseProps } from 'react-icons';
+import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
+import { GoSettings } from 'react-icons/go';
 
 import SearchResultsJson from '../serialization/SearchResultsJson';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
 
+export enum SortDirection {
+  Ascending,
+  Descending,
+}
+
 type SortMode = {
   DisplayName: string;
-  OrderBy: string[];
+  DefaultSortDirection: SortDirection;
+  OrderBy: { [sortDirection in SortDirection]: string[] };
 };
 
 type SearchProcessorProps = {
   page: number;
   query: string;
   sortIndex: number;
+  sortDirection: SortDirection;
   searchOfficialOnly: boolean;
   resultsPerPage: number;
   onResultsChange: (value?: SearchResultsJson) => void;
-  onSortIndexChange: (sortIndex: number) => void;
+  onSortChange: (sortIndex: number, sortDirection: SortDirection) => void;
   onSearchOfficialOnlyChange: (searchOfficialOnly: boolean) => void;
 };
 
-const sortModes: SortMode[] = [
+export const sortModes: SortMode[] = [
   {
     DisplayName: 'Best match',
-    OrderBy: ['search.score() desc', 'Metadata/OfficialRepositoryNumber desc', 'NameSortable asc'],
+    DefaultSortDirection: SortDirection.Descending,
+    OrderBy: {
+      [SortDirection.Ascending]: ['search.score() asc', 'Metadata/OfficialRepositoryNumber asc', 'NameSortable desc'],
+      [SortDirection.Descending]: ['search.score() desc', 'Metadata/OfficialRepositoryNumber desc', 'NameSortable asc'],
+    },
   },
   {
     DisplayName: 'Name',
-    OrderBy: [
-      'NameSortable asc',
-      'Metadata/OfficialRepositoryNumber desc',
-      'Metadata/RepositoryStars desc',
-      'Metadata/Committed desc',
-    ],
+    DefaultSortDirection: SortDirection.Ascending,
+    OrderBy: {
+      [SortDirection.Ascending]: [
+        'NameSortable asc',
+        'Metadata/OfficialRepositoryNumber desc',
+        'Metadata/RepositoryStars desc',
+        'Metadata/Committed desc',
+      ],
+      [SortDirection.Descending]: [
+        'NameSortable desc',
+        'Metadata/OfficialRepositoryNumber asc',
+        'Metadata/RepositoryStars asc',
+        'Metadata/Committed asc',
+      ],
+    },
   },
   {
     DisplayName: 'Newest',
-    OrderBy: ['Metadata/Committed desc', 'Metadata/OfficialRepositoryNumber desc', 'Metadata/RepositoryStars desc'],
+    DefaultSortDirection: SortDirection.Descending,
+    OrderBy: {
+      [SortDirection.Ascending]: [
+        'Metadata/Committed asc',
+        'Metadata/OfficialRepositoryNumber asc',
+        'Metadata/RepositoryStars asc',
+      ],
+      [SortDirection.Descending]: [
+        'Metadata/Committed desc',
+        'Metadata/OfficialRepositoryNumber desc',
+        'Metadata/RepositoryStars desc',
+      ],
+    },
   },
 ];
 
@@ -53,25 +88,23 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     page,
     resultsPerPage,
     sortIndex,
+    sortDirection,
     searchOfficialOnly,
     onResultsChange,
-    onSortIndexChange,
+    onSortChange,
     onSearchOfficialOnlyChange,
   } = props;
 
   const handleSortChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>): void => {
-      onSortIndexChange(e.target.selectedIndex);
+    (idx: number, direction: SortDirection): void => {
+      onSortChange(idx, direction);
     },
-    [onSortIndexChange]
+    [onSortChange]
   );
 
-  const handleSearchOfficialOnlyChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>): void => {
-      onSearchOfficialOnlyChange(e.target.checked);
-    },
-    [onSearchOfficialOnlyChange]
-  );
+  const toggleSearchOfficialOnly = useCallback((): void => {
+    onSearchOfficialOnlyChange(!searchOfficialOnly);
+  }, [searchOfficialOnly, onSearchOfficialOnlyChange]);
 
   useEffect(() => {
     abortControllerRef.current.abort();
@@ -96,7 +129,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
           search: query.trim(),
           searchMode: 'all',
           filter: searchOfficialOnly ? 'Metadata/OfficialRepositoryNumber eq 1' : '',
-          orderby: sortModes[sortIndex].OrderBy.join(', '),
+          orderby: sortModes[sortIndex].OrderBy[sortDirection].join(', '),
           skip: (page - 1) * resultsPerPage,
           top: resultsPerPage,
           select: [
@@ -161,12 +194,26 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     fetchDataAsync(abortControllerRef.current.signal);
 
     return () => abortControllerRef.current.abort();
-  }, [query, page, sortIndex, searchOfficialOnly, resultsPerPage, onResultsChange]);
+  }, [query, page, sortIndex, sortDirection, searchOfficialOnly, resultsPerPage, onResultsChange]);
+
+  const SortIcon = (sortIconProps: { currentSortIndex: number } & IconBaseProps): JSX.Element => {
+    const { currentSortIndex, ...sortIconRest } = sortIconProps;
+
+    if (sortIndex === currentSortIndex) {
+      if (sortDirection === sortModes[currentSortIndex].DefaultSortDirection) {
+        return <FaSortAmountDown {...sortIconRest} />;
+      } else {
+        return <FaSortAmountUp {...sortIconRest} />;
+      }
+    } else {
+      return <FaSortAmountDown {...sortIconRest} visibility="hidden" />;
+    }
+  };
 
   return (
     <Form>
       <Row>
-        <Col className="my-auto">
+        <Col xs={8} className="my-auto">
           <SearchStatus
             query={query}
             resultsCount={resultsCount}
@@ -174,32 +221,44 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
             type={SearchStatusType.Applications}
           />
         </Col>
-        <Col lg={3}>
-          <Row>
-            <Col>
-              <InputGroup size="sm">
-                <InputGroup.Text>Sort by</InputGroup.Text>
-                <Form.Select size="sm" value={sortIndex} onChange={handleSortChange}>
-                  {sortModes.map((item, idx) => (
-                    <option key={item.DisplayName} value={idx}>
-                      {item.DisplayName}
-                    </option>
-                  ))}
-                </Form.Select>
-              </InputGroup>
-            </Col>
-          </Row>
-          <Row className="form-select-sm float-end">
-            <Col>
-              <Form.Check type="switch" id="only-official-buckets">
-                <Form.Check.Input checked={searchOfficialOnly} onChange={handleSearchOfficialOnlyChange} />
-                <Form.Check.Label>
-                  Search only official buckets
-                  <BucketTypeIcon className="ms-1" official showTooltip={false} />
-                </Form.Check.Label>
-              </Form.Check>
-            </Col>
-          </Row>
+        <Col xs={4} className="text-end">
+          <Dropdown autoClose="outside" align="end" drop="end" className="sorting-filtering-button">
+            <Dropdown.Toggle size="sm" variant="secondary">
+              <GoSettings className="me-2" />
+              <span className="d-none d-sm-inline">Sorting &amp; Filtering</span>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu className="sorting-filtering-menu">
+              <Dropdown.Header>Sorting</Dropdown.Header>
+              {sortModes.map((item, idx) => (
+                <Dropdown.Item
+                  key={item.DisplayName}
+                  as={Button}
+                  onClick={() =>
+                    handleSortChange(
+                      idx,
+                      idx === sortIndex
+                        ? (((sortDirection + 1) % 2) as SortDirection)
+                        : sortModes[idx].DefaultSortDirection
+                    )
+                  }
+                >
+                  <SortIcon currentSortIndex={idx} className="me-2" />
+                  {item.DisplayName}
+                </Dropdown.Item>
+              ))}
+              <Dropdown.Divider />
+              <Dropdown.Header>Filtering</Dropdown.Header>
+              <Dropdown.Item as={Button} onClick={toggleSearchOfficialOnly}>
+                <Form.Switch className="form-switch-sm">
+                  <Form.Switch.Input checked={searchOfficialOnly} onChange={(e) => e.currentTarget.blur()} />
+                  <Form.Switch.Label>
+                    Official buckets only <BucketTypeIcon className="ms-1" official showTooltip={false} />
+                  </Form.Switch.Label>
+                </Form.Switch>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Col>
       </Row>
     </Form>

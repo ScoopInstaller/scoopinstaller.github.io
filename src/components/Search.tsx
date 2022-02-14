@@ -8,7 +8,7 @@ import SearchResultsJson from '../serialization/SearchResultsJson';
 import CopyToClipboardHandler from './CopyToClipboardHandler';
 import SearchBar from './SearchBar';
 import SearchPagination from './SearchPagination';
-import SearchProcessor from './SearchProcessor';
+import SearchProcessor, { SortDirection, sortModes } from './SearchProcessor';
 import SearchResult from './SearchResult';
 
 const RESULTS_PER_PAGE = 20;
@@ -21,12 +21,19 @@ const Search = (): JSX.Element => {
   }, [searchParams]);
 
   const getCurrentPageFromSearchParams = useCallback((): number => {
-    return parseInt(searchParams.get('p') || '1', 10);
+    return parseInt(searchParams.get('p') || '1');
   }, [searchParams]);
 
   const getSortIndexFromSearchParams = useCallback((): number => {
-    return parseInt(searchParams.get('s') || '0', 10);
+    return parseInt(searchParams.get('s') || '0');
   }, [searchParams]);
+
+  const getSortDirectionFromSearchParams = useCallback(
+    (sortIndex: number): SortDirection => {
+      return parseInt(searchParams.get('d') || sortModes[sortIndex].DefaultSortDirection.toString()) as SortDirection;
+    },
+    [searchParams]
+  );
 
   const getSearchOfficialOnlyFromSearchParams = useCallback((): boolean => {
     return searchParams.get('o') === 'true';
@@ -49,6 +56,7 @@ const Search = (): JSX.Element => {
   const [query, setQuery] = useState<string>(getQueryFromSearchParams);
   const [currentPage, setCurrentPage] = useState<number>(getCurrentPageFromSearchParams);
   const [sortIndex, setSortIndex] = useState<number>(getSortIndexFromSearchParams);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(getSortDirectionFromSearchParams(sortIndex));
   const [searchOfficialOnly, setSearchOfficialOnly] = useState<boolean>(getSearchOfficialOnlyFromSearchParams);
   const [searchResults, setSearchResults] = useState<SearchResultsJson>();
   const [contentToCopy, setContentToCopy] = useState<string>();
@@ -90,9 +98,15 @@ const Search = (): JSX.Element => {
   );
 
   const handleSortChange = useCallback(
-    (newSortIndex: number): void => {
-      updateSearchParams('s', newSortIndex.toString(), () => newSortIndex > 0);
+    (newSortIndex: number, newSortDirection: SortDirection): void => {
+      updateSearchParams('s', newSortIndex.toString(), () => newSortIndex !== 0);
+      updateSearchParams(
+        'd',
+        newSortDirection.toString(),
+        () => newSortDirection !== sortModes[newSortIndex].DefaultSortDirection
+      );
       setSortIndex(newSortIndex);
+      setSortDirection(newSortDirection);
     },
     [updateSearchParams]
   );
@@ -131,9 +145,10 @@ const Search = (): JSX.Element => {
               page={currentPage}
               query={query}
               sortIndex={sortIndex}
+              sortDirection={sortDirection}
               searchOfficialOnly={searchOfficialOnly}
               onResultsChange={handleResultsChange}
-              onSortIndexChange={handleSortChange}
+              onSortChange={handleSortChange}
               onSearchOfficialOnlyChange={handleSearchOfficialOnlyChange}
             />
           </Col>

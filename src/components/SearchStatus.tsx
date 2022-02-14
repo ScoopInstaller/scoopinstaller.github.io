@@ -26,8 +26,7 @@ const SearchStatus = (props: SearchStatusProps): JSX.Element => {
   if (searching) {
     return (
       <span>
-        <span>Searching for matching {typeDescription}...</span>{' '}
-        <Spinner animation="border" size="sm" variant="secondary" />
+        <span>Searching for {typeDescription}...</span> <Spinner animation="border" size="sm" variant="secondary" />
       </span>
     );
   }
