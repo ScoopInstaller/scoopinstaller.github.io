@@ -234,14 +234,15 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
                 <Dropdown.Item
                   key={item.DisplayName}
                   as={Button}
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.currentTarget.blur();
                     handleSortChange(
                       idx,
                       idx === sortIndex
                         ? (((sortDirection + 1) % 2) as SortDirection)
                         : sortModes[idx].DefaultSortDirection
-                    )
-                  }
+                    );
+                  }}
                 >
                   <SortIcon currentSortIndex={idx} className="me-2" />
                   {item.DisplayName}
