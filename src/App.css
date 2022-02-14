@@ -65,20 +65,6 @@ mark {
   color: var(--bs-body-color);
 }
 
-.sorting-filtering-menu svg {
-  width: 24px;
-}
-
-.sorting-filtering-menu .form-switch {
-  padding-left: 0;
-}
-
-.sorting-filtering-menu .form-switch > input {
-  width: 24px;
-  margin-right: 8px;
-  margin-left: 0px;
-}
-
 
 
 div.valign-items {
