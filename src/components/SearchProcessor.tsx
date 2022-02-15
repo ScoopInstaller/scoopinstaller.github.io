@@ -102,9 +102,26 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     [onSortChange]
   );
 
-  const toggleSearchOfficialOnly = useCallback((): void => {
-    onSearchOfficialOnlyChange(!searchOfficialOnly);
-  }, [searchOfficialOnly, onSearchOfficialOnlyChange]);
+  const toggleSearchOfficialOnly = useCallback(
+    (e: React.MouseEvent<HTMLElement>): void => {
+      e.currentTarget.blur();
+      onSearchOfficialOnlyChange(!searchOfficialOnly);
+    },
+    [searchOfficialOnly, onSearchOfficialOnlyChange]
+  );
+
+  const toggleSort = useCallback(
+    (e: React.MouseEvent<HTMLElement>, newSortIndex: number): void => {
+      e.currentTarget.blur();
+      handleSortChange(
+        newSortIndex,
+        newSortIndex === sortIndex
+          ? (((sortDirection + 1) % 2) as SortDirection)
+          : sortModes[newSortIndex].DefaultSortDirection
+      );
+    },
+    [sortIndex, sortDirection, handleSortChange]
+  );
 
   useEffect(() => {
     abortControllerRef.current.abort();
@@ -231,28 +248,16 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
             <Dropdown.Menu className="sorting-filtering-menu">
               <Dropdown.Header>Sorting</Dropdown.Header>
               {sortModes.map((item, idx) => (
-                <Dropdown.Item
-                  key={item.DisplayName}
-                  as={Button}
-                  onClick={(e) => {
-                    e.currentTarget.blur();
-                    handleSortChange(
-                      idx,
-                      idx === sortIndex
-                        ? (((sortDirection + 1) % 2) as SortDirection)
-                        : sortModes[idx].DefaultSortDirection
-                    );
-                  }}
-                >
+                <Dropdown.Item key={item.DisplayName} as={Button} onClick={(e) => toggleSort(e, idx)}>
                   <SortIcon currentSortIndex={idx} className="me-2" />
                   {item.DisplayName}
                 </Dropdown.Item>
               ))}
               <Dropdown.Divider />
               <Dropdown.Header>Filtering</Dropdown.Header>
-              <Dropdown.Item as={Button} onClick={toggleSearchOfficialOnly}>
+              <Dropdown.Item as={Button} onClick={(e) => toggleSearchOfficialOnly(e)}>
                 <Form.Switch className="form-switch-sm">
-                  <Form.Switch.Input checked={searchOfficialOnly} onChange={(e) => e.currentTarget.blur()} />
+                  <Form.Switch.Input checked={searchOfficialOnly} />
                   <Form.Switch.Label>
                     Official buckets only <BucketTypeIcon className="ms-1" official showTooltip={false} />
                   </Form.Switch.Label>

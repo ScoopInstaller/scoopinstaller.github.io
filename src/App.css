@@ -65,6 +65,10 @@ mark {
   color: var(--bs-body-color);
 }
 
+.sorting-filtering-menu > .dropdown-item > .form-switch > * {
+  cursor: pointer
+}
+
 
 
 div.valign-items {
