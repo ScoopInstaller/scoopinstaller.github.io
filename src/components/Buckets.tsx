@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { Container, Col, Row, InputGroup, Form } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
@@ -15,117 +15,18 @@ type Bucket = {
   official: boolean;
 };
 
-type BucketsState = {
-  searching: boolean;
-  sortIndex: number;
-  results: Bucket[];
-};
+const sortModes: string[] = ['Default', 'Name', 'Manifests'];
 
-class Buckets extends PureComponent<unknown, BucketsState> {
-  private abortController: AbortController = new AbortController();
+const Buckets = (): JSX.Element => {
+  const abortControllerRef = useRef<AbortController>(new AbortController());
+  const [searching, setSearching] = useState<boolean>(false);
+  const [sortIndex, setSortIndex] = useState<number>(0);
+  const [results, setResults] = useState<Bucket[]>([]);
 
-  private sortModes: string[] = ['Default', 'Name', 'Manifests'];
-
-  constructor(props: unknown) {
-    super(props);
-
-    this.state = {
-      searching: false,
-      sortIndex: 0,
-      results: [],
-    };
-  }
-
-  async componentDidMount(): Promise<void> {
-    const { sortIndex } = this.state;
-
-    this.setState({
-      searching: true,
-      results: [],
-    });
-
-    const officialBuckets = await this.fetchDataAsync(
-      this.abortController.signal,
-      true
-    );
-    const communityBuckets = await this.fetchDataAsync(
-      this.abortController.signal,
-      false
-    );
-
-    let results: Bucket[] = officialBuckets.results['Metadata/Repository']
-      .map<Bucket>((item) => {
-        return { bucket: item.value, manifests: item.count, official: true };
-      })
-      .concat(
-        communityBuckets.results['Metadata/Repository'].map<Bucket>((item) => {
-          return { bucket: item.value, manifests: item.count, official: false };
-        })
-      );
-
-    results = this.sortResults(results, sortIndex);
-    this.setState({
-      searching: false,
-      results,
-    });
-  }
-
-  componentWillUnmount(): void {
-    this.abortController.abort();
-  }
-
-  handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    const { results } = this.state;
-    const sortOrder = e.target.selectedIndex;
-    this.setState({
-      sortIndex: sortOrder,
-      results: this.sortResults(results, sortOrder),
-    });
-  };
-
-  // eslint-disable-next-line class-methods-use-this
-  async fetchDataAsync(
-    abortSignal: AbortSignal,
-    officialRepository: boolean
-  ): Promise<BucketsResultsJson> {
-    const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } =
-      process.env;
-
-    if (!REACT_APP_AZURESEARCH_URL) {
-      throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
-    }
-
-    if (!REACT_APP_AZURESEARCH_KEY) {
-      throw new Error('REACT_APP_AZURESEARCH_KEY is not defined');
-    }
-
-    const url = `${REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-        count: true,
-        facets: ['Metadata/Repository,count:10000'],
-        filter: `Metadata/OfficialRepositoryNumber eq ${
-          officialRepository ? '1' : '0'
-        }`,
-        top: 0, // Don't retrieve actual data
-      }),
-      headers: {
-        'api-key': REACT_APP_AZURESEARCH_KEY,
-        'Content-Type': 'application/json',
-      },
-      signal: abortSignal,
-    });
-    const data = (await response.json()) as unknown;
-    return BucketsResultsJson.Create(data);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  sortResults(results: Bucket[], sortOrder: number): Bucket[] {
+  const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
     switch (sortOrder) {
       case 0:
-        return results.sort((x, y) => {
+        return buckets.sort((x, y) => {
           if (x.official === y.official) {
             return x.bucket.localeCompare(y.bucket);
           }
@@ -137,10 +38,10 @@ class Buckets extends PureComponent<unknown, BucketsState> {
         });
 
       case 1:
-        return results.sort((x, y) => x.bucket.localeCompare(y.bucket));
+        return buckets.sort((x, y) => x.bucket.localeCompare(y.bucket));
 
       case 2:
-        return results.sort((x, y) => {
+        return buckets.sort((x, y) => {
           if (x.manifests === y.manifests) {
             return 0;
           }
@@ -151,73 +52,135 @@ class Buckets extends PureComponent<unknown, BucketsState> {
           return -1;
         });
       default:
-        throw new Error('Unexpected sort');
+        throw new Error('Unexpected sort mode');
     }
-  }
+  };
 
-  render(): JSX.Element {
-    const { results, searching } = this.state;
-    return (
-      <>
-        <Container className="mt-5 mb-5">
-          <Row>
-            <Col className="my-auto">
-              <SearchStatus
-                resultsCount={results.length}
-                searching={searching}
-                type={SearchStatusType.Buckets}
-              />
-            </Col>
-            <Col lg={3}>
-              <InputGroup size="sm">
-                <InputGroup.Text>Sort by</InputGroup.Text>
-                <Form.Select size="sm" onChange={this.handleSortChange}>
-                  {this.sortModes.map((item, idx) => (
-                    <option key={item} value={idx}>
-                      {item}
-                    </option>
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    const sortOrder = e.target.selectedIndex;
+    setSortIndex(sortOrder);
+    setResults((previousResults) => sortResults(previousResults, sortOrder));
+  };
+
+  useEffect(() => {
+    setSearching(true);
+    setResults([]);
+
+    const fetchDataAsync = async (
+      abortSignal: AbortSignal,
+      officialRepository: boolean
+    ): Promise<BucketsResultsJson> => {
+      const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } = process.env;
+
+      if (!REACT_APP_AZURESEARCH_URL) {
+        throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
+      }
+
+      if (!REACT_APP_AZURESEARCH_KEY) {
+        throw new Error('REACT_APP_AZURESEARCH_KEY is not defined');
+      }
+
+      const url = `${REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          count: true,
+          facets: ['Metadata/Repository,count:10000'],
+          filter: `Metadata/OfficialRepositoryNumber eq ${officialRepository ? '1' : '0'}`,
+          top: 0, // Don't retrieve actual data
+        }),
+        headers: {
+          'api-key': REACT_APP_AZURESEARCH_KEY,
+          'Content-Type': 'application/json',
+        },
+        signal: abortSignal,
+      });
+      const data = (await response.json()) as unknown;
+      return BucketsResultsJson.Create(data);
+    };
+
+    const fetchAsync = async (abortSignal: AbortSignal): Promise<Bucket[]> => {
+      const officialBuckets = await fetchDataAsync(abortSignal, true);
+      const communityBuckets = await fetchDataAsync(abortSignal, false);
+
+      return officialBuckets.results['Metadata/Repository']
+        .map<Bucket>((item) => {
+          return { bucket: item.value, manifests: item.count, official: true };
+        })
+        .concat(
+          communityBuckets.results['Metadata/Repository'].map<Bucket>((item) => {
+            return { bucket: item.value, manifests: item.count, official: false };
+          })
+        );
+    };
+
+    fetchAsync(abortControllerRef.current.signal)
+      .then((buckets) => setResults(sortResults(buckets, sortIndex)))
+      .finally(() => setSearching(false));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => abortControllerRef.current.abort();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <>
+      <Container className="mt-5 mb-5">
+        <Row>
+          <Col className="my-auto">
+            <SearchStatus resultsCount={results.length} searching={searching} type={SearchStatusType.Buckets} />
+          </Col>
+          <Col lg={3}>
+            <InputGroup size="sm">
+              <InputGroup.Text>Sort by</InputGroup.Text>
+              <Form.Select size="sm" onChange={handleSortChange}>
+                {sortModes.map((item, idx) => (
+                  <option key={item} value={idx}>
+                    {item}
+                  </option>
+                ))}
+              </Form.Select>
+            </InputGroup>
+          </Col>
+        </Row>
+
+        {results && (
+          <Row className="mt-2">
+            <Col>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Bucket</th>
+                    <th>Manifests</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((item: Bucket) => (
+                    <tr key={item.bucket}>
+                      <td>
+                        <Link
+                          to={{
+                            pathname: '/apps',
+                            search: `?q="${encodeURIComponent(item.bucket)}"`,
+                          }}
+                        >
+                          {Utils.extractPathFromUrl(item.bucket)}
+                        </Link>{' '}
+                        <BucketTypeIcon official={item.official} />
+                      </td>
+                      <td>{item.manifests}</td>
+                    </tr>
                   ))}
-                </Form.Select>
-              </InputGroup>
+                </tbody>
+              </Table>
             </Col>
           </Row>
+        )}
+      </Container>
+    </>
+  );
+};
 
-          {results && (
-            <Row className="mt-2">
-              <Col>
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Bucket</th>
-                      <th>Manifests</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {results.map((item: Bucket) => (
-                      <tr key={item.bucket}>
-                        <td>
-                          <Link
-                            to={{
-                              pathname: '/apps',
-                              search: encodeURIComponent(`"${item.bucket}"`),
-                            }}
-                          >
-                            {Utils.extractPathFromUrl(item.bucket)}
-                          </Link>{' '}
-                          <BucketTypeIcon official={item.official} />
-                        </td>
-                        <td>{item.manifests}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
-          )}
-        </Container>
-      </>
-    );
-  }
-}
-
-export default Buckets;
+export default React.memo(Buckets);

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 
 import { Form, InputGroup } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
@@ -11,68 +11,66 @@ type SearchBarProps = {
   onSubmit: () => void;
 };
 
-class SearchBar extends PureComponent<SearchBarProps> {
-  searchInput: React.RefObject<HTMLInputElement>;
+const SearchBar = (props: SearchBarProps): JSX.Element => {
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const delayBeforeSubmit = useRef<NodeJS.Timeout>();
+  const { query, onQueryChange, onSubmit } = props;
 
-  delayBeforeSubmit?: NodeJS.Timeout;
-
-  constructor(props: SearchBarProps) {
-    super(props);
-    this.searchInput = React.createRef<HTMLInputElement>();
-  }
-
-  componentDidMount(): void {
-    this.searchInput.current?.focus();
-  }
-
-  componentWillUnmount(): void {
-    this.clearDelayBeforeSubmitTimeout();
-  }
-
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { onQueryChange, onSubmit } = this.props;
-    onQueryChange(e.target.value);
-
-    this.clearDelayBeforeSubmitTimeout();
-    this.delayBeforeSubmit = setTimeout(onSubmit, DELAY_SEARCH_AFTER_KEYPRESS);
-  };
-
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    const { onSubmit } = this.props;
-    e.preventDefault();
-
-    this.clearDelayBeforeSubmitTimeout();
-    onSubmit();
-  };
-
-  clearDelayBeforeSubmitTimeout(): void {
-    if (this.delayBeforeSubmit) {
-      clearTimeout(this.delayBeforeSubmit);
-      this.delayBeforeSubmit = undefined;
+  const clearDelayBeforeSubmitTimeout = (): void => {
+    if (delayBeforeSubmit.current) {
+      clearTimeout(delayBeforeSubmit.current);
+      delayBeforeSubmit.current = undefined;
     }
-  }
+  };
 
-  render(): JSX.Element {
-    const { query } = this.props;
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      onQueryChange(e.target.value);
 
-    return (
-      <Form onSubmit={this.handleSubmit}>
-        <InputGroup>
-          <InputGroup.Text>
-            <FaSearch />
-          </InputGroup.Text>
-          <Form.Control
-            ref={this.searchInput}
-            size="lg"
-            type="text"
-            placeholder="Search an app"
-            value={query}
-            onChange={this.handleChange}
-          />
-        </InputGroup>
-      </Form>
-    );
-  }
-}
+      clearDelayBeforeSubmitTimeout();
+      delayBeforeSubmit.current = setTimeout(
+        () => formRef.current?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true })),
+        DELAY_SEARCH_AFTER_KEYPRESS
+      );
+    },
+    [onQueryChange]
+  );
 
-export default SearchBar;
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>): void => {
+      e.preventDefault();
+
+      clearDelayBeforeSubmitTimeout();
+      onSubmit();
+    },
+    [onSubmit]
+  );
+
+  useEffect(() => {
+    searchInputRef.current?.focus();
+
+    return () => clearDelayBeforeSubmitTimeout();
+  }, []);
+
+  return (
+    <Form onSubmit={handleSubmit} ref={formRef}>
+      <InputGroup>
+        <InputGroup.Text>
+          <FaSearch />
+        </InputGroup.Text>
+        <Form.Control
+          ref={searchInputRef}
+          size="lg"
+          type="text"
+          placeholder="Search an app"
+          spellCheck={false}
+          value={query}
+          onChange={handleChange}
+        />
+      </InputGroup>
+    </Form>
+  );
+};
+
+export default React.memo(SearchBar);

@@ -1,33 +1,22 @@
-import { PureComponent } from 'react';
-
 import './App.css';
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Buckets from './components/Buckets';
-import NavBar from './components/NavBar';
+import Root from './components/Root';
 import Search from './components/Search';
 
-class App extends PureComponent {
-  render(): JSX.Element {
-    return (
-      <Router>
-        <NavBar />
-
-        <Switch>
-          <Route path="/apps/:page?" component={Search} />
-          <Route path="/buckets" component={Buckets} />
-          <Route path="/">
-            <Redirect to="/apps" />
-          </Route>
-        </Switch>
-      </Router>
-    );
-  }
-}
+const App = (): JSX.Element => {
+  return (
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<Root />}>
+          <Route path="apps" element={<Search />} />
+          <Route path="buckets" element={<Buckets />} />
+          <Route index element={<Navigate to="apps" replace />} />
+        </Route>
+      </Routes>
+    </HashRouter>
+  );
+};
 
 export default App;

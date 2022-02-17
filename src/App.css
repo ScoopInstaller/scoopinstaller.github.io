@@ -2,38 +2,83 @@ mark {
   background-color: rgba(255, 255, 0, 0.5);
 }
 
-.card-header, .card-body {
-  padding: .75rem;
+
+
+.copy-command-prefix, .copy-command-text {
+  background-color: var(--bs-gray-100) !important;
+  border: 0;
+  font-family: var(--bs-font-monospace);
+  line-height: 2.0;
+  user-select: none;
+  box-shadow: none !important;
 }
 
-.scoopCopyCommand {
+.copy-command-prefix {
   padding-right: 0 !important;
 }
 
-.faIconVerticalAlign {
-  vertical-align: baseline;
-  margin-bottom: -2px;
+.copy-command-text {
+  cursor: pointer;
 }
 
-.copyToClipbardMiniButton {
-  padding: 0.15rem 0.2rem;
-  font-size: 0.7rem;
-  line-height: 0.75rem;
-  vertical-align: text-top;
+#app-command > * {
+  font-weight: bold;
 }
 
-.starsBadge {
-  padding: 0.3em 0.4em;
-  vertical-align: text-top;
-  line-height: 0.75rem;
+.copy-command-group > button {
+  border: 0;
+  margin-left: 0 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
 }
 
-.starsBadge > span{
-  vertical-align: text-bottom;
+.copy-command-group > button:not(:hover) {
+  background-color: var(--bs-gray-200);
+  transition: none;
 }
-.starsBadge > svg{
-  margin-top: 1px;
-  vertical-align: top;
+
+.copy-command-text:hover + .copy-command-button:not(:disabled) {
+  color: var(--bs-white);
+  background-color: var(--bs-secondary);
+  border-color: var(--bs-secondary);
+}
+
+.copy-command-button:disabled {
+  color: var(--bs-gray-200);
+  background-color: rgba(var(--bs-success-rgb), 0.8) !important;
+}
+
+
+
+.sorting-filtering-button > button:not(:hover) {
+  background-color: var(--bs-gray-200);
+  border-color: var(--bs-gray-200);
+  color: var(--bs-dark);
+}
+
+.sorting-filtering-menu .btn:focus, .sorting-filtering-menu .btn:active, .sorting-filtering-menu .form-check-input:focus, .sorting-filtering-menu .form-check-input:active {
+  box-shadow: none;
+}
+
+.sorting-filtering-menu > .dropdown-item:active {
+  background-color: var(--bs-gray-200);
+  color: var(--bs-body-color);
+}
+
+.sorting-filtering-menu > .dropdown-item > .form-switch > * {
+  cursor: pointer
+}
+
+
+
+div.valign-items {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+svg.react-icon {
+  margin-top: -3px;
 }
 
 .pagination > li {
@@ -50,4 +95,8 @@ a:not([class*="btn"]):hover {
 
 body {
   overflow-y: scroll;
+}
+
+.tooltip-inner {
+  max-width: none;
 }

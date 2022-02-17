@@ -7,10 +7,7 @@ class SearchResultsJson {
   private static jsonConvert = new JsonConvert();
 
   static Create(jsonObject: unknown): SearchResultsJson {
-    return SearchResultsJson.jsonConvert.deserializeObject(
-      jsonObject,
-      SearchResultsJson
-    );
+    return SearchResultsJson.jsonConvert.deserializeObject(jsonObject, SearchResultsJson);
   }
 
   @JsonProperty('@odata.count', Number)

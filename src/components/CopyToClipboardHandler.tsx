@@ -1,17 +1,17 @@
-import React, { PureComponent } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 type CopyToClipboardHandlerProps = {
   content?: string;
   onContentCopied: () => void;
 };
 
-class CopyToClipboardHandler extends PureComponent<CopyToClipboardHandlerProps> {
-  private textAreaRef = React.createRef<HTMLTextAreaElement>();
+const CopyToClipboardHandler = (props: CopyToClipboardHandlerProps): JSX.Element => {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const { content, onContentCopied } = props;
 
-  componentDidUpdate(): void {
-    const { content, onContentCopied } = this.props;
+  useEffect(() => {
     if (content) {
-      const textArea = this.textAreaRef.current;
+      const textArea = textAreaRef.current;
       if (textArea) {
         textArea.value = content;
         textArea.select();
@@ -21,17 +21,9 @@ class CopyToClipboardHandler extends PureComponent<CopyToClipboardHandlerProps> 
         onContentCopied();
       }
     }
-  }
+  });
 
-  render(): JSX.Element {
-    return (
-      <textarea
-        ref={this.textAreaRef}
-        readOnly
-        style={{ position: 'absolute', left: -9999 }}
-      />
-    );
-  }
-}
+  return <textarea ref={textAreaRef} readOnly style={{ position: 'absolute', left: -9999 }} />;
+};
 
-export default CopyToClipboardHandler;
+export default React.memo(CopyToClipboardHandler);

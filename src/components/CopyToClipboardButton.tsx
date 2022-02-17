@@ -1,65 +1,38 @@
-import { PureComponent } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { Button } from 'react-bootstrap';
-import { FaClipboard, FaCheck } from 'react-icons/fa';
+import { FaRegClipboard, FaCheck } from 'react-icons/fa';
 
-const CLIPBOARD_COPY_NOTIFICATION = 1500;
+const CLIPBOARD_COPY_NOTIFICATION_DELAY = 1500;
 
-type CopyToClipboardButtonState = {
-  copied: boolean;
-};
+type Props = { title: string; variant: string; className: string; onClick: React.MouseEventHandler<HTMLButtonElement> };
 
-type CopyToClipboardButtonProps = {
-  className?: string;
-  onClick: () => void;
-};
+const CopyToClipboardButton = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
+  const [copied, setCopied] = useState<boolean>(false);
+  const { onClick, ...rest } = props;
 
-class CopyToClipboardButton extends PureComponent<
-  CopyToClipboardButtonProps,
-  CopyToClipboardButtonState
-> {
-  constructor(props: CopyToClipboardButtonProps) {
-    super(props);
-    this.state = { copied: false };
-  }
-
-  componentDidUpdate(
-    prevProps: CopyToClipboardButtonProps,
-    prevState: CopyToClipboardButtonState
-  ): void {
-    const { copied } = this.state;
-    if (copied && copied !== prevState.copied) {
+  useEffect(() => {
+    if (copied) {
       setTimeout(() => {
-        this.setState({ copied: false });
-      }, CLIPBOARD_COPY_NOTIFICATION);
+        setCopied(false);
+      }, CLIPBOARD_COPY_NOTIFICATION_DELAY);
     }
-  }
+  }, [copied]);
 
-  handleClick = (): void => {
-    const { onClick } = this.props;
-    onClick();
-    this.setState({ copied: true });
-  };
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>): void => {
+      onClick?.call(this, e);
+      setCopied(true);
+    },
+    [onClick]
+  );
 
-  render(): JSX.Element {
-    const { className } = this.props;
-    const { copied } = this.state;
+  return (
+    <Button {...rest} onClick={handleClick} disabled={copied} ref={ref}>
+      {copied ? <FaCheck /> : <FaRegClipboard />}
+    </Button>
+  );
+});
 
-    return (
-      <Button
-        className={className}
-        variant="secondary"
-        onClick={this.handleClick}
-        disabled={copied}
-      >
-        {copied ? (
-          <FaCheck className="faIconVerticalAlign" />
-        ) : (
-          <FaClipboard className="faIconVerticalAlign" />
-        )}
-      </Button>
-    );
-  }
-}
-
-export default CopyToClipboardButton;
+CopyToClipboardButton.displayName = 'CopyToClipboardButton';
+export default React.memo(CopyToClipboardButton);
