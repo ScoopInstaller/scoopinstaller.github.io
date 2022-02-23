@@ -60,6 +60,7 @@ const Search = (): JSX.Element => {
   const [searchOfficialOnly, setSearchOfficialOnly] = useState<boolean>(getSearchOfficialOnlyFromSearchParams);
   const [searchResults, setSearchResults] = useState<SearchResultsJson>();
   const [contentToCopy, setContentToCopy] = useState<string>();
+  const [officialRepositories, setOfficialRepositories] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     const queryfromSearchParams = getQueryFromSearchParams();
@@ -70,6 +71,20 @@ const Search = (): JSX.Element => {
   useEffect(() => {
     setCurrentPage(getCurrentPageFromSearchParams());
   }, [getCurrentPageFromSearchParams]);
+
+  useEffect(() => {
+    fetch('https://raw.githubusercontent.com/ScoopInstaller/Scoop/master/buckets.json')
+      .then((response) => response.json())
+      .then((response) => {
+        const json = response as { [key: string]: string };
+        const mapping: { [key: string]: string } = {};
+        Object.keys(json).forEach((key) => {
+          mapping[json[key]] = key;
+        });
+        setOfficialRepositories(mapping);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   const handleQueryChange = useCallback(
     (newQuery: string): void => {
@@ -157,7 +172,12 @@ const Search = (): JSX.Element => {
         <Row className="mt-2">
           <Col>
             {searchResults?.results.map((searchResult: ManifestJson) => (
-              <SearchResult key={searchResult.id} result={searchResult} onCopyToClipbard={handleCopyToClipboard} />
+              <SearchResult
+                key={searchResult.id}
+                result={searchResult}
+                officialRepositories={officialRepositories}
+                onCopyToClipbard={handleCopyToClipboard}
+              />
             ))}
           </Col>
         </Row>
