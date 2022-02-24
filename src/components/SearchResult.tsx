@@ -21,11 +21,12 @@ dayjs.extend(relativeTime);
 
 type SearchResultProps = {
   result: ManifestJson;
+  officialRepositories: { [key: string]: string };
   onCopyToClipbard: (content: string) => void;
 };
 
 const SearchResult = (props: SearchResultProps): JSX.Element => {
-  const { result, onCopyToClipbard } = props;
+  const { result, officialRepositories, onCopyToClipbard } = props;
   const homepageRef = useRef<HTMLSpanElement>(null);
   const [homepageTooltipHidden, setHomepageTooltipHidden] = useState<boolean>(false);
 
@@ -103,21 +104,17 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
   // Remove scheme and trailing slash
   const formattedHomepage = (homepage ?? '').replace(/^(?:\w+:\/\/)(.+?)\/*$/, '$1');
 
-  // Remove scheme + host
-  let formattedHighlightedRepository = highlightedRepository?.toString().replace(/^(<mark>|)(?:.*?\/){3}(.+)$/, '$1$2');
-
-  // Remove GitHub organization part for official buckets
-  formattedHighlightedRepository = metadata.repositoryOfficial
-    ? formattedHighlightedRepository?.replace(/^(<mark>|)(?:[^/]+)\/(.+)$/, '$1$2')
-    : formattedHighlightedRepository;
+  // Use known repository name for official repositories and keep only organization+repo for community repositories
+  const formattedHighlightedRepository = metadata.repositoryOfficial
+    ? highlightedRepository?.toString().replace(metadata.repository, officialRepositories[metadata.repository])
+    : highlightedRepository?.toString().replace(/^(<mark>|)(?:.*?\/){3}(.+)$/, '$1$2');
 
   const versionPrefix = version.length > 0 && /^\d/.test(version) && 'v';
 
   const bucketCommandLine = metadata.repositoryOfficial
-    ? `scoop bucket add ${metadata.repository.substring(metadata.repository.lastIndexOf('/') + 1).toLowerCase()}`
-    : `scoop bucket add ${Utils.extractPathFromUrl(metadata.repository, '_')} ${metadata.repository}`;
-
-  const appCommandLine = `scoop install ${name}`;
+    ? (officialRepositories[metadata.repository] && officialRepositories[metadata.repository]) ||
+      metadata.repository.substring(metadata.repository.lastIndexOf('/') + 1).toLowerCase()
+    : `${Utils.extractPathFromUrl(metadata.repository, '_')} ${metadata.repository}`;
 
   return (
     <Card key={id} className="mb-2">
@@ -178,10 +175,10 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
             </Col>
             <Col lg={6} className="mt-4 mt-lg-0">
               <Row>
-                <CopyToClipboardComponent value={bucketCommandLine} id="bucket-command" />
+                <CopyToClipboardComponent value={`scoop bucket add ${bucketCommandLine}`} id="bucket-command" />
               </Row>
               <Row className="mt-2">
-                <CopyToClipboardComponent value={appCommandLine} id="app-command" />
+                <CopyToClipboardComponent value={`scoop install ${name}`} id="app-command" />
               </Row>
             </Col>
           </Row>
