@@ -104,13 +104,10 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
   // Remove scheme and trailing slash
   const formattedHomepage = (homepage ?? '').replace(/^(?:\w+:\/\/)(.+?)\/*$/, '$1');
 
-  // Remove scheme + host
-  let formattedHighlightedRepository = highlightedRepository?.toString().replace(/^(<mark>|)(?:.*?\/){3}(.+)$/, '$1$2');
-
-  // Remove GitHub organization part for official buckets
-  formattedHighlightedRepository = metadata.repositoryOfficial
-    ? formattedHighlightedRepository?.replace(/^(<mark>|)(?:[^/]+)\/(.+)$/, '$1$2')
-    : formattedHighlightedRepository;
+  // Use known repository name for official repositories and keep only organization+repo for community repositories
+  const formattedHighlightedRepository = metadata.repositoryOfficial
+    ? highlightedRepository?.toString().replace(metadata.repository, officialRepositories[metadata.repository])
+    : highlightedRepository?.toString().replace(/^(<mark>|)(?:.*?\/){3}(.+)$/, '$1$2');
 
   const versionPrefix = version.length > 0 && /^\d/.test(version) && 'v';
 
