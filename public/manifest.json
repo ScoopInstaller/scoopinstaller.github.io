@@ -1,6 +1,6 @@
 {
-  "short_name": "ScoopSearch",
-  "name": "Web search engine to find Scoop applications",
+  "short_name": "Scoop",
+  "name": "A command-line installer for Windows",
   "icons": [
     {
       "src": "favicon.ico",

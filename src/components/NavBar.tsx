@@ -9,7 +9,7 @@ const NavBar = (): JSX.Element => {
     <Navbar expand="sm" bg="dark" variant="dark">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          ScoopSearch
+          Scoop
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -22,7 +22,7 @@ const NavBar = (): JSX.Element => {
             </Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="https://github.com/ScoopSearch">
+            <Nav.Link href="https://github.com/ScoopInstaller">
               <GoMarkGithub size="1.2em" />
             </Nav.Link>
           </Nav>
