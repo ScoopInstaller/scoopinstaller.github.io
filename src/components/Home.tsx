@@ -2,17 +2,15 @@ import React from 'react';
 
 import { Container, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import powershell from 'react-syntax-highlighter/dist/esm/languages/prism/powershell';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
+import powershell from 'react-syntax-highlighter/dist/esm/languages/prism/powershell';
 import ghcolors from 'react-syntax-highlighter/dist/esm/styles/prism/ghcolors';
 
 SyntaxHighlighter.registerLanguage('powershell', powershell);
 SyntaxHighlighter.registerLanguage('json', json);
 
 const Home = (): JSX.Element => {
-
   return (
     <>
       <Container className="mt-5 mb-5">
@@ -20,17 +18,26 @@ const Home = (): JSX.Element => {
         <h2 className="fw-light text-center mb-5">A command-line installer for Windows</h2>
 
         <h3 className="mb-4 text-center fw-normal">Quickstart</h3>
-        <p className="text-center">Make sure PowerShell 5.1 (or later) is installed, and its <code className="bg-light">ExecutionPolicy</code> is set to 'RemoteSigned'. In it, run:</p>
+        <p className="text-center">
+          Make sure PowerShell 5.1 (or later) is installed, and its <code className="bg-light">ExecutionPolicy</code> is
+          set to &apos;RemoteSigned&apos;. In it, run:
+        </p>
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
         <SyntaxHighlighter language="powershell" style={ghcolors}>
-          {`> Invoke-WebRequest get.scoop.sh | Invoke-Expression`}
+          &gt; Invoke-WebRequest get.scoop.sh | Invoke-Expression
         </SyntaxHighlighter>
-        <p className="text-center">For advanced installation options, check out the <a href="https://github.com/ScoopInstaller/Install#readme"> Installer's Readme</a>.</p>
+        <p className="text-center">
+          For advanced installation options, check out the{' '}
+          <a href="https://github.com/ScoopInstaller/Install#readme"> Installer&apos;s Readme</a>.
+        </p>
 
         <h3 className="mt-5 mb-4 text-center fw-normal">What does Scoop do?</h3>
 
         <Row>
           <Col lg={6}>
-            Scoop installs programs you know and love, from the command line with a minimal amount of friction. It:<br /><br />
+            Scoop installs programs you know and love, from the command line with a minimal amount of friction. It:
+            <br />
+            <br />
             <ul>
               <li>Eliminates permission popup windows</li>
               <li>Hides GUI wizard-style installers</li>
@@ -41,8 +48,9 @@ const Home = (): JSX.Element => {
             </ul>
           </Col>
           <Col lg={6}>
+            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="powershell" style={ghcolors}>
-{`> scoop install vscode
+              {`> scoop install vscode
 
 Installing 'vscode' (1.66.0) [64bit]
 dl.7z (104.1 MB) [=========================================] 100%
@@ -60,8 +68,9 @@ Running post-install script...
 
         <Row>
           <Col lg={6}>
+            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="powershell" style={ghcolors}>
-{`> dir ~\\scoop
+              {`> dir ~\\scoop
 
     Directory: C:\\Users\\User\\scoop
 
@@ -76,18 +85,19 @@ d----          20-02-2022    01:22                workspace`}
             </SyntaxHighlighter>
           </Col>
           <Col lg={6}>
-            Scoop downloads and manages packages in their own directory and then creates shims for them in <code className="bg-light">~\scoop\shims</code>. It won't install files outside its home, and you can place a Scoop installation wherever you like.
+            Scoop downloads and manages packages in their own directory and then creates shims for them in{' '}
+            <code className="bg-light">~\scoop\shims</code>. It won&apos;t install files outside its home, and you can
+            place a Scoop installation wherever you like.
           </Col>
         </Row>
         <hr />
 
         <Row>
+          <Col lg={6}>Scoop allows you to trivially create your own packages.</Col>
           <Col lg={6}>
-            Scoop allows you to trivially create your own packages.
-          </Col>
-          <Col lg={6}>
+            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="powershell" style={ghcolors}>
-{`> scoop create https://example.com/foobar/1.2.3/foobar-package.zip
+              {`> scoop create https://example.com/foobar/1.2.3/foobar-package.zip
 
 1) foobar
 2) 1.2.3
@@ -105,8 +115,9 @@ Created 'C:\\Users\\User\\Desktop\\foobar.json'.`}
 
         <Row>
           <Col lg={6}>
+            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="json" style={ghcolors}>
-{`> scoop cat gifski
+              {`> scoop cat gifski
 
 {
     "version": "1.6.4",
@@ -125,19 +136,27 @@ Created 'C:\\Users\\User\\Desktop\\foobar.json'.`}
             </SyntaxHighlighter>
           </Col>
           <Col lg={6}>
-             Scoop manifests are simple JSON files, which can be optionally complemented with inline PowerShell statements.
+            Scoop manifests are simple JSON files, which can be optionally complemented with inline PowerShell
+            statements.
           </Col>
         </Row>
 
         <h3 className="mt-5 mb-4 text-center fw-normal">Discovering Packages</h3>
-        <p className="text-center">Scoop packages exist as a part of Git repositories, called 'buckets'. The <Link to="/apps">package search</Link> can be used to search all Scoop manifests on GitHub. <br />The list of all Scoop buckets on GitHub can be browsed <Link to="/buckets">here</Link>.</p>
+        <p className="text-center">
+          Scoop packages exist as a part of Git repositories, called &apos;buckets&apos;. The{' '}
+          <Link to="/apps">package search</Link> can be used to search all Scoop manifests on GitHub. <br />
+          The list of all Scoop buckets on GitHub can be browsed <Link to="/buckets">here</Link>.
+        </p>
 
         <h3 className="mt-5 mb-4 text-center fw-normal">Documentation</h3>
-        <p className="text-center">Looking for something specific, or ready to dive into Scoop internals? Check out <a href="https://github.com/ScoopInstaller/Scoop#readme">Scoop's Readme</a> or refer to the <a href="https://github.com/ScoopInstaller/Scoop/wiki">Wiki</a>.</p>
+        <p className="text-center">
+          Looking for something specific, or ready to dive into Scoop internals? Check out{' '}
+          <a href="https://github.com/ScoopInstaller/Scoop#readme">Scoop&apos;s Readme</a> or refer to the{' '}
+          <a href="https://github.com/ScoopInstaller/Scoop/wiki">Wiki</a>.
+        </p>
       </Container>
     </>
   );
 };
 
 export default React.memo(Home);
-
