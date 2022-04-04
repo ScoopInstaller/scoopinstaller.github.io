@@ -90,8 +90,15 @@ d----          20-02-2022    01:22                workspace`}
             place a Scoop installation wherever you like.
           </Col>
         </Row>
-        <hr />
 
+        <h3 className="mt-5 mb-4 text-center fw-normal">Discovering Packages</h3>
+        <p className="text-center">
+          Scoop packages exist as a part of Git repositories, called &apos;buckets&apos;. The{' '}
+          <Link to="/apps">package search</Link> can be used to search all Scoop manifests on GitHub. <br />
+          The list of all Scoop buckets on GitHub can be browsed <Link to="/buckets">here</Link>.
+        </p>
+
+        <h3 className="mt-5 mb-4 text-center fw-normal">Creating Packages</h3>
         <Row>
           <Col lg={6}>Scoop allows you to trivially create your own packages.</Col>
           <Col lg={6}>
@@ -140,13 +147,6 @@ Created 'C:\\Users\\User\\Desktop\\foobar.json'.`}
             statements.
           </Col>
         </Row>
-
-        <h3 className="mt-5 mb-4 text-center fw-normal">Discovering Packages</h3>
-        <p className="text-center">
-          Scoop packages exist as a part of Git repositories, called &apos;buckets&apos;. The{' '}
-          <Link to="/apps">package search</Link> can be used to search all Scoop manifests on GitHub. <br />
-          The list of all Scoop buckets on GitHub can be browsed <Link to="/buckets">here</Link>.
-        </p>
 
         <h3 className="mt-5 mb-4 text-center fw-normal">Documentation</h3>
         <p className="text-center">
