@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { GoMarkGithub } from 'react-icons/go';
 import { Link } from 'react-router-dom';
 
 const NavBar = (): JSX.Element => {
@@ -19,11 +18,6 @@ const NavBar = (): JSX.Element => {
             </Nav.Link>
             <Nav.Link as={Link} to="/buckets">
               Buckets
-            </Nav.Link>
-          </Nav>
-          <Nav>
-            <Nav.Link href="https://github.com/ScoopInstaller">
-              <GoMarkGithub size="1.2em" />
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

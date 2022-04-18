@@ -100,3 +100,13 @@ body {
 .tooltip-inner {
   max-width: none;
 }
+
+.footer {
+  font-size: smaller;
+}
+
+svg.footer-icon {
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: sub;
+}
