@@ -8,6 +8,13 @@ const NavBar = (): JSX.Element => {
     <Navbar expand="sm" bg="dark" variant="dark">
       <Container>
         <Navbar.Brand as={Link} to="/">
+          <img
+            alt=""
+            src="https://avatars.githubusercontent.com/u/16618068?s=30"
+            width="30"
+            height="30"
+            className="d-inline-block align-top rounded me-2"
+          />
           Scoop
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
