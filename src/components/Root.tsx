@@ -7,11 +7,11 @@ import NavBar from './NavBar';
 const Root = (): JSX.Element => {
   return (
     <div>
-      <NavBar />
       <IconContext.Provider value={{ className: 'react-icon' }}>
+        <NavBar />
         <Outlet />
+        <Footer />
       </IconContext.Provider>
-      <Footer />
     </div>
   );
 };

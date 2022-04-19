@@ -108,7 +108,6 @@ body {
 svg.footer-icon {
   width: 1.2em;
   height: 1.2em;
-  vertical-align: sub;
 }
 
 @media (prefers-color-scheme: dark) {
