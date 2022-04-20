@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 
 import { Container, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -8,17 +8,14 @@ import powershell from 'react-syntax-highlighter/dist/esm/languages/prism/powers
 import lightStyle from 'react-syntax-highlighter/dist/esm/styles/prism/vs';
 import darkStyle from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus';
 
+import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
+
 SyntaxHighlighter.registerLanguage('powershell', powershell);
 SyntaxHighlighter.registerLanguage('json', json);
 
 const Home = (): JSX.Element => {
-  const [currentStyle, setCurrentStyle] = useState<unknown>();
-
-  useEffect(() => {
-    const colorSchemeQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-    setCurrentStyle(colorSchemeQueryList.matches ? darkStyle : lightStyle);
-    colorSchemeQueryList.addEventListener('change', (e) => setCurrentStyle(e.matches ? darkStyle : lightStyle));
-  }, []);
+  const { isDarkMode } = useContext(ColorSchemeContext);
+  const colorStyle: unknown = isDarkMode ? darkStyle : lightStyle;
 
   return (
     <>
@@ -32,7 +29,7 @@ const Home = (): JSX.Element => {
           set to &apos;RemoteSigned&apos;. In it, run:
         </p>
         {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-        <SyntaxHighlighter language="powershell" style={currentStyle}>
+        <SyntaxHighlighter language="powershell" style={colorStyle}>
           &gt; Invoke-WebRequest get.scoop.sh | Invoke-Expression
         </SyntaxHighlighter>
         <p className="text-center">
@@ -58,7 +55,7 @@ const Home = (): JSX.Element => {
           </Col>
           <Col lg={6}>
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="powershell" style={currentStyle}>
+            <SyntaxHighlighter language="powershell" style={colorStyle}>
               {`> scoop install vscode
 
 Installing 'vscode' (1.66.0) [64bit]
@@ -78,7 +75,7 @@ Running post-install script...
         <Row>
           <Col lg={6}>
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="powershell" style={currentStyle}>
+            <SyntaxHighlighter language="powershell" style={colorStyle}>
               {`> dir ~\\scoop
 
     Directory: C:\\Users\\User\\scoop
@@ -112,7 +109,7 @@ d----          20-02-2022    01:22                workspace`}
           <Col lg={6}>Scoop allows you to trivially create your own packages.</Col>
           <Col lg={6}>
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="powershell" style={currentStyle}>
+            <SyntaxHighlighter language="powershell" style={colorStyle}>
               {`> scoop create https://example.com/foobar/1.2.3/foobar-package.zip
 
 1) foobar
@@ -132,7 +129,7 @@ Created 'C:\\Users\\User\\Desktop\\foobar.json'.`}
         <Row>
           <Col lg={6}>
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="json" style={currentStyle}>
+            <SyntaxHighlighter language="json" style={colorStyle}>
               {`> scoop cat gifski
 
 {

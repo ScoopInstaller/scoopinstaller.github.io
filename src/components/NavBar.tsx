@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { BsSun, BsMoon, BsCircleHalf } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
+import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
+import { ColorSchemeType } from '../colorscheme/ColorSchemeType';
+
 const NavBar = (): JSX.Element => {
+  const { colorScheme, toggleColorScheme } = useContext(ColorSchemeContext);
+
   return (
     <Navbar expand="sm" bg="dark" variant="dark">
       <Container>
@@ -27,6 +33,11 @@ const NavBar = (): JSX.Element => {
               Buckets
             </Nav.Link>
           </Nav>
+          <Button onClick={toggleColorScheme} size="sm" variant="secondary">
+            {colorScheme == ColorSchemeType.Auto && <BsCircleHalf title="Auto mode. Click to switch to light mode" />}
+            {colorScheme == ColorSchemeType.Light && <BsSun title="Light mode. Click to switch to dark mode" />}
+            {colorScheme == ColorSchemeType.Dark && <BsMoon title="Dark mode. Click to switch to auto mode" />}
+          </Button>
         </Navbar.Collapse>
       </Container>
     </Navbar>
