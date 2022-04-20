@@ -16,16 +16,22 @@ const ColorSchemeProvider = (props: { children: React.ReactNode }): JSX.Element 
   const toggleColorScheme = useCallback((): void => {
     switch (userColorSchemePreference) {
       case ColorSchemeType.Auto:
-        setUserColorSchemePreference(ColorSchemeType.Light);
+        setUserColorSchemePreference(
+          browserColorSchemePreference === ColorSchemeType.Light ? ColorSchemeType.Dark : ColorSchemeType.Light
+        );
         break;
       case ColorSchemeType.Light:
-        setUserColorSchemePreference(ColorSchemeType.Dark);
+        setUserColorSchemePreference(
+          browserColorSchemePreference === ColorSchemeType.Light ? ColorSchemeType.Auto : ColorSchemeType.Dark
+        );
         break;
       case ColorSchemeType.Dark:
-        setUserColorSchemePreference(ColorSchemeType.Auto);
+        setUserColorSchemePreference(
+          browserColorSchemePreference === ColorSchemeType.Dark ? ColorSchemeType.Auto : ColorSchemeType.Light
+        );
         break;
     }
-  }, [userColorSchemePreference]);
+  }, [userColorSchemePreference, browserColorSchemePreference]);
 
   const toColorSchemeType = (value: boolean | string | null): ColorSchemeType => {
     if (value === null) {
@@ -70,7 +76,8 @@ const ColorSchemeProvider = (props: { children: React.ReactNode }): JSX.Element 
     updateUI(preferedColorScheme);
 
     setContextState({
-      colorScheme: userColorSchemePreference,
+      preferedColorScheme: userColorSchemePreference,
+      browserColorScheme: browserColorSchemePreference,
       isDarkMode: preferedColorScheme === ColorSchemeType.Dark,
       toggleColorScheme,
     });

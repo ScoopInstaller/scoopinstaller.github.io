@@ -8,7 +8,7 @@ import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
 import { ColorSchemeType } from '../colorscheme/ColorSchemeType';
 
 const NavBar = (): JSX.Element => {
-  const { colorScheme, toggleColorScheme } = useContext(ColorSchemeContext);
+  const { preferedColorScheme, browserColorScheme, toggleColorScheme } = useContext(ColorSchemeContext);
 
   return (
     <Navbar expand="sm" bg="dark" variant="dark">
@@ -34,9 +34,24 @@ const NavBar = (): JSX.Element => {
             </Nav.Link>
           </Nav>
           <Button onClick={toggleColorScheme} size="sm" variant="secondary">
-            {colorScheme == ColorSchemeType.Auto && <BsCircleHalf title="Auto mode. Click to switch to light mode" />}
-            {colorScheme == ColorSchemeType.Light && <BsSun title="Light mode. Click to switch to dark mode" />}
-            {colorScheme == ColorSchemeType.Dark && <BsMoon title="Dark mode. Click to switch to auto mode" />}
+            {preferedColorScheme == ColorSchemeType.Auto &&
+              (browserColorScheme == ColorSchemeType.Light ? (
+                <BsCircleHalf title="Auto mode. Click to switch to dark mode" />
+              ) : (
+                <BsCircleHalf title="Auto mode. Click to switch to light mode" />
+              ))}
+            {preferedColorScheme == ColorSchemeType.Light &&
+              (browserColorScheme == ColorSchemeType.Light ? (
+                <BsSun title="Light mode. Click to switch to OS/browser preferred mode" />
+              ) : (
+                <BsSun title="Light mode. Click to switch to dark mode" />
+              ))}
+            {preferedColorScheme == ColorSchemeType.Dark &&
+              (browserColorScheme == ColorSchemeType.Light ? (
+                <BsMoon title="Dark mode. Click to switch to light mode" />
+              ) : (
+                <BsMoon title="Dark mode. Click to switch to OS/browser preferred mode" />
+              ))}
           </Button>
         </Navbar.Collapse>
       </Container>

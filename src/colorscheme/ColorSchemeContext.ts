@@ -3,13 +3,15 @@ import React from 'react';
 import { ColorSchemeType } from './ColorSchemeType';
 
 export interface IColorSchemeContext {
-  colorScheme: ColorSchemeType;
+  preferedColorScheme: ColorSchemeType;
+  browserColorScheme: ColorSchemeType;
   isDarkMode: boolean;
   toggleColorScheme: () => void;
 }
 
 export const defaultState = {
-  colorScheme: ColorSchemeType.Auto,
+  preferedColorScheme: ColorSchemeType.Auto,
+  browserColorScheme: ColorSchemeType.Auto,
   isDarkMode: false,
   toggleColorScheme: () => {},
 };
