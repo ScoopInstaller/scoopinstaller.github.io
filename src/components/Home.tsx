@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Container, Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, createSearchParams } from 'react-router-dom';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 import powershell from 'react-syntax-highlighter/dist/esm/languages/prism/powershell';
@@ -9,6 +9,7 @@ import lightStyle from 'react-syntax-highlighter/dist/esm/styles/prism/vs';
 import darkStyle from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus';
 
 import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
+import SearchBar from './SearchBar';
 
 SyntaxHighlighter.registerLanguage('powershell', powershell);
 SyntaxHighlighter.registerLanguage('json', json);
@@ -17,11 +18,31 @@ const Home = (): JSX.Element => {
   const { isDarkMode } = useContext(ColorSchemeContext);
   const colorStyle: unknown = isDarkMode ? darkStyle : lightStyle;
 
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const handleSearchQuerySubmit = (): void => {
+    navigate({
+      pathname: '/apps',
+      search: createSearchParams({ q: searchQuery }).toString(),
+    });
+  };
+
   return (
     <>
       <Container className="mt-5 mb-5">
         <h1 className="display-4 text-center">Scoop</h1>
         <h2 className="fw-light text-center mb-5">A command-line installer for Windows</h2>
+
+        <Row className="justify-content-center mb-5">
+          <Col lg={6}>
+            <SearchBar
+              query={searchQuery}
+              onQueryChange={setSearchQuery}
+              onSubmit={handleSearchQuerySubmit}
+              autoSubmit={false}
+            />
+          </Col>
+        </Row>
 
         <h3 className="mb-4 text-center fw-normal">Quickstart</h3>
         <p className="text-center">
