@@ -2,17 +2,17 @@ import React, { useContext, useState } from 'react';
 
 import { Container, Col, Row } from 'react-bootstrap';
 import { Link, useNavigate, createSearchParams } from 'react-router-dom';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { PrismLight as SyntaxHighlighterBase, SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 import powershell from 'react-syntax-highlighter/dist/esm/languages/prism/powershell';
-import lightStyle from 'react-syntax-highlighter/dist/esm/styles/prism/vs';
-import darkStyle from 'react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus';
+import darkStyle from 'react-syntax-highlighter/dist/esm/styles/prism/a11y-dark';
+import lightStyle from 'react-syntax-highlighter/dist/esm/styles/prism/ghcolors';
 
 import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
 import SearchBar from './SearchBar';
 
-SyntaxHighlighter.registerLanguage('powershell', powershell);
-SyntaxHighlighter.registerLanguage('json', json);
+SyntaxHighlighterBase.registerLanguage('powershell', powershell);
+SyntaxHighlighterBase.registerLanguage('json', json);
 
 const Home = (): JSX.Element => {
   const { isDarkMode } = useContext(ColorSchemeContext);
@@ -25,6 +25,31 @@ const Home = (): JSX.Element => {
       pathname: '/apps',
       search: createSearchParams({ q: searchQuery }).toString(),
     });
+  };
+
+  const SyntaxHighlighter = (syntaxHighlighterProps: SyntaxHighlighterProps): JSX.Element => {
+    const { children, ...syntaxHighlighterRest } = syntaxHighlighterProps;
+
+    // Adjust light and dark styles to have similar visual result
+    const customStyle = {
+      lineHeight: '1.4',
+      fontSize: '0.9em',
+    };
+
+    const codeTagProps = {
+      style: customStyle,
+    };
+
+    return (
+      <SyntaxHighlighterBase
+        {...syntaxHighlighterRest}
+        style={colorStyle}
+        customStyle={customStyle}
+        codeTagProps={codeTagProps}
+      >
+        {children}
+      </SyntaxHighlighterBase>
+    );
   };
 
   return (
@@ -50,7 +75,7 @@ const Home = (): JSX.Element => {
           set to &apos;RemoteSigned&apos;. In it, run:
         </p>
         {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-        <SyntaxHighlighter language="powershell" style={colorStyle}>
+        <SyntaxHighlighter language="powershell">
           &gt; Invoke-WebRequest get.scoop.sh | Invoke-Expression
         </SyntaxHighlighter>
         <p className="text-center">
@@ -76,7 +101,7 @@ const Home = (): JSX.Element => {
           </Col>
           <Col lg={6}>
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="powershell" style={colorStyle}>
+            <SyntaxHighlighter language="powershell">
               {`> scoop install vscode
 
 Installing 'vscode' (1.66.0) [64bit]
@@ -96,7 +121,7 @@ Running post-install script...
         <Row>
           <Col lg={6}>
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="powershell" style={colorStyle}>
+            <SyntaxHighlighter language="powershell">
               {`> dir ~\\scoop
 
     Directory: C:\\Users\\User\\scoop
@@ -130,7 +155,7 @@ d----          20-02-2022    01:22                workspace`}
           <Col lg={6}>Scoop allows you to trivially create your own packages.</Col>
           <Col lg={6}>
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="powershell" style={colorStyle}>
+            <SyntaxHighlighter language="powershell">
               {`> scoop create https://example.com/foobar/1.2.3/foobar-package.zip
 
 1) foobar
@@ -150,7 +175,7 @@ Created 'C:\\Users\\User\\Desktop\\foobar.json'.`}
         <Row>
           <Col lg={6}>
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="json" style={colorStyle}>
+            <SyntaxHighlighter language="json">
               {`> scoop cat gifski
 
 {
