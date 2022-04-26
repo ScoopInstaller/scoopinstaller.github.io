@@ -60,12 +60,7 @@ const Home = (): JSX.Element => {
 
         <Row className="justify-content-center mb-5">
           <Col lg={6}>
-            <SearchBar
-              query={searchQuery}
-              onQueryChange={setSearchQuery}
-              onSubmit={handleSearchQuerySubmit}
-              autoSubmit={false}
-            />
+            <SearchBar query={searchQuery} onQueryChange={setSearchQuery} onSubmit={handleSearchQuerySubmit} />
           </Col>
         </Row>
 

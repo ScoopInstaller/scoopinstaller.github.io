@@ -9,14 +9,13 @@ type SearchBarProps = {
   query: string;
   onQueryChange: (query: string) => void;
   onSubmit: () => void;
-  autoSubmit?: boolean;
 };
 
 const SearchBar = (props: SearchBarProps): JSX.Element => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const delayBeforeSubmit = useRef<NodeJS.Timeout>();
-  const { query, onQueryChange, onSubmit, autoSubmit = true } = props;
+  const { query, onQueryChange, onSubmit } = props;
 
   const clearDelayBeforeSubmitTimeout = (): void => {
     if (delayBeforeSubmit.current) {
@@ -30,14 +29,12 @@ const SearchBar = (props: SearchBarProps): JSX.Element => {
       onQueryChange(e.target.value);
 
       clearDelayBeforeSubmitTimeout();
-      if (autoSubmit) {
-        delayBeforeSubmit.current = setTimeout(
-          () => formRef.current?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true })),
-          DELAY_SEARCH_AFTER_KEYPRESS
-        );
-      }
+      delayBeforeSubmit.current = setTimeout(
+        () => formRef.current?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true })),
+        DELAY_SEARCH_AFTER_KEYPRESS
+      );
     },
-    [onQueryChange, autoSubmit]
+    [onQueryChange]
   );
 
   const handleSubmit = useCallback(
