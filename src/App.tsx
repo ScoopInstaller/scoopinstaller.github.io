@@ -1,7 +1,8 @@
 import './App.css';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 import Buckets from './components/Buckets';
+import Home from './components/Home';
 import Root from './components/Root';
 import Search from './components/Search';
 
@@ -12,7 +13,7 @@ const App = (): JSX.Element => {
         <Route path="/" element={<Root />}>
           <Route path="apps" element={<Search />} />
           <Route path="buckets" element={<Buckets />} />
-          <Route index element={<Navigate to="apps" replace />} />
+          <Route index element={<Home />} />
         </Route>
       </Routes>
     </HashRouter>
