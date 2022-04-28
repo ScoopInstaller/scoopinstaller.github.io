@@ -66,7 +66,15 @@ const Home = (): JSX.Element => {
 
         <h3 className="mb-4 text-center fw-normal">Quickstart</h3>
         <p className="text-center">
-          Open a PowerShell terminal (version 5.1 or later) by searching in the Start menu. In it, run:
+          Open a{' '}
+          <abbr
+            style={{ textDecorationStyle: 'solid' }}
+            /* eslint-disable-next-line max-len */
+            title="If you don't know what it is, don't worry, you can use the standard command line after installation. Just search for 'PowerShell' in the Start menu. Windows 7 users must install PowerShell version 5.1 or later manually."
+          >
+            PowerShell terminal
+          </abbr>{' '}
+          (version 5.1 or later) and run:
         </p>
         {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
         <SyntaxHighlighter language="powershell">
