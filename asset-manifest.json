@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "https://scoopinstaller.github.io/static/css/main.d6f4ff8b.css",
+    "main.js": "https://scoopinstaller.github.io/static/js/main.1801f8f5.js",
+    "static/js/787.bc779ebf.chunk.js": "https://scoopinstaller.github.io/static/js/787.bc779ebf.chunk.js",
+    "index.html": "https://scoopinstaller.github.io/index.html",
+    "main.d6f4ff8b.css.map": "https://scoopinstaller.github.io/static/css/main.d6f4ff8b.css.map",
+    "main.1801f8f5.js.map": "https://scoopinstaller.github.io/static/js/main.1801f8f5.js.map",
+    "787.bc779ebf.chunk.js.map": "https://scoopinstaller.github.io/static/js/787.bc779ebf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d6f4ff8b.css",
+    "static/js/main.1801f8f5.js"
+  ]
+}
