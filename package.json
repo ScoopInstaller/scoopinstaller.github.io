@@ -1,5 +1,5 @@
 {
-  "name": "scoopsearch",
+  "name": "scoopinstaller.github.io",
   "version": "0.2.0",
   "private": true,
   "dependencies": {
@@ -24,7 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "lint": "eslint . --ext .ts,.tsx,.js,.jsx"
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx"
   },
   "eslintConfig": {
     "extends": [
