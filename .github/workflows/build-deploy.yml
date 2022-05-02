@@ -1,0 +1,80 @@
+name: Build and deploy Website
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+env:
+  OUTPUT_PATH: ${{ github.workspace }}/build
+  NODE_VERSION: '16'
+  REACT_APP_AZURESEARCH_KEY: ${{ secrets.REACT_APP_AZURESEARCH_KEY }}
+
+jobs:
+  build:
+    name: Build ⚙️📦
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Define PUBLIC_URL environment variable
+      run: |
+        if [[ "${{github.ref}}" == "refs/heads/main" ]]; then
+            echo "PUBLIC_URL=https://scoopinstaller.github.io" >> "$GITHUB_ENV"
+        else
+            echo "PUBLIC_URL=https://scoopinstaller.github.io/scoopinstaller-dev.github.io" >> "$GITHUB_ENV"
+        fi
+
+    - name: Build Website
+      run: |
+        echo "Use PUBLIC_URL=${{ env.PUBLIC_URL }}"
+        npm run build
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: website
+        path: ${{ env.OUTPUT_PATH }}
+
+  deploy:
+    if: github.event_name == 'push'
+    name: Deploy 🚀🌐
+    needs: [ build ]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+          name: website
+          path: ${{ env.OUTPUT_PATH }}
+
+    - name: Deploy website => https://scoopinstaller.github.io
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: ./build
+
+    - name: Deploy website => https://scoopinstaller.github.io/scoopinstaller-dev.github.io
+      if: github.ref == 'refs/heads/develop'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.GHPAGES_DEPLOY_KEY_DEV }}
+        external_repository: ScoopInstaller/scoopinstaller-dev.github.io
+        publish_branch: master
+        publish_dir: ./build
