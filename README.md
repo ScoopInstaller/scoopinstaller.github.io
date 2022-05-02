@@ -20,3 +20,5 @@ Application should run on http://localhost:3000 or https://localhost:5000 to pas
 ### Contribute to this project
 Pull requests are most welcome!
 Please target the `develop` branch and run `npm run build` (or at least `npm run lint`) to ensure your changes compile and match the code guidelines.
+
+### Test
