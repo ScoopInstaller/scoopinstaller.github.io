@@ -33,9 +33,9 @@ jobs:
     - name: Define PUBLIC_URL environment variable
       run: |
         if [[ "${{github.ref}}" == "refs/heads/main" ]]; then
-            echo "PUBLIC_URL=https://scoopinstaller.github.io" >> "$GITHUB_ENV"
+            echo "PUBLIC_URL=https://scoop.sh" >> "$GITHUB_ENV"
         else
-            echo "PUBLIC_URL=https://scoopinstaller.github.io/scoopinstaller-dev.github.io" >> "$GITHUB_ENV"
+            echo "PUBLIC_URL=https://scoop.sh/scoopinstaller-dev.github.io" >> "$GITHUB_ENV"
         fi
 
     - name: Build Website
@@ -62,15 +62,16 @@ jobs:
           name: website
           path: ${{ env.OUTPUT_PATH }}
 
-    - name: Deploy website => https://scoopinstaller.github.io
+    - name: Deploy website => https://scoop.sh
       if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
         publish_dir: ./build
+        cname: scoop.sh
 
-    - name: Deploy website => https://scoopinstaller.github.io/scoopinstaller-dev.github.io
+    - name: Deploy website => https://scoop.sh/scoopinstaller-dev.github.io
       if: github.ref == 'refs/heads/develop'
       uses: peaceiris/actions-gh-pages@v3
       with:
