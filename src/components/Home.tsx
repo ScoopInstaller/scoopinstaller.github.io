@@ -79,7 +79,7 @@ const Home = (): JSX.Element => {
         {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
         <SyntaxHighlighter language="powershell">
           {`> Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
-> Invoke-WebRequest get.scoop.sh | Invoke-Expression`}
+> irm get.scoop.sh | iex`}
         </SyntaxHighlighter>
         <p className="text-center">
           For advanced installation options, check out the{' '}
