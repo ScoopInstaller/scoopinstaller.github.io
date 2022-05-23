@@ -12,31 +12,38 @@ import SearchProcessor, { SortDirection, sortModes } from './SearchProcessor';
 import SearchResult from './SearchResult';
 
 const RESULTS_PER_PAGE = 20;
+const SEARCH_PARAM_QUERY = 'q';
+const SEARCH_PARAM_PAGE = 'p';
+const SEARCH_PARAM_SORT_INDEX = 's';
+const SEARCH_PARAM_SORT_DIRECTION = 'd';
+const SEARCH_PARAM_FILTER_OFFICIALONLY = 'o';
 
 const Search = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const getQueryFromSearchParams = useCallback((): string => {
-    return searchParams.get('q') ?? '';
+    return searchParams.get(SEARCH_PARAM_QUERY) ?? '';
   }, [searchParams]);
 
   const getCurrentPageFromSearchParams = useCallback((): number => {
-    return parseInt(searchParams.get('p') || '1');
+    return parseInt(searchParams.get(SEARCH_PARAM_PAGE) || '1');
   }, [searchParams]);
 
   const getSortIndexFromSearchParams = useCallback((): number => {
-    return parseInt(searchParams.get('s') || '0');
+    return parseInt(searchParams.get(SEARCH_PARAM_SORT_INDEX) || '0');
   }, [searchParams]);
 
   const getSortDirectionFromSearchParams = useCallback(
     (sortIndex: number): SortDirection => {
-      return parseInt(searchParams.get('d') || sortModes[sortIndex].DefaultSortDirection.toString()) as SortDirection;
+      return parseInt(
+        searchParams.get(SEARCH_PARAM_SORT_DIRECTION) || sortModes[sortIndex].DefaultSortDirection.toString()
+      ) as SortDirection;
     },
     [searchParams]
   );
 
   const getSearchOfficialOnlyFromSearchParams = useCallback((): boolean => {
-    return searchParams.get('o') === 'true';
+    return searchParams.get(SEARCH_PARAM_FILTER_OFFICIALONLY) === 'true';
   }, [searchParams]);
 
   const updateSearchParams = useCallback(
@@ -88,7 +95,7 @@ const Search = (): JSX.Element => {
 
   const handleQueryChange = useCallback(
     (newQuery: string): void => {
-      updateSearchParams('q', newQuery, () => newQuery.length > 0);
+      updateSearchParams(SEARCH_PARAM_QUERY, newQuery, () => newQuery.length > 0);
       setSearchBarQuery(newQuery);
       setCurrentPage(1);
     },
@@ -105,7 +112,7 @@ const Search = (): JSX.Element => {
 
   const handlePageChange = useCallback(
     (newCurrentPage: number): void => {
-      updateSearchParams('p', newCurrentPage.toString(), () => newCurrentPage > 1);
+      updateSearchParams(SEARCH_PARAM_PAGE, newCurrentPage.toString(), () => newCurrentPage > 1);
       setCurrentPage(newCurrentPage);
       window.scrollTo(0, 0);
     },
@@ -114,9 +121,9 @@ const Search = (): JSX.Element => {
 
   const handleSortChange = useCallback(
     (newSortIndex: number, newSortDirection: SortDirection): void => {
-      updateSearchParams('s', newSortIndex.toString(), () => newSortIndex !== 0);
+      updateSearchParams(SEARCH_PARAM_SORT_INDEX, newSortIndex.toString(), () => newSortIndex !== 0);
       updateSearchParams(
-        'd',
+        SEARCH_PARAM_SORT_DIRECTION,
         newSortDirection.toString(),
         () => newSortDirection !== sortModes[newSortIndex].DefaultSortDirection
       );
@@ -128,7 +135,11 @@ const Search = (): JSX.Element => {
 
   const handleSearchOfficialOnlyChange = useCallback(
     (newSearchOfficialOnly: boolean): void => {
-      updateSearchParams('o', newSearchOfficialOnly.toString(), () => newSearchOfficialOnly);
+      updateSearchParams(
+        SEARCH_PARAM_FILTER_OFFICIALONLY,
+        newSearchOfficialOnly.toString(),
+        () => newSearchOfficialOnly
+      );
       setSearchOfficialOnly(newSearchOfficialOnly);
     },
     [updateSearchParams]
