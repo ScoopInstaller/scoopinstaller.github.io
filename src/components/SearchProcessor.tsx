@@ -227,10 +227,16 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     }
   };
 
+  const formatSortingAndFiltering = () => {
+    const currentSort = sortModes[sortIndex].DisplayName;
+    const currentFilter = searchOfficialOnly ? 'Official buckets only' : 'All buckets';
+    return `${currentSort}, ${currentFilter}`;
+  };
+
   return (
     <Form>
       <Row>
-        <Col xs={8} className="my-auto">
+        <Col xs={6} className="my-auto">
           <SearchStatus
             query={query}
             resultsCount={resultsCount}
@@ -238,11 +244,11 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
             type={SearchStatusType.Applications}
           />
         </Col>
-        <Col xs={4} className="text-end">
+        <Col xs={6} className="text-end">
           <Dropdown autoClose="outside" align="end" drop="end" className="sorting-filtering-button">
             <Dropdown.Toggle size="sm" variant="secondary">
               <GoSettings className="me-2" />
-              <span className="d-none d-sm-inline">Sorting &amp; Filtering</span>
+              <span className="d-none d-sm-inline">{formatSortingAndFiltering()}</span>
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="sorting-filtering-menu">

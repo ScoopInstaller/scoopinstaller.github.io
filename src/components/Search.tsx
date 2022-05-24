@@ -12,39 +12,60 @@ import SearchProcessor, { SortDirection, sortModes } from './SearchProcessor';
 import SearchResult from './SearchResult';
 
 const RESULTS_PER_PAGE = 20;
+const SEARCH_PARAM_QUERY = 'q';
+const SEARCH_PARAM_PAGE = 'p';
+const SEARCH_PARAM_SORT_INDEX = 's';
+const SEARCH_PARAM_SORT_DIRECTION = 'd';
+const SEARCH_PARAM_FILTER_OFFICIALONLY = 'o';
 
 const Search = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const getQueryFromSearchParams = useCallback((): string => {
-    return searchParams.get('q') ?? '';
+    return searchParams.get(SEARCH_PARAM_QUERY) ?? '';
   }, [searchParams]);
 
   const getCurrentPageFromSearchParams = useCallback((): number => {
-    return parseInt(searchParams.get('p') || '1');
+    return parseInt(searchParams.get(SEARCH_PARAM_PAGE) || '1');
   }, [searchParams]);
 
-  const getSortIndexFromSearchParams = useCallback((): number => {
-    return parseInt(searchParams.get('s') || '0');
-  }, [searchParams]);
+  const getSearchParam = useCallback(
+    <T extends number | boolean>(key: string, defaultValue: T): T => {
+      const value = searchParams.get(key) || localStorage.getItem(key);
+      if (value) {
+        switch (typeof defaultValue) {
+          case 'number':
+            return parseInt(value) as T;
+          case 'boolean':
+            return (value === 'true') as T;
+        }
+      }
 
-  const getSortDirectionFromSearchParams = useCallback(
-    (sortIndex: number): SortDirection => {
-      return parseInt(searchParams.get('d') || sortModes[sortIndex].DefaultSortDirection.toString()) as SortDirection;
+      return defaultValue;
     },
     [searchParams]
   );
 
+  const getSortIndexFromSearchParams = useCallback((): number => {
+    return getSearchParam(SEARCH_PARAM_SORT_INDEX, 0);
+  }, [getSearchParam]);
+
+  const getSortDirectionFromSearchParams = useCallback(
+    (sortIndex: number): SortDirection => {
+      return getSearchParam(SEARCH_PARAM_SORT_DIRECTION, sortModes[sortIndex].DefaultSortDirection);
+    },
+    [getSearchParam]
+  );
+
   const getSearchOfficialOnlyFromSearchParams = useCallback((): boolean => {
-    return searchParams.get('o') === 'true';
-  }, [searchParams]);
+    return getSearchParam(SEARCH_PARAM_FILTER_OFFICIALONLY, true);
+  }, [getSearchParam]);
 
   const updateSearchParams = useCallback(
-    (name: string, value: string, shouldSet: () => boolean): void => {
-      if (shouldSet()) {
-        searchParams.set(name, value);
-      } else {
-        searchParams.delete(name);
+    (key: string, value: string, updateLocalStorage: boolean): void => {
+      searchParams.set(key, value);
+      if (updateLocalStorage) {
+        localStorage.setItem(key, value);
       }
 
       setSearchParams(searchParams, { replace: true });
@@ -73,6 +94,12 @@ const Search = (): JSX.Element => {
   }, [getCurrentPageFromSearchParams]);
 
   useEffect(() => {
+    updateSearchParams(SEARCH_PARAM_SORT_INDEX, sortIndex.toString(), true);
+    updateSearchParams(SEARCH_PARAM_SORT_DIRECTION, sortDirection.toString(), true);
+    updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, searchOfficialOnly.toString(), true);
+  }, [updateSearchParams, sortIndex, sortDirection, searchOfficialOnly]);
+
+  useEffect(() => {
     fetch('https://raw.githubusercontent.com/ScoopInstaller/Scoop/master/buckets.json')
       .then((response) => response.json())
       .then((response) => {
@@ -88,7 +115,7 @@ const Search = (): JSX.Element => {
 
   const handleQueryChange = useCallback(
     (newQuery: string): void => {
-      updateSearchParams('q', newQuery, () => newQuery.length > 0);
+      updateSearchParams(SEARCH_PARAM_QUERY, newQuery, false);
       setSearchBarQuery(newQuery);
       setCurrentPage(1);
     },
@@ -105,34 +132,21 @@ const Search = (): JSX.Element => {
 
   const handlePageChange = useCallback(
     (newCurrentPage: number): void => {
-      updateSearchParams('p', newCurrentPage.toString(), () => newCurrentPage > 1);
+      updateSearchParams(SEARCH_PARAM_PAGE, newCurrentPage.toString(), false);
       setCurrentPage(newCurrentPage);
       window.scrollTo(0, 0);
     },
     [updateSearchParams]
   );
 
-  const handleSortChange = useCallback(
-    (newSortIndex: number, newSortDirection: SortDirection): void => {
-      updateSearchParams('s', newSortIndex.toString(), () => newSortIndex !== 0);
-      updateSearchParams(
-        'd',
-        newSortDirection.toString(),
-        () => newSortDirection !== sortModes[newSortIndex].DefaultSortDirection
-      );
-      setSortIndex(newSortIndex);
-      setSortDirection(newSortDirection);
-    },
-    [updateSearchParams]
-  );
+  const handleSortChange = (newSortIndex: number, newSortDirection: SortDirection): void => {
+    setSortIndex(newSortIndex);
+    setSortDirection(newSortDirection);
+  };
 
-  const handleSearchOfficialOnlyChange = useCallback(
-    (newSearchOfficialOnly: boolean): void => {
-      updateSearchParams('o', newSearchOfficialOnly.toString(), () => newSearchOfficialOnly);
-      setSearchOfficialOnly(newSearchOfficialOnly);
-    },
-    [updateSearchParams]
-  );
+  const handleSearchOfficialOnlyChange = (newSearchOfficialOnly: boolean): void => {
+    setSearchOfficialOnly(newSearchOfficialOnly);
+  };
 
   const handleCopyToClipboard = useCallback((newContentToCopy: string): void => {
     setContentToCopy(newContentToCopy);
