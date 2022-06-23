@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container, Col, Row, Tabs, Tab } from 'react-bootstrap';
 import { Link, useNavigate, createSearchParams } from 'react-router-dom';
 import { PrismLight as SyntaxHighlighterBase, SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
@@ -34,6 +34,7 @@ const Home = (): JSX.Element => {
     const customStyle = {
       lineHeight: '1.4',
       fontSize: '0.9em',
+      margin: '0',
     };
 
     const codeTagProps = {
@@ -76,7 +77,6 @@ const Home = (): JSX.Element => {
           </abbr>{' '}
           (version 5.1 or later) and run:
         </p>
-        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
         <SyntaxHighlighter language="powershell">
           {`> Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
 > irm get.scoop.sh | iex`}
@@ -103,9 +103,30 @@ const Home = (): JSX.Element => {
             </ul>
           </Col>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="json">
-              {`> scoop install vscode
+            <Tabs defaultActiveKey="7zip" className="syntaxhighlighter-no-top-border">
+              <Tab eventKey="7zip" title="7zip">
+                <SyntaxHighlighter language="json">
+                  {`> scoop install 7zip
+Installing '7zip' (21.07) [64bit]
+7z2107-x64.msi (1.8 MB) [=========================================] 100%
+Checking hash of 7z2107-x64.msi ... ok.
+Extracting 7z2107-x64.msi ... done.
+Linking ~\\scoop\\apps\\7zip\\current => ~\\scoop\\apps\\7zip\\21.07
+Creating shim for '7z'.
+Creating shortcut for 7-Zip (7zFM.exe)
+Persisting Codecs
+Persisting Formats
+Running post_install script...
+'7zip' (21.07) was installed successfully!`}
+                </SyntaxHighlighter>
+              </Tab>
+              <Tab eventKey="vscode" title="VS Code">
+                <SyntaxHighlighter language="json">
+                  {`> scoop bucket add extras
+Checking repo... OK
+The versions bucket was added successfully.
+
+> scoop install vscode
 Installing 'vscode' (1.66.0) [64bit]
 dl.7z (104.1 MB) [=========================================] 100%
 Checking hash of dl.7z ... ok.
@@ -115,14 +136,15 @@ Creating shortcut for Visual Studio Code (code.exe)
 Persisting data
 Running post-install script...
 'vscode' (1.66.0) was installed successfully!`}
-            </SyntaxHighlighter>
+                </SyntaxHighlighter>
+              </Tab>
+            </Tabs>
           </Col>
         </Row>
         <hr />
 
         <Row>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="powershell">
               {`> dir ~\\scoop
 
@@ -155,7 +177,6 @@ d----          20-02-2022    01:22                workspace`}
             in your PATH and in your Start menu.
           </Col>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="json">
               {`> scoop search python
 'main' bucket:
@@ -176,7 +197,6 @@ Hello from Python installed by Scoop!`}
         <h3 className="mt-5 mb-4 text-center fw-normal">Discovering Packages</h3>
         <Row>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="json">
               {`> scoop search mongo
 'extras' bucket:
@@ -210,7 +230,6 @@ Results from other known buckets...
         <Row>
           <Col lg={6}>Scoop allows you to trivially create your own packages.</Col>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="powershell">
               {`> scoop create https://example.com/foobar/1.2.3/foobar-package.zip
 1) foobar
@@ -229,7 +248,6 @@ Created 'C:\\Users\\User\\Desktop\\foobar.json'.`}
 
         <Row>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="json">
               {`> scoop cat gifski
 {
