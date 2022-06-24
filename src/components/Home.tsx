@@ -103,21 +103,23 @@ const Home = (): JSX.Element => {
             </ul>
           </Col>
           <Col lg={6}>
-            <Tabs defaultActiveKey="7zip" className="syntaxhighlighter-no-top-border">
-              <Tab eventKey="7zip" title="7zip">
+            <Tabs defaultActiveKey="python" className="syntaxhighlighter-no-top-border">
+              <Tab eventKey="python" title="python">
                 <SyntaxHighlighter language="json">
-                  {`> scoop install 7zip
-Installing '7zip' (21.07) [64bit]
-7z2107-x64.msi (1.8 MB) [=========================================] 100%
-Checking hash of 7z2107-x64.msi ... ok.
-Extracting 7z2107-x64.msi ... done.
-Linking ~\\scoop\\apps\\7zip\\current => ~\\scoop\\apps\\7zip\\21.07
-Creating shim for '7z'.
-Creating shortcut for 7-Zip (7zFM.exe)
-Persisting Codecs
-Persisting Formats
+                  {`> scoop install python
+Installing 'python' (3.10.5) [64bit]
+python-3.10.5-amd64.exe (27.3 MB) [=========================================] 100%
+Checking hash of python-3.10.5-amd64.exe ... ok.
+Running pre_install script...
+Running installer script...
+Linking ~\\scoop\\apps\\python\\current => ~\\scoop\\apps\\python\\3.10.5
+Creating shim for 'python3'.
+Creating shim for 'idle'.
+Creating shim for 'idle3'.
+Persisting Scripts
+Persisting Lib\\site-packages
 Running post_install script...
-'7zip' (21.07) was installed successfully!`}
+'python' (3.10.5) was installed successfully!`}
                 </SyntaxHighlighter>
               </Tab>
               <Tab eventKey="vscode" title="VS Code">
