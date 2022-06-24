@@ -129,15 +129,15 @@ Checking repo... OK
 The extras bucket was added successfully.
 
 > scoop install vscode
-Installing 'vscode' (1.66.0) [64bit]
-dl.7z (104.1 MB) [=========================================] 100%
+Installing 'vscode' (1.68.1) [64bit]
+dl.7z (108.1 MB) [=========================================] 100%
 Checking hash of dl.7z ... ok.
 Extracting dl.7z ... done.
-Linking ~\\scoop\\apps\\vscode\\current => ~\\scoop\\apps\\vscode\\1.66.0
+Linking ~\\scoop\\apps\\vscode\\current => ~\\scoop\\apps\\vscode\\1.68.1
 Creating shortcut for Visual Studio Code (code.exe)
 Persisting data
 Running post-install script...
-'vscode' (1.66.0) was installed successfully!`}
+'vscode' (1.68.1) was installed successfully!`}
                 </SyntaxHighlighter>
               </Tab>
             </Tabs>
@@ -182,13 +182,13 @@ d----          20-02-2022    01:22                workspace`}
             <SyntaxHighlighter language="json">
               {`> scoop search python
 'main' bucket:
-    python (3.10.4)
-    winpython (3.8.9.0)
+    python (3.10.5)
+    winpython (3.10.4.0)
 
 > scoop install python
 ...
 Creating shim for 'python.exe'.
-'python' (3.10.4) was installed successfully!
+'python' (3.10.5) was installed successfully!
 
 > python -c "print('Hello from Python installed by Scoop!')"
 Hello from Python installed by Scoop!`}
@@ -202,12 +202,12 @@ Hello from Python installed by Scoop!`}
             <SyntaxHighlighter language="json">
               {`> scoop search mongo
 'extras' bucket:
-    mongodb-compass (1.31.2)
-    mongosh (1.3.1)
+    mongodb-compass (1.32.2)
+    mongosh (1.5.0)
 
 'main' bucket:
-    mongodb-database-tools (100.5.2)
-    mongodb (5.3.1)
+    mongodb-database-tools (100.5.3)
+    mongodb (5.3.2)
 
 > scoop search citra
 Results from other known buckets...
