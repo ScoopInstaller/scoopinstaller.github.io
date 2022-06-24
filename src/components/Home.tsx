@@ -126,7 +126,7 @@ Running post_install script...
                 <SyntaxHighlighter language="json">
                   {`> scoop bucket add extras
 Checking repo... OK
-The versions bucket was added successfully.
+The extras bucket was added successfully.
 
 > scoop install vscode
 Installing 'vscode' (1.66.0) [64bit]
