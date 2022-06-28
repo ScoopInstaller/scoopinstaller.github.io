@@ -104,7 +104,7 @@ const Home = (): JSX.Element => {
           </Col>
           <Col lg={6}>
             <Tabs defaultActiveKey="python" className="syntaxhighlighter-no-top-border">
-              <Tab eventKey="python" title="python">
+              <Tab eventKey="python" title="Python">
                 <SyntaxHighlighter language="json">
                   {`> scoop install python
 Installing 'python' (3.10.5) [64bit]
@@ -122,7 +122,45 @@ Running post_install script...
 'python' (3.10.5) was installed successfully!`}
                 </SyntaxHighlighter>
               </Tab>
-              <Tab eventKey="vscode" title="VS Code">
+              <Tab eventKey="neovim" title="Neovim">
+                <SyntaxHighlighter language="json">
+                  {`> scoop install neovim
+Installing 'neovim' (0.7.0) [64bit]
+nvim-win64.zip (36.4 MB) [=========================================] 100%
+Checking hash of nvim-win64.zip ... ok.
+Extracting nvim-win64.zip ... done.
+Linking ~\\scoop\\apps\\neovim\\current => ~\\scoop\\apps\\neovim\\0.7.0
+Creating shim for 'nvim'.
+Creating shim for 'nvim-qt'.
+Creating shortcut for Neovim (nvim-qt.exe)
+'neovim' (0.7.0) was installed successfully!
+
+
+
+
+`}
+                </SyntaxHighlighter>
+              </Tab>
+              <Tab eventKey="nodejs" title="Node.js">
+                <SyntaxHighlighter language="json">
+                  {`> scoop install nodejs
+Installing 'nodejs' (18.4.0) [64bit]
+node-v18.4.0-win-x64.7z (17.3 MB) [=========================================] 100%
+Checking hash of node-v18.4.0-win-x64.7z ... ok.
+Extracting node-v18.4.0-win-x64.7z ... done.
+Linking ~\\scoop\\apps\\nodejs\\current => ~\\scoop\\apps\\nodejs\\18.4.0
+Persisting bin
+Persisting cache
+Running post_install script...
+'nodejs' (18.4.0) was installed successfully!
+
+
+
+
+`}
+                </SyntaxHighlighter>
+              </Tab>
+              <Tab eventKey="vscode" title="VS Code (extras)">
                 <SyntaxHighlighter language="json">
                   {`> scoop bucket add extras
 Checking repo... OK
@@ -138,6 +176,25 @@ Creating shortcut for Visual Studio Code (code.exe)
 Persisting data
 Running post-install script...
 'vscode' (1.68.1) was installed successfully!`}
+                </SyntaxHighlighter>
+              </Tab>
+              <Tab eventKey="cascadia-code" title="Cascadia Code (nerd-fonts)">
+                <SyntaxHighlighter language="json">
+                  {`> scoop bucket add nerd-fonts
+Checking repo... OK
+The nerd-fonts bucket was added successfully.
+
+> scoop install Cascadia-Code
+Installing 'Cascadia-Code' (2111.01) [64bit]
+CascadiaCode-2111.01.zip (23.7 MB) [=========================================] 100%
+Checking hash of CascadiaCode-2111.01.zip ... ok.
+Extracting CascadiaCode-2111.01.zip ... done.
+Running installer script...
+Linking ~\\scoop\\apps\\Cascadia-Code\\current => ~\\scoop\\apps\\Cascadia-Code\\2111.01
+'Cascadia-Code' (2111.01) was installed successfully!
+
+
+`}
                 </SyntaxHighlighter>
               </Tab>
             </Tabs>
