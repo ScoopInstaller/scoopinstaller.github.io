@@ -103,23 +103,24 @@ const Home = (): JSX.Element => {
             </ul>
           </Col>
           <Col lg={6}>
-            <Tabs defaultActiveKey="python" className="syntaxhighlighter-no-top-border">
-              <Tab eventKey="python" title="Python">
+            <Tabs defaultActiveKey="nodejs" className="syntaxhighlighter-no-top-border">
+              <Tab eventKey="nodejs" title="Node.js">
                 <SyntaxHighlighter language="json">
-                  {`> scoop install python
-Installing 'python' (3.10.5) [64bit]
-python-3.10.5-amd64.exe (27.3 MB) [=========================================] 100%
-Checking hash of python-3.10.5-amd64.exe ... ok.
-Running pre_install script...
-Running installer script...
-Linking ~\\scoop\\apps\\python\\current => ~\\scoop\\apps\\python\\3.10.5
-Creating shim for 'python3'.
-Creating shim for 'idle'.
-Creating shim for 'idle3'.
-Persisting Scripts
-Persisting Lib\\site-packages
+                  {`> scoop install nodejs
+Installing 'nodejs' (18.4.0) [64bit]
+node-v18.4.0-win-x64.7z (17.3 MB) [=========================================] 100%
+Checking hash of node-v18.4.0-win-x64.7z ... ok.
+Extracting node-v18.4.0-win-x64.7z ... done.
+Linking ~\\scoop\\apps\\nodejs\\current => ~\\scoop\\apps\\nodejs\\18.4.0
+Persisting bin
+Persisting cache
 Running post_install script...
-'python' (3.10.5) was installed successfully!`}
+'nodejs' (18.4.0) was installed successfully!
+
+
+
+
+`}
                 </SyntaxHighlighter>
               </Tab>
               <Tab eventKey="neovim" title="Neovim">
@@ -134,25 +135,6 @@ Creating shim for 'nvim'.
 Creating shim for 'nvim-qt'.
 Creating shortcut for Neovim (nvim-qt.exe)
 'neovim' (0.7.0) was installed successfully!
-
-
-
-
-`}
-                </SyntaxHighlighter>
-              </Tab>
-              <Tab eventKey="nodejs" title="Node.js">
-                <SyntaxHighlighter language="json">
-                  {`> scoop install nodejs
-Installing 'nodejs' (18.4.0) [64bit]
-node-v18.4.0-win-x64.7z (17.3 MB) [=========================================] 100%
-Checking hash of node-v18.4.0-win-x64.7z ... ok.
-Extracting node-v18.4.0-win-x64.7z ... done.
-Linking ~\\scoop\\apps\\nodejs\\current => ~\\scoop\\apps\\nodejs\\18.4.0
-Persisting bin
-Persisting cache
-Running post_install script...
-'nodejs' (18.4.0) was installed successfully!
 
 
 
