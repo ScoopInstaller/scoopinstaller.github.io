@@ -220,9 +220,12 @@ d----          20-02-2022    01:22                workspace`}
           <Col lg={6}>
             <SyntaxHighlighter language="json">
               {`> scoop search python
-'main' bucket:
-    python (3.10.5)
-    winpython (3.10.4.0)
+Results from local buckets...
+
+Name      Version  Source Binaries
+----      -------  ------ --------
+python    3.10.5   main
+winpython 3.10.4.0 main
 
 > scoop install python
 ...
@@ -240,21 +243,23 @@ Hello from Python installed by Scoop!`}
           <Col lg={6}>
             <SyntaxHighlighter language="json">
               {`> scoop search mongo
-'extras' bucket:
-    mongodb-compass (1.32.2)
-    mongosh (1.5.0)
+Results from local buckets...
 
-'main' bucket:
-    mongodb-database-tools (100.5.3)
-    mongodb (5.3.2)
+Name                   Version Source Binaries
+----                   ------- ------ --------
+mongodb-compass        1.32.2  extras
+mongosh                1.5.0   extras
+mongodb-database-tools 100.5.3 main
+mongodb                5.3.2   main
 
 > scoop search citra
 Results from other known buckets...
 (add them using 'scoop bucket add <name>')
 
-'games' bucket (install using 'scoop install games/<app>'):
-    citra-canary
-    citra`}
+Name         Source
+----         ------
+citra-canary games
+citra        games`}
             </SyntaxHighlighter>
           </Col>
           <Col lg={6}>
