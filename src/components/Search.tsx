@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
+import { Helmet } from 'react-helmet';
 import { useSearchParams } from 'react-router-dom';
 
 import ManifestJson from '../serialization/ManifestJson';
@@ -157,7 +158,11 @@ const Search = (): JSX.Element => {
   }, []);
 
   return (
-    <div className="Search">
+    <>
+      <Helmet>
+        <title>Apps{query && ` (${query})`}</title>
+      </Helmet>
+
       <CopyToClipboardHandler content={contentToCopy} onContentCopied={handleContentCopied} />
 
       <Container className="mt-5 mb-5">
@@ -207,7 +212,7 @@ const Search = (): JSX.Element => {
           </Col>
         </Row>
       </Container>
-    </div>
+    </>
   );
 };
 

@@ -69,6 +69,9 @@ mark {
   cursor: pointer
 }
 
+.syntaxhighlighter-no-top-border + .tab-content > div > pre {
+  border-top: 0 !important;
+}
 
 
 div.valign-items {

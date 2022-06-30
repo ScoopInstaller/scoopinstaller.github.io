@@ -42,7 +42,7 @@ class ManifestJson {
   private highlights: HighLights = undefined;
 
   get highlightedName(): HighLight {
-    return this.tryGetHighlights(['Name', 'NamePartial', 'NameSuffix'], this.name);
+    return this.tryGetHighlights(['NamePartial', 'Name', 'NameSuffix'], this.name);
   }
 
   get highlightedLicense(): HighLight {

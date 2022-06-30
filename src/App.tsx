@@ -1,4 +1,5 @@
 import './App.css';
+import { Helmet } from 'react-helmet';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 
 import Buckets from './components/Buckets';
@@ -8,15 +9,18 @@ import Search from './components/Search';
 
 const App = (): JSX.Element => {
   return (
-    <HashRouter>
-      <Routes>
-        <Route path="/" element={<Root />}>
-          <Route path="apps" element={<Search />} />
-          <Route path="buckets" element={<Buckets />} />
-          <Route index element={<Home />} />
-        </Route>
-      </Routes>
-    </HashRouter>
+    <>
+      <Helmet defaultTitle="Scoop" titleTemplate="Scoop - %s" />
+      <HashRouter>
+        <Routes>
+          <Route path="/" element={<Root />}>
+            <Route path="apps" element={<Search />} />
+            <Route path="buckets" element={<Buckets />} />
+            <Route index element={<Home />} />
+          </Route>
+        </Routes>
+      </HashRouter>
+    </>
   );
 };
 

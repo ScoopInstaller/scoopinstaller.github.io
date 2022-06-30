@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container, Col, Row, Tabs, Tab } from 'react-bootstrap';
 import { Link, useNavigate, createSearchParams } from 'react-router-dom';
 import { PrismLight as SyntaxHighlighterBase, SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
@@ -34,6 +34,7 @@ const Home = (): JSX.Element => {
     const customStyle = {
       lineHeight: '1.4',
       fontSize: '0.9em',
+      margin: '0',
     };
 
     const codeTagProps = {
@@ -76,7 +77,6 @@ const Home = (): JSX.Element => {
           </abbr>{' '}
           (version 5.1 or later) and run:
         </p>
-        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
         <SyntaxHighlighter language="powershell">
           {`> Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
 > irm get.scoop.sh | iex`}
@@ -103,26 +103,89 @@ const Home = (): JSX.Element => {
             </ul>
           </Col>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <SyntaxHighlighter language="json">
-              {`> scoop install vscode
-Installing 'vscode' (1.66.0) [64bit]
-dl.7z (104.1 MB) [=========================================] 100%
+            <Tabs defaultActiveKey="nodejs" className="syntaxhighlighter-no-top-border">
+              <Tab eventKey="nodejs" title="Node.js">
+                <SyntaxHighlighter language="json">
+                  {`> scoop install nodejs
+Installing 'nodejs' (18.4.0) [64bit]
+node-v18.4.0-win-x64.7z (17.3 MB) [=========================================] 100%
+Checking hash of node-v18.4.0-win-x64.7z ... ok.
+Extracting node-v18.4.0-win-x64.7z ... done.
+Linking ~\\scoop\\apps\\nodejs\\current => ~\\scoop\\apps\\nodejs\\18.4.0
+Persisting bin
+Persisting cache
+Running post_install script...
+'nodejs' (18.4.0) was installed successfully!
+
+
+
+
+`}
+                </SyntaxHighlighter>
+              </Tab>
+              <Tab eventKey="neovim" title="Neovim">
+                <SyntaxHighlighter language="json">
+                  {`> scoop install neovim
+Installing 'neovim' (0.7.0) [64bit]
+nvim-win64.zip (36.4 MB) [=========================================] 100%
+Checking hash of nvim-win64.zip ... ok.
+Extracting nvim-win64.zip ... done.
+Linking ~\\scoop\\apps\\neovim\\current => ~\\scoop\\apps\\neovim\\0.7.0
+Creating shim for 'nvim'.
+Creating shim for 'nvim-qt'.
+Creating shortcut for Neovim (nvim-qt.exe)
+'neovim' (0.7.0) was installed successfully!
+
+
+
+
+`}
+                </SyntaxHighlighter>
+              </Tab>
+              <Tab eventKey="vscode" title="VS Code (extras)">
+                <SyntaxHighlighter language="json">
+                  {`> scoop bucket add extras
+Checking repo... OK
+The extras bucket was added successfully.
+
+> scoop install vscode
+Installing 'vscode' (1.68.1) [64bit]
+dl.7z (108.1 MB) [=========================================] 100%
 Checking hash of dl.7z ... ok.
 Extracting dl.7z ... done.
-Linking ~\\scoop\\apps\\vscode\\current => ~\\scoop\\apps\\vscode\\1.66.0
+Linking ~\\scoop\\apps\\vscode\\current => ~\\scoop\\apps\\vscode\\1.68.1
 Creating shortcut for Visual Studio Code (code.exe)
 Persisting data
 Running post-install script...
-'vscode' (1.66.0) was installed successfully!`}
-            </SyntaxHighlighter>
+'vscode' (1.68.1) was installed successfully!`}
+                </SyntaxHighlighter>
+              </Tab>
+              <Tab eventKey="cascadia-code" title="Cascadia Code (nerd-fonts)">
+                <SyntaxHighlighter language="json">
+                  {`> scoop bucket add nerd-fonts
+Checking repo... OK
+The nerd-fonts bucket was added successfully.
+
+> scoop install Cascadia-Code
+Installing 'Cascadia-Code' (2111.01) [64bit]
+CascadiaCode-2111.01.zip (23.7 MB) [=========================================] 100%
+Checking hash of CascadiaCode-2111.01.zip ... ok.
+Extracting CascadiaCode-2111.01.zip ... done.
+Running installer script...
+Linking ~\\scoop\\apps\\Cascadia-Code\\current => ~\\scoop\\apps\\Cascadia-Code\\2111.01
+'Cascadia-Code' (2111.01) was installed successfully!
+
+
+`}
+                </SyntaxHighlighter>
+              </Tab>
+            </Tabs>
           </Col>
         </Row>
         <hr />
 
         <Row>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="powershell">
               {`> dir ~\\scoop
 
@@ -155,17 +218,19 @@ d----          20-02-2022    01:22                workspace`}
             in your PATH and in your Start menu.
           </Col>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="json">
               {`> scoop search python
-'main' bucket:
-    python (3.10.4)
-    winpython (3.8.9.0)
+Results from local buckets...
+
+Name      Version  Source Binaries
+----      -------  ------ --------
+python    3.10.5   main
+winpython 3.10.4.0 main
 
 > scoop install python
 ...
 Creating shim for 'python.exe'.
-'python' (3.10.4) was installed successfully!
+'python' (3.10.5) was installed successfully!
 
 > python -c "print('Hello from Python installed by Scoop!')"
 Hello from Python installed by Scoop!`}
@@ -176,24 +241,25 @@ Hello from Python installed by Scoop!`}
         <h3 className="mt-5 mb-4 text-center fw-normal">Discovering Packages</h3>
         <Row>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="json">
               {`> scoop search mongo
-'extras' bucket:
-    mongodb-compass (1.31.2)
-    mongosh (1.3.1)
+Results from local buckets...
 
-'main' bucket:
-    mongodb-database-tools (100.5.2)
-    mongodb (5.3.1)
+Name                   Version Source Binaries
+----                   ------- ------ --------
+mongodb-compass        1.32.2  extras
+mongosh                1.5.0   extras
+mongodb-database-tools 100.5.3 main
+mongodb                5.3.2   main
 
 > scoop search citra
 Results from other known buckets...
 (add them using 'scoop bucket add <name>')
 
-'games' bucket (install using 'scoop install games/<app>'):
-    citra-canary
-    citra`}
+Name         Source
+----         ------
+citra-canary games
+citra        games`}
             </SyntaxHighlighter>
           </Col>
           <Col lg={6}>
@@ -210,7 +276,6 @@ Results from other known buckets...
         <Row>
           <Col lg={6}>Scoop allows you to trivially create your own packages.</Col>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="powershell">
               {`> scoop create https://example.com/foobar/1.2.3/foobar-package.zip
 1) foobar
@@ -229,7 +294,6 @@ Created 'C:\\Users\\User\\Desktop\\foobar.json'.`}
 
         <Row>
           <Col lg={6}>
-            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <SyntaxHighlighter language="json">
               {`> scoop cat gifski
 {

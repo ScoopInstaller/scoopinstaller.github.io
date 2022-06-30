@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import { Container, Col, Row, InputGroup, Form } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
+import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 
 import BucketsResultsJson from '../serialization/BucketsResultsJson';
@@ -127,6 +128,9 @@ const Buckets = (): JSX.Element => {
 
   return (
     <>
+      <Helmet>
+        <title>Buckets</title>
+      </Helmet>
       <Container className="mt-5 mb-5">
         <Row>
           <Col className="my-auto">
