@@ -69,10 +69,6 @@ mark {
   cursor: pointer
 }
 
-.syntaxhighlighter-no-top-border + .tab-content > div > pre {
-  border-top: 0 !important;
-}
-
 
 div.valign-items {
   display: flex;
@@ -113,6 +109,10 @@ svg.footer-icon {
   height: 1.2em;
 }
 
+.asciinema-player > .control-bar {
+  display: none;
+}
+
 html.dark .copy-command-prefix, html.dark .copy-command-text {
   background-color: var(--bs-gray-800) !important;
 }
@@ -127,7 +127,7 @@ html.dark .sorting-filtering-button > button:not(:hover) {
   border-color: var(--bs-gray-800);
   color: var(--bs-gray-200);
 }
- 
+
 html.dark .sorting-filtering-menu > .dropdown-item:active {
   background-color: var(--bs-gray-800);
 }
