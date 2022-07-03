@@ -8,43 +8,33 @@ export type AsciinemaCastItem = {
   key: string;
   displayName: string;
   url: string;
+  loop: boolean;
+  showControls: boolean;
 };
 
 type AsciinemaCastsProps = {
   casts: AsciinemaCastItem[];
-  currentCast: string;
-  onCastChange: (castKey: string) => void;
 };
 
 const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
+  const { casts } = props;
+
   const asciiPlayerDivRef = useRef<HTMLDivElement>(null);
   const asciiPlayerRef = useRef<AsciinemaPlayer.Player>();
-  const [asciiPlayerUrl, setAsciiPlayerUrl] = useState<string>();
-
-  const { casts, currentCast, onCastChange } = props;
-
-  useEffect(() => {
-    const match = casts.find((x) => x.key == currentCast);
-    if (match) {
-      setAsciiPlayerUrl(match.url);
-    }
-  }, [currentCast, casts]);
+  const [currentCast, setCurrentCast] = useState<AsciinemaCastItem>(casts[0]);
 
   useEffect(() => {
     if (asciiPlayerDivRef.current) {
+      asciiPlayerRef.current?.dispose();
       const options = {
-        loop: true,
+        loop: currentCast.loop,
         autoPlay: true,
         rows: 15,
         cols: 80,
       };
-
-      if (asciiPlayerUrl) {
-        asciiPlayerRef.current?.dispose();
-        asciiPlayerRef.current = AsciinemaPlayer.create(asciiPlayerUrl, asciiPlayerDivRef.current, options);
-      }
+      asciiPlayerRef.current = AsciinemaPlayer.create(currentCast.url, asciiPlayerDivRef.current, options);
     }
-  }, [asciiPlayerUrl]);
+  }, [currentCast]);
 
   return (
     <>
@@ -52,8 +42,8 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
         fill
         variant="tabs"
         defaultActiveKey={casts[0].key}
-        activeKey={currentCast}
-        onSelect={(k) => onCastChange(k ?? casts[0].key)}
+        activeKey={currentCast.key}
+        onSelect={(k) => setCurrentCast(casts.find((x) => x.key === k) ?? casts[0])}
       >
         {casts.map((item, i) => (
           <Nav.Item key={i}>
@@ -61,7 +51,7 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
           </Nav.Item>
         ))}
       </Nav>
-      <div ref={asciiPlayerDivRef} />
+      <div ref={asciiPlayerDivRef} className={currentCast.showControls ? '' : 'asciinema-player-no-controls'} />
     </>
   );
 };

@@ -109,7 +109,7 @@ svg.footer-icon {
   height: 1.2em;
 }
 
-.asciinema-player > .control-bar {
+.asciinema-player-no-controls > * > .asciinema-player > .control-bar {
   display: none;
 }
 
