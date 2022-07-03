@@ -28,14 +28,13 @@ const Home = (): JSX.Element => {
     });
   };
 
-  const CASTS_DEFAULT = 'nodejs';
   const CASTS_CONFIG: AsciinemaCastItem[] = [
     { key: 'nodejs', displayName: 'Node.js', url: 'casts/nodejs.cast' },
     { key: 'neovim', displayName: 'Neovim', url: 'casts/neovim.cast' },
     { key: 'vscode', displayName: 'VS Code (extras)', url: 'casts/vscode.cast' },
     { key: 'cascadia-code', displayName: 'Cascadia Code (nerd-fonts)', url: 'casts/cascadia-code.cast' },
   ];
-  const [currentCast, setCurrentCast] = useState<string>(CASTS_DEFAULT);
+  const [currentCast, setCurrentCast] = useState<string>(CASTS_CONFIG[0].key);
 
   const SyntaxHighlighter = (syntaxHighlighterProps: SyntaxHighlighterProps): JSX.Element => {
     const { children, ...syntaxHighlighterRest } = syntaxHighlighterProps;
@@ -113,12 +112,7 @@ const Home = (): JSX.Element => {
             </ul>
           </Col>
           <Col lg={6}>
-            <AsciinemaCasts
-              casts={CASTS_CONFIG}
-              defaultCast={CASTS_DEFAULT}
-              currentCast={currentCast}
-              onCastChange={setCurrentCast}
-            />
+            <AsciinemaCasts casts={CASTS_CONFIG} currentCast={currentCast} onCastChange={setCurrentCast} />
           </Col>
         </Row>
         <hr />

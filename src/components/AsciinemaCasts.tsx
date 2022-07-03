@@ -12,7 +12,6 @@ export type AsciinemaCastItem = {
 
 type AsciinemaCastsProps = {
   casts: AsciinemaCastItem[];
-  defaultCast: string;
   currentCast: string;
   onCastChange: (castKey: string) => void;
 };
@@ -22,7 +21,7 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
   const asciiPlayerRef = useRef<AsciinemaPlayer.Player>();
   const [asciiPlayerUrl, setAsciiPlayerUrl] = useState<string>();
 
-  const { casts, defaultCast, currentCast, onCastChange } = props;
+  const { casts, currentCast, onCastChange } = props;
 
   useEffect(() => {
     const match = casts.find((x) => x.key == currentCast);
@@ -52,9 +51,9 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
       <Nav
         fill
         variant="tabs"
-        defaultActiveKey={defaultCast}
+        defaultActiveKey={casts[0].key}
         activeKey={currentCast}
-        onSelect={(k) => onCastChange(k ?? defaultCast)}
+        onSelect={(k) => onCastChange(k ?? casts[0].key)}
       >
         {casts.map((item, i) => (
           <Nav.Item key={i}>
