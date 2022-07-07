@@ -1,6 +1,24 @@
 
 # Scoop website
 
+## Quickstart
+
+_On Windows 11, using [Scoop](https://scoop.sh/)_
+```powershell
+# Prerequisites
+scoop install git
+scoop install nodejs
+npm update
+npm install react-scripts -save
+
+# get repo
+git clone https://github.com/ScoopInstaller/scoopinstaller.github.io.git
+cd scoopinstaller.github.io
+
+# run site on your local machine
+npm start
+```
+
 This repository is used to build the Scoop website https://scoopinstaller.github.io
 
 
@@ -9,6 +27,7 @@ This repository is used to build the Scoop website https://scoopinstaller.github
 #### Prerequisites
 - Install a recent [Node](https://nodejs.org/en/ "Node") version >= 16.0.0
 - Run `npm update`
+- Get `react-scripts` as well: `npm install react-scripts -save`
 
 #### Launch the application
 - Run `npm start`
