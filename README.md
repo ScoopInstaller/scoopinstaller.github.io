@@ -9,13 +9,15 @@ _On Windows 11, using [Scoop](https://scoop.sh/)_
 scoop install git
 scoop install nodejs
 npm update
-npm install react-scripts -save
 
 # get repo
 git clone https://github.com/ScoopInstaller/scoopinstaller.github.io.git
 cd scoopinstaller.github.io
 
-# run site on your local machine
+# Install React locally to the repo
+npm install react-scripts
+
+# Start, probably localhost port 3000/5000
 npm start
 ```
 
