@@ -1,38 +1,26 @@
 
 # Scoop website
 
-## Quickstart
-
-_On Windows 11, using [Scoop](https://scoop.sh/)_
-```powershell
-# Prerequisites
-scoop install git
-scoop install nodejs
-npm update
-
-# get repo
-git clone https://github.com/ScoopInstaller/scoopinstaller.github.io.git
-cd scoopinstaller.github.io
-
-# Install React locally to the repo
-npm install react-scripts
-
-# Start, probably localhost port 3000/5000
-npm start
-```
-
 This repository is used to build the Scoop website https://scoopinstaller.github.io
 
 
 ### Build this project
 
+#### Get the source
+- If you already use Scoop, install Git and clone the repository:
+```
+scoop install git
+git clone https://github.com/ScoopInstaller/scoopinstaller.github.io
+cd scoopinstaller.github.io
+```
+
 #### Prerequisites
-- Install a recent [Node](https://nodejs.org/en/ "Node") version >= 16.0.0
+- Install a recent [Node](https://nodejs.org/en/ "Node") version >= 16.0.0, e.g. `scoop install nodejs`
 - Run `npm update`
-- Get `react-scripts` as well: `npm install react-scripts -save`
 
 #### Launch the application
 - Run `npm start`
+
 Application should run on http://localhost:3000 or https://localhost:5000 to pass CORS checks and query the search database.
 
 #### Build the application
