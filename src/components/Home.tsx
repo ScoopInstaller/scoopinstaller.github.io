@@ -29,16 +29,10 @@ const Home = (): JSX.Element => {
   };
 
   const CASTS_CONFIG: AsciinemaCastItem[] = [
-    { key: 'nodejs', displayName: 'Node.js', url: 'casts/nodejs.cast', loop: false, showControls: false },
-    { key: 'neovim', displayName: 'Neovim', url: 'casts/neovim.cast', loop: true, showControls: false },
-    { key: 'vscode', displayName: 'VS Code (extras)', url: 'casts/vscode.cast', loop: false, showControls: true },
-    {
-      key: 'cascadia-code',
-      displayName: 'Cascadia Code (nerd-fonts)',
-      url: 'casts/cascadia-code.cast',
-      loop: true,
-      showControls: true,
-    },
+    { key: 'nodejs', displayName: 'Node.js', url: 'casts/nodejs.cast' },
+    { key: 'neovim', displayName: 'Neovim', url: 'casts/neovim.cast' },
+    { key: 'vscode', displayName: 'VS Code (extras)', url: 'casts/vscode.cast' },
+    { key: 'cascadia-code', displayName: 'Cascadia Code (nerd-fonts)', url: 'casts/cascadia-code.cast' },
   ];
 
   const SyntaxHighlighter = (syntaxHighlighterProps: SyntaxHighlighterProps): JSX.Element => {

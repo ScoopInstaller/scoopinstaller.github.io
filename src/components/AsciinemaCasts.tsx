@@ -8,8 +8,6 @@ export type AsciinemaCastItem = {
   key: string;
   displayName: string;
   url: string;
-  loop: boolean;
-  showControls: boolean;
 };
 
 type AsciinemaCastsProps = {
@@ -27,7 +25,6 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
     if (asciiPlayerDivRef.current) {
       asciiPlayerRef.current?.dispose();
       const options = {
-        loop: currentCast.loop,
         autoPlay: true,
         rows: 15,
         cols: 80,
@@ -51,7 +48,7 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
           </Nav.Item>
         ))}
       </Nav>
-      <div ref={asciiPlayerDivRef} className={currentCast.showControls ? '' : 'asciinema-player-no-controls'} />
+      <div ref={asciiPlayerDivRef} className="asciinema-player-no-controls" />
     </>
   );
 };
