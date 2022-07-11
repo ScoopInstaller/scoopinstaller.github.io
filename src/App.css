@@ -113,6 +113,15 @@ svg.footer-icon {
   display: none;
 }
 
+.asciinema-player-border {
+  border: 1px solid rgb(221, 221, 221);
+  border-top: 0;
+}
+
+html.dark .asciinema-player-border {
+  border: 0;
+}
+
 html.dark .copy-command-prefix, html.dark .copy-command-text {
   background-color: var(--bs-gray-800) !important;
 }

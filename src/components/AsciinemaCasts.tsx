@@ -43,7 +43,7 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
         autoPlay: true,
         rows: 15,
         cols: 80,
-        theme: isDarkMode ? 'asciinema' : 'asciinema-light',
+        theme: isDarkMode ? 'asciinema-dark' : 'asciinema-light',
       };
 
       asciiPlayerRef.current = AsciinemaPlayer.create(currentCast.url, asciiPlayerDivRef.current, options);
@@ -65,7 +65,7 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
           </Nav.Item>
         ))}
       </Nav>
-      <div ref={asciiPlayerDivRef} className="asciinema-player-no-controls" />
+      <div ref={asciiPlayerDivRef} className="asciinema-player-no-controls asciinema-player-border" />
     </>
   );
 };
