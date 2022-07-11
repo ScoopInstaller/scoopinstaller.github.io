@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useLayoutEffect, useRef } from 'react';
 
 import 'asciinema-player/dist/bundle/asciinema-player.css';
 import './asciinema-customthemes.css';
@@ -25,15 +25,27 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
   const asciiPlayerRef = useRef<AsciinemaPlayer.Player>();
   const [currentCast, setCurrentCast] = useState<AsciinemaCastItem>(casts[0]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (asciiPlayerDivRef.current) {
-      asciiPlayerRef.current?.dispose();
+      try {
+        asciiPlayerRef.current?.dispose();
+      } catch (err) {
+        // Dispose may throw when called before the player is completely initialized.
+        // We then manually remove the created div
+        if (err instanceof TypeError && asciiPlayerDivRef.current.firstChild) {
+          asciiPlayerDivRef.current.removeChild(asciiPlayerDivRef.current.firstChild);
+        } else {
+          throw err;
+        }
+      }
+
       const options = {
         autoPlay: true,
         rows: 15,
         cols: 80,
         theme: isDarkMode ? 'asciinema' : 'asciinema-light',
       };
+
       asciiPlayerRef.current = AsciinemaPlayer.create(currentCast.url, asciiPlayerDivRef.current, options);
     }
   }, [currentCast, isDarkMode]);
