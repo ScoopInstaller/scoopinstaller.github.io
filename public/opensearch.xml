@@ -1,7 +1,7 @@
-<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
 	<ShortName>Scoop Installer</ShortName>
 	<Description>Search Scoop packages</Description>
 	<InputEncoding>UTF-8</InputEncoding>
 	<Image width="16" height="16" type="image/x-icon">https://scoop.sh/favicon.ico</Image>
-	<Url type="text/html" method="get" template="https://scoop.sh/#/apps?q={searchTerms}&s=0&d=1&o=true" />
+	<Url type="text/html" method="get" template="https://scoop.sh/#/apps?q={searchTerms}&amp;s=0&amp;d=1&amp;o=true" />
 </OpenSearchDescription>
