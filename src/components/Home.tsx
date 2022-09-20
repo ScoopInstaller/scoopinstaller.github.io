@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import { Container, Col, Row, Tabs, Tab } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 import { Link, useNavigate, createSearchParams } from 'react-router-dom';
 import { PrismLight as SyntaxHighlighterBase, SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
@@ -9,6 +9,7 @@ import darkStyle from 'react-syntax-highlighter/dist/esm/styles/prism/a11y-dark'
 import lightStyle from 'react-syntax-highlighter/dist/esm/styles/prism/ghcolors';
 
 import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
+import AsciinemaCasts, { AsciinemaCastItem } from './AsciinemaCasts';
 import SearchBar from './SearchBar';
 
 SyntaxHighlighterBase.registerLanguage('powershell', powershell);
@@ -26,6 +27,13 @@ const Home = (): JSX.Element => {
       search: createSearchParams({ q: searchQuery }).toString(),
     });
   };
+
+  const CASTS_CONFIG: AsciinemaCastItem[] = [
+    { key: 'nodejs', displayName: 'Node.js', url: 'casts/nodejs.cast' },
+    { key: 'neovim', displayName: 'Neovim', url: 'casts/neovim.cast' },
+    { key: 'vscode', displayName: 'VS Code (extras)', url: 'casts/vscode.cast' },
+    { key: 'cascadia-code', displayName: 'Cascadia Code (nerd-fonts)', url: 'casts/cascadia-code.cast' },
+  ];
 
   const SyntaxHighlighter = (syntaxHighlighterProps: SyntaxHighlighterProps): JSX.Element => {
     const { children, ...syntaxHighlighterRest } = syntaxHighlighterProps;
@@ -103,83 +111,7 @@ const Home = (): JSX.Element => {
             </ul>
           </Col>
           <Col lg={6}>
-            <Tabs defaultActiveKey="nodejs" className="syntaxhighlighter-no-top-border">
-              <Tab eventKey="nodejs" title="Node.js">
-                <SyntaxHighlighter language="json">
-                  {`> scoop install nodejs
-Installing 'nodejs' (18.4.0) [64bit]
-node-v18.4.0-win-x64.7z (17.3 MB) [=========================================] 100%
-Checking hash of node-v18.4.0-win-x64.7z ... ok.
-Extracting node-v18.4.0-win-x64.7z ... done.
-Linking ~\\scoop\\apps\\nodejs\\current => ~\\scoop\\apps\\nodejs\\18.4.0
-Persisting bin
-Persisting cache
-Running post_install script...
-'nodejs' (18.4.0) was installed successfully!
-
-
-
-
-`}
-                </SyntaxHighlighter>
-              </Tab>
-              <Tab eventKey="neovim" title="Neovim">
-                <SyntaxHighlighter language="json">
-                  {`> scoop install neovim
-Installing 'neovim' (0.7.0) [64bit]
-nvim-win64.zip (36.4 MB) [=========================================] 100%
-Checking hash of nvim-win64.zip ... ok.
-Extracting nvim-win64.zip ... done.
-Linking ~\\scoop\\apps\\neovim\\current => ~\\scoop\\apps\\neovim\\0.7.0
-Creating shim for 'nvim'.
-Creating shim for 'nvim-qt'.
-Creating shortcut for Neovim (nvim-qt.exe)
-'neovim' (0.7.0) was installed successfully!
-
-
-
-
-`}
-                </SyntaxHighlighter>
-              </Tab>
-              <Tab eventKey="vscode" title="VS Code (extras)">
-                <SyntaxHighlighter language="json">
-                  {`> scoop bucket add extras
-Checking repo... OK
-The extras bucket was added successfully.
-
-> scoop install vscode
-Installing 'vscode' (1.68.1) [64bit]
-dl.7z (108.1 MB) [=========================================] 100%
-Checking hash of dl.7z ... ok.
-Extracting dl.7z ... done.
-Linking ~\\scoop\\apps\\vscode\\current => ~\\scoop\\apps\\vscode\\1.68.1
-Creating shortcut for Visual Studio Code (code.exe)
-Persisting data
-Running post-install script...
-'vscode' (1.68.1) was installed successfully!`}
-                </SyntaxHighlighter>
-              </Tab>
-              <Tab eventKey="cascadia-code" title="Cascadia Code (nerd-fonts)">
-                <SyntaxHighlighter language="json">
-                  {`> scoop bucket add nerd-fonts
-Checking repo... OK
-The nerd-fonts bucket was added successfully.
-
-> scoop install Cascadia-Code
-Installing 'Cascadia-Code' (2111.01) [64bit]
-CascadiaCode-2111.01.zip (23.7 MB) [=========================================] 100%
-Checking hash of CascadiaCode-2111.01.zip ... ok.
-Extracting CascadiaCode-2111.01.zip ... done.
-Running installer script...
-Linking ~\\scoop\\apps\\Cascadia-Code\\current => ~\\scoop\\apps\\Cascadia-Code\\2111.01
-'Cascadia-Code' (2111.01) was installed successfully!
-
-
-`}
-                </SyntaxHighlighter>
-              </Tab>
-            </Tabs>
+            <AsciinemaCasts casts={CASTS_CONFIG} />
           </Col>
         </Row>
         <hr />

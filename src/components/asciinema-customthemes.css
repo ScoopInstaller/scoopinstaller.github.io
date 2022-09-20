@@ -1,0 +1,314 @@
+.asciinema-theme-asciinema-light {
+  background-color: #fff;
+}
+
+.asciinema-theme-asciinema-light .asciinema-terminal {
+  color: #121314;
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.asciinema-theme-asciinema-light .fg-bg {
+  color: #fff;
+}
+
+.asciinema-theme-asciinema-light .bg-fg {
+  background-color: #121314;
+}
+
+.asciinema-theme-asciinema-light .fg-0 {
+  color: hsl(0, 0%, 0%);
+}
+
+.asciinema-theme-asciinema-light .bg-0 {
+  background-color: hsl(0, 0%, 0%);
+}
+
+.asciinema-theme-asciinema-light .fg-1 {
+  color: hsl(343, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-light .bg-1 {
+  background-color: hsl(343, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-light .fg-2 {
+  color: hsl(103, 70%, 44%);
+}
+
+.asciinema-theme-asciinema-light .bg-2 {
+  background-color: hsl(103, 70%, 44%);
+}
+
+.asciinema-theme-asciinema-light .fg-3 {
+  color: hsl(43, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-light .bg-3 {
+  background-color: hsl(43, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-light .fg-4 {
+  color: hsl(193, 70%, 49.5%);
+}
+
+.asciinema-theme-asciinema-light .bg-4 {
+  background-color: hsl(193, 70%, 49.5%);
+}
+
+.asciinema-theme-asciinema-light .fg-5 {
+  color: hsl(283, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-light .bg-5 {
+  background-color: hsl(283, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-light .fg-6 {
+  color: hsl(163, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-light .bg-6 {
+  background-color: hsl(163, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-light .fg-7 {
+  color: hsl(0, 0%, 85%);
+}
+
+.asciinema-theme-asciinema-light .bg-7 {
+  background-color: hsl(0, 0%, 85%);
+}
+
+.asciinema-theme-asciinema-light .fg-8 {
+  color: hsl(0, 0%, 30%);
+}
+
+.asciinema-theme-asciinema-light .bg-8 {
+  background-color: hsl(0, 0%, 30%);
+}
+
+.asciinema-theme-asciinema-light .fg-9 {
+  color: hsl(343, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-light .bg-9 {
+  background-color: hsl(343, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-light .fg-10 {
+  color: hsl(103, 70%, 44%);
+}
+
+.asciinema-theme-asciinema-light .bg-10 {
+  background-color: hsl(103, 70%, 44%);
+}
+
+.asciinema-theme-asciinema-light .fg-11 {
+  color: hsl(43, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-light .bg-11 {
+  background-color: hsl(43, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-light .fg-12 {
+  color: hsl(193, 70%, 49.5%);
+}
+
+.asciinema-theme-asciinema-light .bg-12 {
+  background-color: hsl(193, 70%, 49.5%);
+}
+
+.asciinema-theme-asciinema-light .fg-13 {
+  color: hsl(283, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-light .bg-13 {
+  background-color: hsl(283, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-light .fg-14 {
+  color: hsl(163, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-light .bg-14 {
+  background-color: hsl(163, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-light .fg-15 {
+  color: hsl(0, 0%, 100%);
+}
+
+.asciinema-theme-asciinema-light .bg-15 {
+  background-color: hsl(0, 0%, 100%);
+}
+
+.asciinema-theme-asciinema-light .fg-8,
+.asciinema-theme-asciinema-light .fg-9,
+.asciinema-theme-asciinema-light .fg-10,
+.asciinema-theme-asciinema-light .fg-11,
+.asciinema-theme-asciinema-light .fg-12,
+.asciinema-theme-asciinema-light .fg-13,
+.asciinema-theme-asciinema-light .fg-14,
+.asciinema-theme-asciinema-light .fg-15 {
+  font-weight: bold;
+}
+
+
+.asciinema-theme-asciinema-dark {
+  background-color: rgb(43, 43, 43);
+}
+
+.asciinema-theme-asciinema-dark .asciinema-terminal {
+  color: rgb(248, 248, 242);
+  background-color: rgb(43, 43, 43);
+  border-color: rgb(43, 43, 43);
+}
+
+.asciinema-theme-asciinema-dark .fg-bg {
+  color: rgb(43, 43, 43);
+}
+
+.asciinema-theme-asciinema-dark .bg-fg {
+  background-color: rgb(248, 248, 242);
+}
+
+.asciinema-theme-asciinema-dark .fg-0 {
+  color: hsl(0, 0%, 0%);
+}
+
+.asciinema-theme-asciinema-dark .bg-0 {
+  background-color: hsl(0, 0%, 0%);
+}
+
+.asciinema-theme-asciinema-dark .fg-1 {
+  color: hsl(343, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-dark .bg-1 {
+  background-color: hsl(343, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-dark .fg-2 {
+  color: hsl(103, 70%, 44%);
+}
+
+.asciinema-theme-asciinema-dark .bg-2 {
+  background-color: hsl(103, 70%, 44%);
+}
+
+.asciinema-theme-asciinema-dark .fg-3 {
+  color: hsl(43, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-dark .bg-3 {
+  background-color: hsl(43, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-dark .fg-4 {
+  color: hsl(193, 70%, 49.5%);
+}
+
+.asciinema-theme-asciinema-dark .bg-4 {
+  background-color: hsl(193, 70%, 49.5%);
+}
+
+.asciinema-theme-asciinema-dark .fg-5 {
+  color: hsl(283, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-dark .bg-5 {
+  background-color: hsl(283, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-dark .fg-6 {
+  color: hsl(163, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-dark .bg-6 {
+  background-color: hsl(163, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-dark .fg-7 {
+  color: hsl(0, 0%, 85%);
+}
+
+.asciinema-theme-asciinema-dark .bg-7 {
+  background-color: hsl(0, 0%, 85%);
+}
+
+.asciinema-theme-asciinema-dark .fg-8 {
+  color: hsl(0, 0%, 30%);
+}
+
+.asciinema-theme-asciinema-dark .bg-8 {
+  background-color: hsl(0, 0%, 30%);
+}
+
+.asciinema-theme-asciinema-dark .fg-9 {
+  color: hsl(343, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-dark .bg-9 {
+  background-color: hsl(343, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-dark .fg-10 {
+  color: hsl(103, 70%, 44%);
+}
+
+.asciinema-theme-asciinema-dark .bg-10 {
+  background-color: hsl(103, 70%, 44%);
+}
+
+.asciinema-theme-asciinema-dark .fg-11 {
+  color: hsl(43, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-dark .bg-11 {
+  background-color: hsl(43, 70%, 55%);
+}
+
+.asciinema-theme-asciinema-dark .fg-12 {
+  color: hsl(193, 70%, 49.5%);
+}
+
+.asciinema-theme-asciinema-dark .bg-12 {
+  background-color: hsl(193, 70%, 49.5%);
+}
+
+.asciinema-theme-asciinema-dark .fg-13 {
+  color: hsl(283, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-dark .bg-13 {
+  background-color: hsl(283, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-dark .fg-14 {
+  color: hsl(163, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-dark .bg-14 {
+  background-color: hsl(163, 70%, 60.5%);
+}
+
+.asciinema-theme-asciinema-dark .fg-15 {
+  color: hsl(0, 0%, 100%);
+}
+
+.asciinema-theme-asciinema-dark .bg-15 {
+  background-color: hsl(0, 0%, 100%);
+}
+
+.asciinema-theme-asciinema-dark .fg-8,
+.asciinema-theme-asciinema-dark .fg-9,
+.asciinema-theme-asciinema-dark .fg-10,
+.asciinema-theme-asciinema-dark .fg-11,
+.asciinema-theme-asciinema-dark .fg-12,
+.asciinema-theme-asciinema-dark .fg-13,
+.asciinema-theme-asciinema-dark .fg-14,
+.asciinema-theme-asciinema-dark .fg-15 {
+  font-weight: bold;
+}
