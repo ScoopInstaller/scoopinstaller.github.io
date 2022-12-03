@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
@@ -143,9 +143,12 @@ const Search = (): JSX.Element => {
     setQuery(searchBarQuery);
   }, [searchBarQuery]);
 
+  const idleCallbackId = useRef<number>(-1);
   const handleResultsChange = useCallback((e?: SearchResultsJson): void => {
-    setSearchResults(e);
+    //We should use useTransition or useDeferredValue after updating to v18 instead of this
+    idleCallbackId.current = requestIdleCallback(() => setSearchResults(e));
   }, []);
+  useEffect(() => () => cancelIdleCallback(idleCallbackId.current), [idleCallbackId]);
 
   const handlePageChange = useCallback(
     (newCurrentPage: number): void => {
