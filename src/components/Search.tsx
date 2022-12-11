@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import { Container, Row, Col } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
@@ -18,6 +18,21 @@ const SEARCH_PARAM_PAGE = 'p';
 const SEARCH_PARAM_SORT_INDEX = 's';
 const SEARCH_PARAM_SORT_DIRECTION = 'd';
 const SEARCH_PARAM_FILTER_OFFICIALONLY = 'o';
+const SEARCH_DEBOUNCE_TIME_IN_MS = 500;
+
+function useDebounce<T>(value: T, delay?: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay || SEARCH_DEBOUNCE_TIME_IN_MS);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 const Search = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -76,6 +91,7 @@ const Search = (): JSX.Element => {
 
   const [searchBarQuery, setSearchBarQuery] = useState<string>(getQueryFromSearchParams);
   const [query, setQuery] = useState<string>(getQueryFromSearchParams);
+  const debouncedQuery = useDebounce(query);
   const [currentPage, setCurrentPage] = useState<number>(getCurrentPageFromSearchParams);
   const [sortIndex, setSortIndex] = useState<number>(getSortIndexFromSearchParams);
   const [sortDirection, setSortDirection] = useState<SortDirection>(getSortDirectionFromSearchParams(sortIndex));
@@ -127,9 +143,12 @@ const Search = (): JSX.Element => {
     setQuery(searchBarQuery);
   }, [searchBarQuery]);
 
+  const idleCallbackId = useRef<number>(-1);
   const handleResultsChange = useCallback((e?: SearchResultsJson): void => {
-    setSearchResults(e);
+    //We should use useTransition or useDeferredValue after updating to v18 instead of this
+    idleCallbackId.current = requestIdleCallback(() => setSearchResults(e));
   }, []);
+  useEffect(() => () => cancelIdleCallback(idleCallbackId.current), [idleCallbackId]);
 
   const handlePageChange = useCallback(
     (newCurrentPage: number): void => {
@@ -177,7 +196,7 @@ const Search = (): JSX.Element => {
             <SearchProcessor
               resultsPerPage={RESULTS_PER_PAGE}
               page={currentPage}
-              query={query}
+              query={debouncedQuery}
               sortIndex={sortIndex}
               sortDirection={sortDirection}
               searchOfficialOnly={searchOfficialOnly}
