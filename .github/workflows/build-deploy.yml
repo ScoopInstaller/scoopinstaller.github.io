@@ -11,7 +11,7 @@ on:
 env:
   OUTPUT_PATH: ${{ github.workspace }}/build
   NODE_VERSION: '16'
-  REACT_APP_AZURESEARCH_KEY: ${{ secrets.REACT_APP_AZURESEARCH_KEY }}
+  VITE_APP_AZURESEARCH_KEY: ${{ secrets.VITE_APP_AZURESEARCH_KEY }}
 
 jobs:
   build:
