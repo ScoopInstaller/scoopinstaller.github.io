@@ -24,6 +24,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "preview": "vite preview",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lint": "eslint src --ext .ts,.tsx,.js,.jsx"
   },
