@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
@@ -12,5 +13,13 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
+    rollupOptions: {
+      plugins: [
+        visualizer({
+          filename: 'build_stats/stats_treemap.html',
+          template: 'treemap',
+        }),
+      ],
+    },
   },
 });
