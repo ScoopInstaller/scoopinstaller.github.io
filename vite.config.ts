@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
+    strictPort: true, // Port 3000 is required by CORS
   },
   preview: {
     port: 3000,
