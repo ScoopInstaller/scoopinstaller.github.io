@@ -2,9 +2,11 @@ import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 
-// https://vitejs.dev/config/
+const basePath = process.env.BASE_PATH || '/';
+
 export default defineConfig({
   plugins: [react()],
+  base: basePath,
   server: {
     port: 3000,
     strictPort: true, // Port 3000 is required by CORS
