@@ -9,6 +9,7 @@
 
 # production
 /build
+/build_stats
 
 # misc
 .DS_Store

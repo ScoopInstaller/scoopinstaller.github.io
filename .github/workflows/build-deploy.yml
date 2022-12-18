@@ -49,6 +49,12 @@ jobs:
         name: website
         path: ${{ env.OUTPUT_PATH }}
 
+    - name: Upload stats
+      uses: actions/upload-artifact@v2
+      with:
+        name: stats
+        path: ${{ github.workspace }}/build_stats
+
   deploy:
     if: github.event_name == 'push'
     name: Deploy 🚀🌐
