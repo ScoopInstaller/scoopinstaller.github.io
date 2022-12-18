@@ -19,7 +19,7 @@ cd scoopinstaller.github.io
 - Run `npm update`
 
 #### Launch the application
-- Run `npm dev`
+- Run `npm run dev`
 
 Application should run on http://localhost:3000 or https://localhost:5000 to pass CORS checks and query the search database.
 
