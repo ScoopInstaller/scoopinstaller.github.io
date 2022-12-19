@@ -77,7 +77,7 @@ export const sortModes: SortMode[] = [
   },
 ];
 
-const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } = process.env;
+const { VITE_APP_AZURESEARCH_URL, VITE_APP_AZURESEARCH_KEY } = import.meta.env;
 
 const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
   const [resultsCount, setResultsCount] = useState<number>(0);
@@ -130,15 +130,15 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     const fetchDataAsync = (abortSignal: AbortSignal): void => {
       setSearching(true);
 
-      if (!REACT_APP_AZURESEARCH_URL) {
-        throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
+      if (!VITE_APP_AZURESEARCH_URL) {
+        throw new Error('VITE_APP_AZURESEARCH_URL is not defined');
       }
 
-      if (!REACT_APP_AZURESEARCH_KEY) {
-        throw new Error('REACT_APP_AZURESEARCH_KEY is not defined');
+      if (!VITE_APP_AZURESEARCH_KEY) {
+        throw new Error('VITE_APP_AZURESEARCH_KEY is not defined');
       }
 
-      const url = `${REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
+      const url = `${VITE_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
       fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -180,7 +180,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
           highlightPostTag: '</mark>',
         }),
         headers: {
-          'api-key': REACT_APP_AZURESEARCH_KEY,
+          'api-key': VITE_APP_AZURESEARCH_KEY,
           'Content-Type': 'application/json',
         },
         signal: abortSignal,

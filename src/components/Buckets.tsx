@@ -71,17 +71,17 @@ const Buckets = (): JSX.Element => {
       abortSignal: AbortSignal,
       officialRepository: boolean
     ): Promise<BucketsResultsJson> => {
-      const { REACT_APP_AZURESEARCH_URL, REACT_APP_AZURESEARCH_KEY } = process.env;
+      const { VITE_APP_AZURESEARCH_URL, VITE_APP_AZURESEARCH_KEY } = import.meta.env;
 
-      if (!REACT_APP_AZURESEARCH_URL) {
-        throw new Error('REACT_APP_AZURESEARCH_URL is not defined');
+      if (!VITE_APP_AZURESEARCH_URL) {
+        throw new Error('VITE_APP_AZURESEARCH_URL is not defined');
       }
 
-      if (!REACT_APP_AZURESEARCH_KEY) {
-        throw new Error('REACT_APP_AZURESEARCH_KEY is not defined');
+      if (!VITE_APP_AZURESEARCH_KEY) {
+        throw new Error('VITE_APP_AZURESEARCH_KEY is not defined');
       }
 
-      const url = `${REACT_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
+      const url = `${VITE_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -92,7 +92,7 @@ const Buckets = (): JSX.Element => {
           top: 0, // Don't retrieve actual data
         }),
         headers: {
-          'api-key': REACT_APP_AZURESEARCH_KEY,
+          'api-key': VITE_APP_AZURESEARCH_KEY,
           'Content-Type': 'application/json',
         },
         signal: abortSignal,
