@@ -3,10 +3,9 @@ on:
   push:
     branches:
       - main
-      - develop
   pull_request:
     branches:
-      - develop
+      - main
 
 env:
   BUILD_PATH: ${{ github.workspace }}/build
@@ -30,23 +29,26 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Define BASE_PATH environment variable
-      run: |
-        if [[ "${{github.ref}}" == "refs/heads/main" ]]; then
-            echo "BASE_PATH=/" >> "$GITHUB_ENV"
-        else
-            echo "BASE_PATH=/scoopinstaller-dev.github.io/" >> "$GITHUB_ENV"
-        fi
+    - name: Build Staging Website
+      run: npm run build
+      env:
+        BASE_PATH: /scoopinstaller-dev.github.io/
 
-    - name: Build Website
-      run: |
-        echo "Use BASE_PATH=${{ env.BASE_PATH }}"
-        npm run build
-
-    - name: Upload artifact
+    - name: Upload Staging Website
       uses: actions/upload-artifact@v3
       with:
-        name: website
+        name: staging_website
+        path: ${{ env.BUILD_PATH }}
+
+    - name: Build Production Website
+      run: npm run build
+      env:
+        BASE_PATH: /
+
+    - name: Upload Production Website
+      uses: actions/upload-artifact@v3
+      with:
+        name: production_website
         path: ${{ env.BUILD_PATH }}
 
     - name: Upload stats
@@ -55,9 +57,13 @@ jobs:
         name: stats
         path: ${{ github.workspace }}/build_stats
 
-  deploy:
+
+  deploy_staging:
     if: github.event_name == 'push'
-    name: Deploy 🚀🌐
+    environment:
+      name: Staging
+      url: https://scoop.sh/scoopinstaller-dev.github.io
+    name: Staging deployment 🚀🌐
     needs: [ build ]
     runs-on: ubuntu-latest
 
@@ -65,23 +71,38 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v3
       with:
-          name: website
+          name: staging_website
           path: ${{ env.BUILD_PATH }}
 
-    - name: Deploy website => https://scoop.sh
-      if: github.ref == 'refs/heads/main'
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: ./build
-        cname: scoop.sh
-
-    - name: Deploy website => https://scoop.sh/scoopinstaller-dev.github.io
-      if: github.ref == 'refs/heads/develop'
+    - name: Deploy website
       uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.GHPAGES_DEPLOY_KEY_DEV }}
         external_repository: ScoopInstaller/scoopinstaller-dev.github.io
         publish_branch: master
         publish_dir: ./build
+
+
+  deploy_production:
+    if: github.event_name == 'push'
+    environment:
+      name: Production
+      url: https://scoop.sh
+    name: Production deployment 🚀🌐
+    needs: [ build ]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+          name: production_website
+          path: ${{ env.BUILD_PATH }}
+
+    - name: Deploy website
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: ./build
+        cname: scoop.sh
