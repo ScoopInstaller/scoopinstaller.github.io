@@ -11,7 +11,7 @@ on:
 env:
   OUTPUT_PATH: ${{ github.workspace }}/build
   NODE_VERSION: '16'
-  REACT_APP_AZURESEARCH_KEY: ${{ secrets.REACT_APP_AZURESEARCH_KEY }}
+  VITE_APP_AZURESEARCH_KEY: ${{ secrets.VITE_APP_AZURESEARCH_KEY }}
 
 jobs:
   build:
@@ -30,17 +30,17 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Define PUBLIC_URL environment variable
+    - name: Define BASE_PATH environment variable
       run: |
         if [[ "${{github.ref}}" == "refs/heads/main" ]]; then
-            echo "PUBLIC_URL=https://scoop.sh" >> "$GITHUB_ENV"
+            echo "BASE_PATH=/" >> "$GITHUB_ENV"
         else
-            echo "PUBLIC_URL=https://scoop.sh/scoopinstaller-dev.github.io" >> "$GITHUB_ENV"
+            echo "BASE_PATH=/scoopinstaller-dev.github.io/" >> "$GITHUB_ENV"
         fi
 
     - name: Build Website
       run: |
-        echo "Use PUBLIC_URL=${{ env.PUBLIC_URL }}"
+        echo "Use BASE_PATH=${{ env.BASE_PATH }}"
         npm run build
 
     - name: Upload artifact
@@ -48,6 +48,12 @@ jobs:
       with:
         name: website
         path: ${{ env.OUTPUT_PATH }}
+
+    - name: Upload stats
+      uses: actions/upload-artifact@v2
+      with:
+        name: stats
+        path: ${{ github.workspace }}/build_stats
 
   deploy:
     if: github.event_name == 'push'
