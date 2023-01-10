@@ -21,9 +21,8 @@
 			]
 		}
 	},
-	"waitFor": "onCreateCommand",
 	// Install required modules
-	"updateContentCommand": "npm install",
+	"updateContentCommand": "npm ci",
 	// Start dev server
 	"postAttachCommand": "npm run dev"
 }
