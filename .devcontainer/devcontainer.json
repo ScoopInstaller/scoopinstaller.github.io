@@ -1,0 +1,29 @@
+{
+	"name": "ScoopInstaller web frontend (Node.js & TypeScript)",
+	// Use TypeScript + Node 16
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:16",
+	"forwardPorts": [
+		3000
+	],
+	"portsAttributes": {
+		"3000": {
+			"label": "Vite dev server",
+			"onAutoForward": "openBrowser"
+		}
+	},
+	"extensions": [
+		"dbaeumer.vscode-eslint"
+	],
+	"customizations": {
+		"codespaces": {
+			"openFiles": [
+				"src/App.tsx"
+			]
+		}
+	},
+	"waitFor": "onCreateCommand",
+	// Install required modules
+	"updateContentCommand": "npm install",
+	// Start dev server
+	"postAttachCommand": "npm run dev"
+}
