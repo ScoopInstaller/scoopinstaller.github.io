@@ -1,4 +1,6 @@
 {
-    "prettier.printWidth": 120,
-    "editor.rulers": [120]
+  "prettier.printWidth": 120,
+  "editor.rulers": [120],
+  "typescript.tsc.autoDetect": "off",
+  "npm.autoDetect": "off"
 }
