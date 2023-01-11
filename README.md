@@ -8,9 +8,6 @@ This repository is used to build the Scoop website https://scoopinstaller.github
 
 ### Build this project
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=276677210)
-
-
 #### Get the source
 - If you already use Scoop, install Git and clone the repository:
 ```
