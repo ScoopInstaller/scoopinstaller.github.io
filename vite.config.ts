@@ -1,11 +1,18 @@
-import react from '@vitejs/plugin-react';
+/* eslint-disable import/no-extraneous-dependencies */
+import preact from '@preact/preset-vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 
 const basePath = process.env.BASE_PATH || '/';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    preact({
+      babel: {
+        plugins: [['@babel/plugin-proposal-decorators', { version: 'legacy' }]],
+      },
+    }),
+  ],
   base: basePath,
   server: {
     port: 3000,
