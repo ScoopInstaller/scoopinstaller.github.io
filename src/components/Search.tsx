@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Modal } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
 import { useSearchParams } from 'react-router-dom';
 
@@ -18,6 +18,7 @@ const SEARCH_PARAM_PAGE = 'p';
 const SEARCH_PARAM_SORT_INDEX = 's';
 const SEARCH_PARAM_SORT_DIRECTION = 'd';
 const SEARCH_PARAM_FILTER_OFFICIALONLY = 'o';
+const SEARCH_PARAM_APP = 'a';
 const SEARCH_DEBOUNCE_TIME_IN_MS = 500;
 
 function useDebounce<T>(value: T, delay?: number): T {
@@ -78,10 +79,17 @@ const Search = (): JSX.Element => {
   }, [getSearchParam]);
 
   const updateSearchParams = useCallback(
-    (key: string, value: string, updateLocalStorage: boolean): void => {
-      searchParams.set(key, value);
-      if (updateLocalStorage) {
-        localStorage.setItem(key, value);
+    (key: string, value: string | null, updateLocalStorage: boolean): void => {
+      if (value) {
+        searchParams.set(key, value);
+        if (updateLocalStorage) {
+          localStorage.setItem(key, value);
+        }
+      } else {
+        searchParams.delete(key);
+        if (updateLocalStorage) {
+          localStorage.removeItem(key);
+        }
       }
 
       setSearchParams(searchParams, { replace: true });
@@ -176,6 +184,20 @@ const Search = (): JSX.Element => {
     setContentToCopy(undefined);
   }, []);
 
+  const [show, setShow] = useState(false);
+  const [appDetails, setAppDetails] = useState<ManifestJson>();
+
+  const handleAppSelected = useCallback((app: ManifestJson): void => {
+    setAppDetails(app);
+    setShow(true);
+    updateSearchParams(SEARCH_PARAM_APP, app.id, false);
+  }, []);
+
+  const handleCloseAppDetails = () => {
+    setShow(false);
+    updateSearchParams(SEARCH_PARAM_APP, '', false);
+  };
+
   return (
     <>
       <Helmet>
@@ -215,6 +237,7 @@ const Search = (): JSX.Element => {
                 result={searchResult}
                 officialRepositories={officialRepositories}
                 onCopyToClipbard={handleCopyToClipboard}
+                onAppSelected={handleAppSelected}
               />
             ))}
           </Col>
@@ -231,6 +254,16 @@ const Search = (): JSX.Element => {
           </Col>
         </Row>
       </Container>
+
+      <Modal show={show} onHide={handleCloseAppDetails} size="xl" centered className="modal-app-details">
+        <Modal.Body>
+          <SearchResult
+            result={appDetails!}
+            officialRepositories={officialRepositories}
+            onCopyToClipbard={handleCopyToClipboard}
+          />
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

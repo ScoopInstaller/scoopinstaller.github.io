@@ -23,10 +23,11 @@ type SearchResultProps = {
   result: ManifestJson;
   officialRepositories: { [key: string]: string };
   onCopyToClipbard: (content: string) => void;
+  onAppSelected?: (app: ManifestJson) => void;
 };
 
 const SearchResult = (props: SearchResultProps): JSX.Element => {
-  const { result, officialRepositories, onCopyToClipbard } = props;
+  const { result, officialRepositories, onCopyToClipbard, onAppSelected } = props;
   const homepageRef = useRef<HTMLSpanElement>(null);
   const [homepageTooltipHidden, setHomepageTooltipHidden] = useState<boolean>(false);
 
@@ -35,6 +36,16 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
       onCopyToClipbard(content);
     },
     [onCopyToClipbard]
+  );
+
+  const handleAppSelected = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>): void => {
+      e.preventDefault();
+      if (onAppSelected) {
+        onAppSelected(result);
+      }
+    },
+    [onAppSelected, result]
   );
 
   const displayInnerHtml = (content?: string) => {
@@ -122,7 +133,14 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
         <Row>
           <Col lg={7} className="valign-items">
             {favicon && <Img className="me-2" src={favicon} width={20} height={20} />}
-            <span className="fw-bold">{displayInnerHtml(highlightedName)}</span>
+            <span className="fw-bold">
+              {onAppSelected && (
+                <a href="#" onClick={handleAppSelected}>
+                  {displayInnerHtml(highlightedName)}
+                </a>
+              )}
+              {!onAppSelected && displayInnerHtml(highlightedName)}
+            </span>
             <span className="me-1 ms-1">in</span>
             <a href={metadata.repository}>{displayInnerHtml(formattedHighlightedRepository)}</a>
             <BucketTypeIcon className="ms-1" official={metadata.repositoryOfficial} stars={metadata.stars} />

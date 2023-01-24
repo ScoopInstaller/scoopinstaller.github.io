@@ -2,5 +2,8 @@
   "prettier.printWidth": 120,
   "editor.rulers": [120],
   "typescript.tsc.autoDetect": "off",
-  "npm.autoDetect": "off"
+  "npm.autoDetect": "off",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
