@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
 import { useSearchParams } from 'react-router-dom';
 
+import { requestIdleCallback } from '../request-idle-callback';
 import ManifestJson from '../serialization/ManifestJson';
 import SearchResultsJson from '../serialization/SearchResultsJson';
 import CopyToClipboardHandler from './CopyToClipboardHandler';
