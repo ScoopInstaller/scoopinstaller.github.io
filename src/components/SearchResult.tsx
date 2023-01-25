@@ -23,11 +23,12 @@ type SearchResultProps = {
   result: ManifestJson;
   officialRepositories: { [key: string]: string };
   onCopyToClipbard: (content: string) => void;
-  onAppSelected?: (app: ManifestJson) => void;
+  onResultSelected?: (result: ManifestJson) => void;
+  cardRef?: React.RefObject<HTMLDivElement>;
 };
 
 const SearchResult = (props: SearchResultProps): JSX.Element => {
-  const { result, officialRepositories, onCopyToClipbard, onAppSelected } = props;
+  const { result, officialRepositories, onCopyToClipbard, onResultSelected, cardRef } = props;
   const homepageRef = useRef<HTMLSpanElement>(null);
   const [homepageTooltipHidden, setHomepageTooltipHidden] = useState<boolean>(false);
 
@@ -38,15 +39,9 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
     [onCopyToClipbard]
   );
 
-  const handleAppSelected = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>): void => {
-      e.preventDefault();
-      if (onAppSelected) {
-        onAppSelected(result);
-      }
-    },
-    [onAppSelected, result]
-  );
+  const handleSelected = useCallback((): void => {
+    onResultSelected?.call(this, result);
+  }, [onResultSelected, result]);
 
   const displayInnerHtml = (content?: string) => {
     return (
@@ -128,18 +123,13 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
     : `${Utils.extractPathFromUrl(metadata.repository, '_')} ${metadata.repository}`;
 
   return (
-    <Card key={id} className="mb-2">
+    <Card key={id} className="mb-2" ref={cardRef}>
       <Card.Header>
         <Row>
           <Col lg={7} className="valign-items">
             {favicon && <Img className="me-2" src={favicon} width={20} height={20} />}
-            <span className="fw-bold">
-              {onAppSelected && (
-                <a href="#" onClick={handleAppSelected}>
-                  {displayInnerHtml(highlightedName)}
-                </a>
-              )}
-              {!onAppSelected && displayInnerHtml(highlightedName)}
+            <span className="fw-bold" role={onResultSelected ? 'button' : undefined} onClick={handleSelected}>
+              {displayInnerHtml(highlightedName)}
             </span>
             <span className="me-1 ms-1">in</span>
             <a href={metadata.repository}>{displayInnerHtml(formattedHighlightedRepository)}</a>

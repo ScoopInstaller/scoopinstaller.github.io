@@ -18,7 +18,7 @@ const SEARCH_PARAM_PAGE = 'p';
 const SEARCH_PARAM_SORT_INDEX = 's';
 const SEARCH_PARAM_SORT_DIRECTION = 'd';
 const SEARCH_PARAM_FILTER_OFFICIALONLY = 'o';
-const SEARCH_PARAM_APP = 'a';
+const SEARCH_PARAM_SELECTED_RESULT = 'id';
 const SEARCH_DEBOUNCE_TIME_IN_MS = 500;
 
 function useDebounce<T>(value: T, delay?: number): T {
@@ -47,7 +47,7 @@ const Search = (): JSX.Element => {
   }, [searchParams]);
 
   const getSearchParam = useCallback(
-    <T extends number | boolean>(key: string, defaultValue: T): T => {
+    <T extends number | boolean | string>(key: string, defaultValue: T): T => {
       const value = searchParams.get(key) || localStorage.getItem(key);
       if (value) {
         switch (typeof defaultValue) {
@@ -55,6 +55,8 @@ const Search = (): JSX.Element => {
             return parseInt(value) as T;
           case 'boolean':
             return (value === 'true') as T;
+          case 'string':
+            return value as T;
         }
       }
 
@@ -78,8 +80,12 @@ const Search = (): JSX.Element => {
     return getSearchParam(SEARCH_PARAM_FILTER_OFFICIALONLY, true);
   }, [getSearchParam]);
 
+  const getSelectedResultFromSearchParams = useCallback((): string => {
+    return getSearchParam<string>(SEARCH_PARAM_SELECTED_RESULT, '');
+  }, [getSearchParam]);
+
   const updateSearchParams = useCallback(
-    (key: string, value: string | null, updateLocalStorage: boolean): void => {
+    (key: string, value: string | undefined, updateLocalStorage: boolean): void => {
       if (value) {
         searchParams.set(key, value);
         if (updateLocalStorage) {
@@ -107,6 +113,9 @@ const Search = (): JSX.Element => {
   const [searchResults, setSearchResults] = useState<SearchResultsJson>();
   const [contentToCopy, setContentToCopy] = useState<string>();
   const [officialRepositories, setOfficialRepositories] = useState<{ [key: string]: string }>({});
+  const [selectedResult, setSelectedResult] = useState<ManifestJson | null>();
+  const [selectedResultId, setSelectedResultId] = useState<string>(getSelectedResultFromSearchParams);
+  const selectedResultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const queryfromSearchParams = getQueryFromSearchParams();
@@ -123,6 +132,20 @@ const Search = (): JSX.Element => {
     updateSearchParams(SEARCH_PARAM_SORT_DIRECTION, sortDirection.toString(), true);
     updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, searchOfficialOnly.toString(), true);
   }, [updateSearchParams, sortIndex, sortDirection, searchOfficialOnly]);
+
+  useEffect(() => {
+    if (searchResults?.results && selectedResultId) {
+      const selectedResultManifest = searchResults.results.find((x) => x.id === selectedResultId);
+      if (selectedResultManifest) {
+        setSelectedResult(selectedResultManifest);
+        selectedResultRef.current?.scrollIntoView();
+      }
+    } else {
+      setSelectedResult(undefined);
+    }
+
+    updateSearchParams(SEARCH_PARAM_SELECTED_RESULT, selectedResultId, false);
+  }, [selectedResultId, searchResults, updateSearchParams]);
 
   useEffect(() => {
     fetch('https://raw.githubusercontent.com/ScoopInstaller/Scoop/master/buckets.json')
@@ -184,19 +207,13 @@ const Search = (): JSX.Element => {
     setContentToCopy(undefined);
   }, []);
 
-  const [show, setShow] = useState(false);
-  const [appDetails, setAppDetails] = useState<ManifestJson>();
-
-  const handleAppSelected = useCallback((app: ManifestJson): void => {
-    setAppDetails(app);
-    setShow(true);
-    updateSearchParams(SEARCH_PARAM_APP, app.id, false);
+  const handleResultSelected = useCallback((result: ManifestJson): void => {
+    setSelectedResultId(result.id);
   }, []);
 
-  const handleCloseAppDetails = () => {
-    setShow(false);
-    updateSearchParams(SEARCH_PARAM_APP, '', false);
-  };
+  const handleCloseSelectedResultModal = useCallback((): void => {
+    setSelectedResultId('');
+  }, []);
 
   return (
     <>
@@ -233,11 +250,12 @@ const Search = (): JSX.Element => {
           <Col>
             {searchResults?.results.map((searchResult: ManifestJson) => (
               <SearchResult
+                cardRef={searchResult.id == selectedResultId ? selectedResultRef : undefined}
                 key={searchResult.id}
                 result={searchResult}
                 officialRepositories={officialRepositories}
                 onCopyToClipbard={handleCopyToClipboard}
-                onAppSelected={handleAppSelected}
+                onResultSelected={handleResultSelected}
               />
             ))}
           </Col>
@@ -255,13 +273,22 @@ const Search = (): JSX.Element => {
         </Row>
       </Container>
 
-      <Modal show={show} onHide={handleCloseAppDetails} size="xl" centered className="modal-app-details">
+      <Modal
+        show={selectedResult !== undefined}
+        onHide={handleCloseSelectedResultModal}
+        restoreFocus={false}
+        size="xl"
+        centered
+        className="modal-selected-result"
+      >
         <Modal.Body>
-          <SearchResult
-            result={appDetails!}
-            officialRepositories={officialRepositories}
-            onCopyToClipbard={handleCopyToClipboard}
-          />
+          {selectedResult && (
+            <SearchResult
+              result={selectedResult}
+              officialRepositories={officialRepositories}
+              onCopyToClipbard={handleCopyToClipboard}
+            />
+          )}
         </Modal.Body>
       </Modal>
     </>
