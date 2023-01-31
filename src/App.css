@@ -144,3 +144,8 @@ html.dark .sorting-filtering-menu > .dropdown-item:active {
 html.dark .bg-light {
   background-color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity)) !important;
 }
+
+.modal-selected-result > .modal-dialog > .modal-content {
+  background: transparent;
+  border: transparent;
+}
