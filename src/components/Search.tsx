@@ -149,7 +149,7 @@ const Search = (): JSX.Element => {
   }, [selectedResultId, searchResults, updateSearchParams]);
 
   useEffect(() => {
-    fetch('https://raw.githubusercontent.com/ScoopInstaller/Scoop/master/buckets.json')
+    fetch('https://cdn.jsdelivr.net/gh/ScoopInstaller/Scoop/buckets.json')
       .then((response) => response.json())
       .then((response) => {
         const json = response as { [key: string]: string };
