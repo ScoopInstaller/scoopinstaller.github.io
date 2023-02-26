@@ -7,7 +7,6 @@ import { useSearchParams } from 'react-router-dom';
 import { requestIdleCallback } from '../request-idle-callback';
 import ManifestJson from '../serialization/ManifestJson';
 import SearchResultsJson from '../serialization/SearchResultsJson';
-import CopyToClipboardHandler from './CopyToClipboardHandler';
 import SearchBar from './SearchBar';
 import SearchPagination from './SearchPagination';
 import SearchProcessor, { SortDirection, sortModes } from './SearchProcessor';
@@ -112,7 +111,6 @@ const Search = (): JSX.Element => {
   const [sortDirection, setSortDirection] = useState<SortDirection>(getSortDirectionFromSearchParams(sortIndex));
   const [searchOfficialOnly, setSearchOfficialOnly] = useState<boolean>(getSearchOfficialOnlyFromSearchParams);
   const [searchResults, setSearchResults] = useState<SearchResultsJson>();
-  const [contentToCopy, setContentToCopy] = useState<string>();
   const [officialRepositories, setOfficialRepositories] = useState<{ [key: string]: string }>({});
   const [selectedResult, setSelectedResult] = useState<ManifestJson | null>();
   const [selectedResultId, setSelectedResultId] = useState<string>(getSelectedResultFromSearchParams);
@@ -201,11 +199,11 @@ const Search = (): JSX.Element => {
   };
 
   const handleCopyToClipboard = useCallback((newContentToCopy: string): void => {
-    setContentToCopy(newContentToCopy);
-  }, []);
+    const handleCopyToClipboardAsync = async (data: string) => {
+      await navigator.clipboard.writeText(data);
+    };
 
-  const handleContentCopied = useCallback((): void => {
-    setContentToCopy(undefined);
+    handleCopyToClipboardAsync(newContentToCopy).finally(() => {});
   }, []);
 
   const handleResultSelected = useCallback((result: ManifestJson): void => {
@@ -221,8 +219,6 @@ const Search = (): JSX.Element => {
       <Helmet>
         <title>Apps{query && ` (${query})`}</title>
       </Helmet>
-
-      <CopyToClipboardHandler content={contentToCopy} onContentCopied={handleContentCopied} />
 
       <Container className="mt-5 mb-5">
         <Row className="justify-content-center">
