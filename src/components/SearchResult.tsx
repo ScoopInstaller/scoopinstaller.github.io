@@ -145,7 +145,10 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
             </a>
             <span className="ms-1 me-1">|</span>
             <GoPackage title="Version" className="me-1" />
-            <a href={`${metadata.repository}/blob/master/${metadata.filePath}`} title="Manifest file">
+            <a
+              href={`${metadata.repository}/blob/master/${metadata.filePath.replace('#', '%23')}`}
+              title="Manifest file"
+            >
               {versionPrefix}
               {displayInnerHtml(highlightedVersion)}
             </a>
