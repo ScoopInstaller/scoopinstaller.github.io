@@ -89,7 +89,7 @@ jobs:
       name: Production
       url: https://scoop.sh
     name: Production deployment 🚀🌐
-    needs: [ build ]
+    needs: [ build, deploy_staging ]
     runs-on: ubuntu-latest
 
     steps:
