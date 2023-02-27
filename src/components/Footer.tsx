@@ -17,6 +17,10 @@ const Footer = (): JSX.Element => {
           <GoMarkGithub className="footer-icon" />{' '}
           <a href="https://github.com/ScoopInstaller/scoopinstaller.github.io">Website</a> created by{' '}
           <a href="https://github.com/gpailler">gpailler</a>
+          &nbsp;-&nbsp;{APP_VERSION}/
+          <a href={`https://github.com/ScoopInstaller/scoopinstaller.github.io/commit/${APP_COMMIT_HASH}`}>
+            {APP_COMMIT_HASH}
+          </a>
         </Col>
         <Col md={4} className="mb-2">
           <FaRegHandshake className="footer-icon" /> Maintained by the{' '}
