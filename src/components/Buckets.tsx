@@ -157,7 +157,7 @@ const Buckets = (): JSX.Element => {
               <Form.Control
                 size="sm"
                 type="text"
-                placeholder="Search an app"
+                placeholder="Filter buckets"
                 value={filter}
                 onChange={handleFilterChange}
               />

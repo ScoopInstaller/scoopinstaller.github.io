@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom';
 import Utils from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 
+type Bucket = {
+  bucket: string;
+  manifests: number;
+  official: boolean;
+};
 
 function BucketsList({ results, keyword }) {
     const keywordRE = new RegExp(`${keyword}`, 'g');  
@@ -12,11 +17,11 @@ function BucketsList({ results, keyword }) {
             return bucketName;
         }
 
-        const ret = bucketName.replace(keywordRE, `<mark>${keyword}</mark>`);
+        const ret = bucketName.replace(keywordRE, `<mark style="padding: 0;">${keyword}</mark>`);
         return ret;
     }
 
-    const filterIncludesKeywordBuckets = (item) => {
+    const filterIncludesKeywordBuckets = (item: Bucket) => {
         const bucketName = encodeURIComponent(item.bucket);
 
         const temp = (
