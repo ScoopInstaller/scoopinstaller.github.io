@@ -3,12 +3,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Container, Col, Row, InputGroup, Form } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
 
 import BucketsResultsJson from '../serialization/BucketsResultsJson';
-import Utils from '../utils';
-import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
+import BucketList from './BucketsList'
 
 type Bucket = {
   bucket: string;
@@ -23,6 +21,11 @@ const Buckets = (): JSX.Element => {
   const [searching, setSearching] = useState<boolean>(false);
   const [sortIndex, setSortIndex] = useState<number>(0);
   const [results, setResults] = useState<Bucket[]>([]);
+  const [filter, setFilter] = useState<string>('');
+
+  const handleFilterChange = function handleFilterChange(newVal: React.ChangeEvent<HTMLInputElement>) {
+    setFilter(newVal.target.value);
+  }
 
   const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
     switch (sortOrder) {
@@ -60,7 +63,7 @@ const Buckets = (): JSX.Element => {
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const sortOrder = e.target.selectedIndex;
     setSortIndex(sortOrder);
-    setResults((previousResults) => sortResults(previousResults, sortOrder));
+    setResults([...sortResults(results, sortOrder)]);
   };
 
   useEffect(() => {
@@ -148,6 +151,18 @@ const Buckets = (): JSX.Element => {
               </Form.Select>
             </InputGroup>
           </Col>
+          <Col lg={3}>
+            <InputGroup size="sm">
+              <InputGroup.Text>Filter</InputGroup.Text>
+              <Form.Control
+                size="sm"
+                type="text"
+                placeholder="Search an app"
+                value={filter}
+                onChange={handleFilterChange}
+              />
+            </InputGroup>
+          </Col>
         </Row>
 
         {results && (
@@ -161,22 +176,10 @@ const Buckets = (): JSX.Element => {
                   </tr>
                 </thead>
                 <tbody>
-                  {results.map((item: Bucket) => (
-                    <tr key={item.bucket}>
-                      <td>
-                        <Link
-                          to={{
-                            pathname: '/apps',
-                            search: `?q="${encodeURIComponent(item.bucket)}"`,
-                          }}
-                        >
-                          {Utils.extractPathFromUrl(item.bucket)}
-                        </Link>{' '}
-                        <BucketTypeIcon official={item.official} />
-                      </td>
-                      <td>{item.manifests}</td>
-                    </tr>
-                  ))}
+                  <BucketList 
+                    results={results} 
+                    keyword={filter}
+                    />
                 </tbody>
               </Table>
             </Col>
