@@ -9,10 +9,10 @@ import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
 import supportedSpdxLicenses from 'spdx-license-ids/index.json';
 
-import ManifestJson from '../serialization/ManifestJson';
-import Utils from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 import CopyToClipboardButton from './CopyToClipboardButton';
+import ManifestJson from '../serialization/ManifestJson';
+import Utils from '../utils';
 
 const spdxLicenses = supportedSpdxLicenses.concat(deprecatedSpdxLicenses);
 
@@ -25,10 +25,13 @@ type SearchResultProps = {
   onCopyToClipbard: (content: string) => void;
   onResultSelected?: (result: ManifestJson) => void;
   cardRef?: React.RefObject<HTMLDivElement>;
+
+  installBucketName: boolean;
+  onInstallBucketName: (installBucketName: boolean) => void;
 };
 
 const SearchResult = (props: SearchResultProps): JSX.Element => {
-  const { result, officialRepositories, onCopyToClipbard, onResultSelected, cardRef } = props;
+  const { result, officialRepositories, onCopyToClipbard, onResultSelected, cardRef, installBucketName } = props;
   const homepageRef = useRef<HTMLSpanElement>(null);
   const [homepageTooltipHidden, setHomepageTooltipHidden] = useState<boolean>(false);
 
@@ -117,10 +120,13 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
 
   const versionPrefix = version.length > 0 && /^\d/.test(version) && 'v';
 
-  const bucketCommandLine = metadata.repositoryOfficial
-    ? (officialRepositories[metadata.repository] && officialRepositories[metadata.repository]) ||
+  const bucketName = metadata.repositoryOfficial
+    ? officialRepositories[metadata.repository] ||
       metadata.repository.substring(metadata.repository.lastIndexOf('/') + 1).toLowerCase()
-    : `${Utils.extractPathFromUrl(metadata.repository, '_')} ${metadata.repository}`;
+    : `${Utils.extractPathFromUrl(metadata.repository, '_')}`;
+  const bucketUrl = metadata.repositoryOfficial ? '' : `${metadata.repository}`;
+  console.log(bucketName, bucketUrl);
+  const bucketCommandLine = `${bucketName} ${bucketUrl}`.trim();
 
   return (
     <Card key={id} className="mb-2" ref={cardRef}>
@@ -189,7 +195,10 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
                 <CopyToClipboardComponent value={`scoop bucket add ${bucketCommandLine}`} id="bucket-command" />
               </Row>
               <Row className="mt-2">
-                <CopyToClipboardComponent value={`scoop install ${name}`} id="app-command" />
+                <CopyToClipboardComponent
+                  value={`scoop install ${installBucketName ? bucketName + '/' : ''}${name}`}
+                  id="app-command"
+                />
               </Row>
             </Col>
           </Row>

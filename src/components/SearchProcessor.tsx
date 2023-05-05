@@ -5,9 +5,9 @@ import { IconBaseProps } from 'react-icons';
 import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 import { GoSettings } from 'react-icons/go';
 
-import SearchResultsJson from '../serialization/SearchResultsJson';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
+import SearchResultsJson from '../serialization/SearchResultsJson';
 
 export enum SortDirection {
   Ascending,
@@ -26,6 +26,10 @@ type SearchProcessorProps = {
   sortIndex: number;
   sortDirection: SortDirection;
   searchOfficialOnly: boolean;
+
+  installBucketName: boolean;
+  onInstallBucketName: (installBucketName: boolean) => void;
+
   resultsPerPage: number;
   onResultsChange: (value?: SearchResultsJson) => void;
   onSortChange: (sortIndex: number, sortDirection: SortDirection) => void;
@@ -93,6 +97,8 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     onResultsChange,
     onSortChange,
     onSearchOfficialOnlyChange,
+    installBucketName,
+    onInstallBucketName,
   } = props;
 
   const handleSortChange = useCallback(
@@ -108,6 +114,14 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
       onSearchOfficialOnlyChange(!searchOfficialOnly);
     },
     [searchOfficialOnly, onSearchOfficialOnlyChange]
+  );
+
+  const toggleInstallBucketName = useCallback(
+    (e: React.MouseEvent<HTMLElement>): void => {
+      e.currentTarget.blur();
+      onInstallBucketName(!installBucketName);
+    },
+    [installBucketName, onInstallBucketName]
   );
 
   const toggleSort = useCallback(
@@ -267,6 +281,15 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
                   <Form.Switch.Label>
                     Official buckets only <BucketTypeIcon className="ms-1" official showTooltip={false} />
                   </Form.Switch.Label>
+                </Form.Switch>
+              </Dropdown.Item>
+
+              <Dropdown.Divider />
+              <Dropdown.Header>Option</Dropdown.Header>
+              <Dropdown.Item as={Button} onClick={(e) => toggleInstallBucketName(e)}>
+                <Form.Switch className="form-switch-sm">
+                  <Form.Switch.Input checked={installBucketName} />
+                  <Form.Switch.Label>Show bucket name</Form.Switch.Label>
                 </Form.Switch>
               </Dropdown.Item>
             </Dropdown.Menu>
