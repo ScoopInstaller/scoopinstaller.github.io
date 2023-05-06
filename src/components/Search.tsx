@@ -133,6 +133,7 @@ const Search = (): JSX.Element => {
     setCurrentPage(getCurrentPageFromSearchParams());
   }, [getCurrentPageFromSearchParams]);
 
+
   if (getSortIndexFromSearchParams() !== sortIndex) {
     setSortIndex(getSortIndexFromSearchParams());
   }
@@ -142,10 +143,10 @@ const Search = (): JSX.Element => {
   if (getSearchOfficialOnlyFromSearchParams() !== searchOfficialOnly) {
     setSearchOfficialOnly(getSearchOfficialOnlyFromSearchParams());
   }
-
   if (getInstallBucketNameFromSearchParams() !== installBucketName) {
     setInstallBucketName(getInstallBucketNameFromSearchParams());
   }
+
 
   useEffect(() => {
     if (searchResults?.results && selectedResultId) {
@@ -205,11 +206,14 @@ const Search = (): JSX.Element => {
   );
 
   const handleSortChange = (newSortIndex: number, newSortDirection: SortDirection): void => {
+    updateSearchParams(SEARCH_PARAM_SORT_INDEX, newSortIndex.toString(), true);
+    updateSearchParams(SEARCH_PARAM_SORT_DIRECTION, newSortDirection.toString(), true);
     setSortIndex(newSortIndex);
     setSortDirection(newSortDirection);
   };
 
   const handleSearchOfficialOnlyChange = (newSearchOfficialOnly: boolean): void => {
+    updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, newSearchOfficialOnly.toString(), true);
     setSearchOfficialOnly(newSearchOfficialOnly);
   };
 
