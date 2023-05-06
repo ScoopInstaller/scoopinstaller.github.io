@@ -127,10 +127,12 @@ const Search = (): JSX.Element => {
   }, [getCurrentPageFromSearchParams]);
 
   useEffect(() => {
-    updateSearchParams(SEARCH_PARAM_SORT_INDEX, sortIndex.toString(), true);
-    updateSearchParams(SEARCH_PARAM_SORT_DIRECTION, sortDirection.toString(), true);
-    updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, searchOfficialOnly.toString(), true);
-  }, [updateSearchParams, sortIndex, sortDirection, searchOfficialOnly]);
+    const sortIndexFromUrl = getSortIndexFromSearchParams();
+    const sortDirectionFromUrl = getSortDirectionFromSearchParams(sortIndexFromUrl);
+    setSortIndex(sortIndexFromUrl);
+    setSortDirection(sortDirectionFromUrl);
+    setSearchOfficialOnly(getSearchOfficialOnlyFromSearchParams());
+  }, [getSortIndexFromSearchParams, getSortDirectionFromSearchParams, getSearchOfficialOnlyFromSearchParams]);
 
   useEffect(() => {
     if (searchResults?.results && selectedResultId) {
@@ -190,11 +192,14 @@ const Search = (): JSX.Element => {
   );
 
   const handleSortChange = (newSortIndex: number, newSortDirection: SortDirection): void => {
+    updateSearchParams(SEARCH_PARAM_SORT_INDEX, newSortIndex.toString(), true);
+    updateSearchParams(SEARCH_PARAM_SORT_DIRECTION, newSortDirection.toString(), true);
     setSortIndex(newSortIndex);
     setSortDirection(newSortDirection);
   };
 
   const handleSearchOfficialOnlyChange = (newSearchOfficialOnly: boolean): void => {
+    updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, newSearchOfficialOnly.toString(), true);
     setSearchOfficialOnly(newSearchOfficialOnly);
   };
 
