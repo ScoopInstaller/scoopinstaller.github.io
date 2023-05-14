@@ -4,13 +4,13 @@ import { Container, Row, Col, Modal } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
 import { useSearchParams } from 'react-router-dom';
 
-import { requestIdleCallback } from '../request-idle-callback';
-import ManifestJson from '../serialization/ManifestJson';
-import SearchResultsJson from '../serialization/SearchResultsJson';
 import SearchBar from './SearchBar';
 import SearchPagination from './SearchPagination';
 import SearchProcessor, { SortDirection, sortModes } from './SearchProcessor';
 import SearchResult from './SearchResult';
+import { requestIdleCallback } from '../request-idle-callback';
+import ManifestJson from '../serialization/ManifestJson';
+import SearchResultsJson from '../serialization/SearchResultsJson';
 
 const RESULTS_PER_PAGE = 20;
 const SEARCH_PARAM_QUERY = 'q';
@@ -18,6 +18,7 @@ const SEARCH_PARAM_PAGE = 'p';
 const SEARCH_PARAM_SORT_INDEX = 's';
 const SEARCH_PARAM_SORT_DIRECTION = 'd';
 const SEARCH_PARAM_FILTER_OFFICIALONLY = 'o';
+const SEARCH_PARAM_OPTION_BUCKETNAME = 'n';
 const SEARCH_PARAM_SELECTED_RESULT = 'id';
 const SEARCH_DEBOUNCE_TIME_IN_MS = 500;
 
@@ -80,6 +81,10 @@ const Search = (): JSX.Element => {
     return getSearchParam(SEARCH_PARAM_FILTER_OFFICIALONLY, true);
   }, [getSearchParam]);
 
+  const getInstallBucketNameFromSearchParams = useCallback((): boolean => {
+    return getSearchParam(SEARCH_PARAM_OPTION_BUCKETNAME, true);
+  }, [getSearchParam]);
+
   const getSelectedResultFromSearchParams = useCallback((): string => {
     return getSearchParam<string>(SEARCH_PARAM_SELECTED_RESULT, '');
   }, [getSearchParam]);
@@ -110,6 +115,8 @@ const Search = (): JSX.Element => {
   const [sortIndex, setSortIndex] = useState<number>(getSortIndexFromSearchParams);
   const [sortDirection, setSortDirection] = useState<SortDirection>(getSortDirectionFromSearchParams(sortIndex));
   const [searchOfficialOnly, setSearchOfficialOnly] = useState<boolean>(getSearchOfficialOnlyFromSearchParams);
+  const [installBucketName, setInstallBucketName] = useState<boolean>(getInstallBucketNameFromSearchParams());
+
   const [searchResults, setSearchResults] = useState<SearchResultsJson>();
   const [officialRepositories, setOfficialRepositories] = useState<{ [key: string]: string }>({});
   const [selectedResult, setSelectedResult] = useState<ManifestJson | null>();
@@ -126,13 +133,20 @@ const Search = (): JSX.Element => {
     setCurrentPage(getCurrentPageFromSearchParams());
   }, [getCurrentPageFromSearchParams]);
 
-  useEffect(() => {
-    const sortIndexFromUrl = getSortIndexFromSearchParams();
-    const sortDirectionFromUrl = getSortDirectionFromSearchParams(sortIndexFromUrl);
-    setSortIndex(sortIndexFromUrl);
-    setSortDirection(sortDirectionFromUrl);
+
+  if (getSortIndexFromSearchParams() !== sortIndex) {
+    setSortIndex(getSortIndexFromSearchParams());
+  }
+  if (getSortDirectionFromSearchParams(getSortIndexFromSearchParams()) !== sortDirection) {
+    setSortIndex(getSortDirectionFromSearchParams(getSortIndexFromSearchParams()));
+  }
+  if (getSearchOfficialOnlyFromSearchParams() !== searchOfficialOnly) {
     setSearchOfficialOnly(getSearchOfficialOnlyFromSearchParams());
-  }, [getSortIndexFromSearchParams, getSortDirectionFromSearchParams, getSearchOfficialOnlyFromSearchParams]);
+  }
+  if (getInstallBucketNameFromSearchParams() !== installBucketName) {
+    setInstallBucketName(getInstallBucketNameFromSearchParams());
+  }
+
 
   useEffect(() => {
     if (searchResults?.results && selectedResultId) {
@@ -219,6 +233,15 @@ const Search = (): JSX.Element => {
     setSelectedResultId('');
   }, []);
 
+  const handleInstallBucketName = useCallback(
+    (newInstallBucketName: boolean): void => {
+      updateSearchParams(SEARCH_PARAM_OPTION_BUCKETNAME, newInstallBucketName.toString(), true);
+
+      setInstallBucketName(newInstallBucketName);
+    },
+    [updateSearchParams]
+  );
+
   return (
     <>
       <Helmet>
@@ -244,6 +267,8 @@ const Search = (): JSX.Element => {
               onResultsChange={handleResultsChange}
               onSortChange={handleSortChange}
               onSearchOfficialOnlyChange={handleSearchOfficialOnlyChange}
+              installBucketName={installBucketName}
+              onInstallBucketName={handleInstallBucketName}
             />
           </Col>
         </Row>
@@ -258,6 +283,8 @@ const Search = (): JSX.Element => {
                 officialRepositories={officialRepositories}
                 onCopyToClipbard={handleCopyToClipboard}
                 onResultSelected={handleResultSelected}
+                installBucketName={installBucketName}
+                onInstallBucketName={handleInstallBucketName}
               />
             ))}
           </Col>
@@ -289,6 +316,8 @@ const Search = (): JSX.Element => {
               result={selectedResult}
               officialRepositories={officialRepositories}
               onCopyToClipbard={handleCopyToClipboard}
+              installBucketName={installBucketName}
+              onInstallBucketName={handleInstallBucketName}
             />
           )}
         </Modal.Body>
