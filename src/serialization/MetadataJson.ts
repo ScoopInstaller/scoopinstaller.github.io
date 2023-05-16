@@ -19,9 +19,6 @@ class MetadataJson {
   @JsonProperty('FilePath', String)
   filePath = '';
 
-  @JsonProperty('AuthorName', String)
-  authorName = '';
-
   @JsonProperty('Committed', DateConverter)
   committed: Date = new Date();
 
