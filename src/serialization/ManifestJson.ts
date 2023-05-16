@@ -53,10 +53,6 @@ class ManifestJson {
     return this.tryGetHighlight('Metadata/Repository', this.metadata.repository);
   }
 
-  get highlightedAuthorName(): HighLight {
-    return this.tryGetHighlight('Metadata/AuthorName', this.metadata.authorName);
-  }
-
   get highlightedDescription(): HighLight {
     return this.tryGetHighlight('Description', this.description);
   }
