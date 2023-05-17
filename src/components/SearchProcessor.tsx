@@ -27,9 +27,10 @@ type SearchProcessorProps = {
   sortDirection: SortDirection;
   officialOnly: boolean;
   onOfficialOnlyChange: (officialOnly: boolean) => void;
+  distinctManifestsOnly: boolean;
+  onDistinctManifestsOnlyChange: (distinctManifestsOnly: boolean) => void;
   installBucketName: boolean;
   onInstallBucketName: (installBucketName: boolean) => void;
-
   resultsPerPage: number;
   onResultsChange: (value?: SearchResultsJson) => void;
   onSortChange: (sortIndex: number, sortDirection: SortDirection) => void;
@@ -94,6 +95,8 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     sortDirection,
     officialOnly,
     onOfficialOnlyChange,
+    distinctManifestsOnly,
+    onDistinctManifestsOnlyChange,
     installBucketName,
     onInstallBucketName,
     onResultsChange,
@@ -113,6 +116,14 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
       onOfficialOnlyChange(!officialOnly);
     },
     [officialOnly, onOfficialOnlyChange]
+  );
+
+  const toggleDistinctManifestsOnly = useCallback(
+    (e: React.MouseEvent<HTMLElement>): void => {
+      e.currentTarget.blur();
+      onDistinctManifestsOnlyChange(!distinctManifestsOnly);
+    },
+    [distinctManifestsOnly, onDistinctManifestsOnlyChange]
   );
 
   const toggleInstallBucketName = useCallback(
@@ -151,6 +162,15 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
         throw new Error('VITE_APP_AZURESEARCH_KEY is not defined');
       }
 
+      const filters: string[] = [];
+      if (officialOnly) {
+        filters.push('Metadata/OfficialRepositoryNumber eq 1');
+      }
+
+      if (distinctManifestsOnly) {
+        filters.push('Metadata/DuplicateOf eq null');
+      }
+
       const url = `${VITE_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
       fetch(url, {
         method: 'POST',
@@ -158,7 +178,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
           count: true,
           search: query.trim(),
           searchMode: 'all',
-          filter: searchOfficialOnly ? 'Metadata/OfficialRepositoryNumber eq 1' : '',
+          filter: filters.join(' and '),
           orderby: sortModes[sortIndex].OrderBy[sortDirection].join(', '),
           skip: (page - 1) * resultsPerPage,
           top: resultsPerPage,
@@ -222,7 +242,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     fetchDataAsync(abortControllerRef.current.signal);
 
     return () => abortControllerRef.current.abort();
-  }, [query, page, sortIndex, sortDirection, searchOfficialOnly, resultsPerPage, onResultsChange]);
+  }, [query, page, sortIndex, sortDirection, officialOnly, distinctManifestsOnly, resultsPerPage, onResultsChange]);
 
   const SortIcon = (sortIconProps: { currentSortIndex: number } & IconBaseProps): JSX.Element => {
     const { currentSortIndex, ...sortIconRest } = sortIconProps;
@@ -280,7 +300,12 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
                   </Form.Switch.Label>
                 </Form.Switch>
               </Dropdown.Item>
-
+              <Dropdown.Item as={Button} onClick={(e) => toggleDistinctManifestsOnly(e)}>
+                <Form.Switch className="form-switch-sm">
+                  <Form.Switch.Input checked={distinctManifestsOnly} />
+                  <Form.Switch.Label>Distinct manifests only</Form.Switch.Label>
+                </Form.Switch>
+              </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Header>Option</Dropdown.Header>
               <Dropdown.Item as={Button} onClick={(e) => toggleInstallBucketName(e)}>

@@ -18,6 +18,7 @@ const SEARCH_PARAM_PAGE = 'p';
 const SEARCH_PARAM_SORT_INDEX = 's';
 const SEARCH_PARAM_SORT_DIRECTION = 'd';
 const SEARCH_PARAM_FILTER_OFFICIALONLY = 'o';
+const SEARCH_PARAM_FILTER_DISTINCTONLY = 'dm';
 const SEARCH_PARAM_OPTION_BUCKETNAME = 'n';
 const SEARCH_PARAM_SELECTED_RESULT = 'id';
 const SEARCH_DEBOUNCE_TIME_IN_MS = 500;
@@ -81,6 +82,10 @@ const Search = (): JSX.Element => {
     return getSearchParam(SEARCH_PARAM_FILTER_OFFICIALONLY, true);
   }, [getSearchParam]);
 
+  const getDistinctManifestsOnlyFromSearchParams = useCallback((): boolean => {
+    return getSearchParam(SEARCH_PARAM_FILTER_DISTINCTONLY, true);
+  }, [getSearchParam]);
+
   const getInstallBucketNameFromSearchParams = useCallback((): boolean => {
     return getSearchParam(SEARCH_PARAM_OPTION_BUCKETNAME, true);
   }, [getSearchParam]);
@@ -115,8 +120,10 @@ const Search = (): JSX.Element => {
   const [sortIndex, setSortIndex] = useState<number>(getSortIndexFromSearchParams);
   const [sortDirection, setSortDirection] = useState<SortDirection>(getSortDirectionFromSearchParams(sortIndex));
   const [officialOnly, setOfficialOnly] = useState<boolean>(getOfficialOnlyFromSearchParams);
+  const [distinctManifestsOnly, setDistinctManifestsOnly] = useState<boolean>(
+    getDistinctManifestsOnlyFromSearchParams()
+  );
   const [installBucketName, setInstallBucketName] = useState<boolean>(getInstallBucketNameFromSearchParams());
-
   const [searchResults, setSearchResults] = useState<SearchResultsJson>();
   const [officialRepositories, setOfficialRepositories] = useState<{ [key: string]: string }>({});
   const [selectedResult, setSelectedResult] = useState<ManifestJson | null>();
@@ -141,6 +148,9 @@ const Search = (): JSX.Element => {
   }
   if (getOfficialOnlyFromSearchParams() !== officialOnly) {
     setOfficialOnly(getOfficialOnlyFromSearchParams());
+  }
+  if (getDistinctManifestsOnlyFromSearchParams() !== distinctManifestsOnly) {
+    setDistinctManifestsOnly(getDistinctManifestsOnlyFromSearchParams());
   }
   if (getInstallBucketNameFromSearchParams() !== installBucketName) {
     setInstallBucketName(getInstallBucketNameFromSearchParams());
@@ -221,6 +231,14 @@ const Search = (): JSX.Element => {
     [updateSearchParams]
   );
 
+  const handleDistinctManifestsOnlyChange = useCallback(
+    (newDistinctManifestsOnly: boolean): void => {
+      updateSearchParams(SEARCH_PARAM_FILTER_DISTINCTONLY, newDistinctManifestsOnly.toString(), true);
+      setDistinctManifestsOnly(newDistinctManifestsOnly);
+    },
+    [updateSearchParams]
+  );
+
   const handleCopyToClipboard = useCallback((newContentToCopy: string): void => {
     const handleCopyToClipboardAsync = async (data: string) => {
       await navigator.clipboard.writeText(data);
@@ -268,6 +286,8 @@ const Search = (): JSX.Element => {
               sortDirection={sortDirection}
               officialOnly={officialOnly}
               onOfficialOnlyChange={handleOfficialOnlyChange}
+              distinctManifestsOnly={distinctManifestsOnly}
+              onDistinctManifestsOnlyChange={handleDistinctManifestsOnlyChange}
               onResultsChange={handleResultsChange}
               onSortChange={handleSortChange}
               installBucketName={installBucketName}
