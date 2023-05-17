@@ -25,8 +25,8 @@ type SearchProcessorProps = {
   query: string;
   sortIndex: number;
   sortDirection: SortDirection;
-  searchOfficialOnly: boolean;
-  onSearchOfficialOnlyChange: (searchOfficialOnly: boolean) => void;
+  officialOnly: boolean;
+  onOfficialOnlyChange: (officialOnly: boolean) => void;
   installBucketName: boolean;
   onInstallBucketName: (installBucketName: boolean) => void;
 
@@ -92,8 +92,8 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     resultsPerPage,
     sortIndex,
     sortDirection,
-    searchOfficialOnly,
-    onSearchOfficialOnlyChange,
+    officialOnly,
+    onOfficialOnlyChange,
     installBucketName,
     onInstallBucketName,
     onResultsChange,
@@ -107,12 +107,12 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     [onSortChange]
   );
 
-  const toggleSearchOfficialOnly = useCallback(
+  const toggleOfficialOnly = useCallback(
     (e: React.MouseEvent<HTMLElement>): void => {
       e.currentTarget.blur();
-      onSearchOfficialOnlyChange(!searchOfficialOnly);
+      onOfficialOnlyChange(!officialOnly);
     },
-    [searchOfficialOnly, onSearchOfficialOnlyChange]
+    [officialOnly, onOfficialOnlyChange]
   );
 
   const toggleInstallBucketName = useCallback(
@@ -240,7 +240,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
 
   const formatSortingAndFiltering = () => {
     const currentSort = sortModes[sortIndex].DisplayName;
-    const currentFilter = searchOfficialOnly ? 'Official buckets only' : 'All buckets';
+    const currentFilter = officialOnly ? 'Official buckets only' : 'All buckets';
     return `${currentSort}, ${currentFilter}`;
   };
 
@@ -272,9 +272,9 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
               ))}
               <Dropdown.Divider />
               <Dropdown.Header>Filtering</Dropdown.Header>
-              <Dropdown.Item as={Button} onClick={(e) => toggleSearchOfficialOnly(e)}>
+              <Dropdown.Item as={Button} onClick={(e) => toggleOfficialOnly(e)}>
                 <Form.Switch className="form-switch-sm">
-                  <Form.Switch.Input checked={searchOfficialOnly} />
+                  <Form.Switch.Input checked={officialOnly} />
                   <Form.Switch.Label>
                     Official buckets only <BucketTypeIcon className="ms-1" official showTooltip={false} />
                   </Form.Switch.Label>

@@ -77,7 +77,7 @@ const Search = (): JSX.Element => {
     [getSearchParam]
   );
 
-  const getSearchOfficialOnlyFromSearchParams = useCallback((): boolean => {
+  const getOfficialOnlyFromSearchParams = useCallback((): boolean => {
     return getSearchParam(SEARCH_PARAM_FILTER_OFFICIALONLY, true);
   }, [getSearchParam]);
 
@@ -114,7 +114,7 @@ const Search = (): JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(getCurrentPageFromSearchParams);
   const [sortIndex, setSortIndex] = useState<number>(getSortIndexFromSearchParams);
   const [sortDirection, setSortDirection] = useState<SortDirection>(getSortDirectionFromSearchParams(sortIndex));
-  const [searchOfficialOnly, setSearchOfficialOnly] = useState<boolean>(getSearchOfficialOnlyFromSearchParams);
+  const [officialOnly, setOfficialOnly] = useState<boolean>(getOfficialOnlyFromSearchParams);
   const [installBucketName, setInstallBucketName] = useState<boolean>(getInstallBucketNameFromSearchParams());
 
   const [searchResults, setSearchResults] = useState<SearchResultsJson>();
@@ -139,8 +139,8 @@ const Search = (): JSX.Element => {
   if (getSortDirectionFromSearchParams(getSortIndexFromSearchParams()) !== sortDirection) {
     setSortIndex(getSortDirectionFromSearchParams(getSortIndexFromSearchParams()));
   }
-  if (getSearchOfficialOnlyFromSearchParams() !== searchOfficialOnly) {
-    setSearchOfficialOnly(getSearchOfficialOnlyFromSearchParams());
+  if (getOfficialOnlyFromSearchParams() !== officialOnly) {
+    setOfficialOnly(getOfficialOnlyFromSearchParams());
   }
   if (getInstallBucketNameFromSearchParams() !== installBucketName) {
     setInstallBucketName(getInstallBucketNameFromSearchParams());
@@ -213,10 +213,10 @@ const Search = (): JSX.Element => {
     [updateSearchParams]
   );
 
-  const handleSearchOfficialOnlyChange = useCallback(
-    (newSearchOfficialOnly: boolean): void => {
-      updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, newSearchOfficialOnly.toString(), true);
-      setSearchOfficialOnly(newSearchOfficialOnly);
+  const handleOfficialOnlyChange = useCallback(
+    (newOfficialOnly: boolean): void => {
+      updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, newOfficialOnly.toString(), true);
+      setOfficialOnly(newOfficialOnly);
     },
     [updateSearchParams]
   );
@@ -266,8 +266,8 @@ const Search = (): JSX.Element => {
               query={debouncedQuery}
               sortIndex={sortIndex}
               sortDirection={sortDirection}
-              searchOfficialOnly={searchOfficialOnly}
-              onSearchOfficialOnlyChange={handleSearchOfficialOnlyChange}
+              officialOnly={officialOnly}
+              onOfficialOnlyChange={handleOfficialOnlyChange}
               onResultsChange={handleResultsChange}
               onSortChange={handleSortChange}
               installBucketName={installBucketName}
