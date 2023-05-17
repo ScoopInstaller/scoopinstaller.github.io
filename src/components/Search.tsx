@@ -146,7 +146,6 @@ const Search = (): JSX.Element => {
     setInstallBucketName(getInstallBucketNameFromSearchParams());
   }
 
-
   useEffect(() => {
     if (searchResults?.results && selectedResultId) {
       const selectedResultManifest = searchResults.results.find((x) => x.id === selectedResultId);
@@ -206,18 +205,18 @@ const Search = (): JSX.Element => {
 
   const handleSortChange = useCallback(
     (newSortIndex: number, newSortDirection: SortDirection): void => {
-    updateSearchParams(SEARCH_PARAM_SORT_INDEX, newSortIndex.toString(), true);
-    updateSearchParams(SEARCH_PARAM_SORT_DIRECTION, newSortDirection.toString(), true);
-    setSortIndex(newSortIndex);
-    setSortDirection(newSortDirection);
+      updateSearchParams(SEARCH_PARAM_SORT_INDEX, newSortIndex.toString(), true);
+      updateSearchParams(SEARCH_PARAM_SORT_DIRECTION, newSortDirection.toString(), true);
+      setSortIndex(newSortIndex);
+      setSortDirection(newSortDirection);
     },
     [updateSearchParams]
   );
 
   const handleSearchOfficialOnlyChange = useCallback(
     (newSearchOfficialOnly: boolean): void => {
-    updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, newSearchOfficialOnly.toString(), true);
-    setSearchOfficialOnly(newSearchOfficialOnly);
+      updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, newSearchOfficialOnly.toString(), true);
+      setSearchOfficialOnly(newSearchOfficialOnly);
     },
     [updateSearchParams]
   );
