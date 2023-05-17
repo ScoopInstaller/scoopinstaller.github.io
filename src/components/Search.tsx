@@ -4,13 +4,13 @@ import { Container, Row, Col, Modal } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';
 import { useSearchParams } from 'react-router-dom';
 
+import { requestIdleCallback } from '../request-idle-callback';
+import ManifestJson from '../serialization/ManifestJson';
+import SearchResultsJson from '../serialization/SearchResultsJson';
 import SearchBar from './SearchBar';
 import SearchPagination from './SearchPagination';
 import SearchProcessor, { SortDirection, sortModes } from './SearchProcessor';
 import SearchResult from './SearchResult';
-import { requestIdleCallback } from '../request-idle-callback';
-import ManifestJson from '../serialization/ManifestJson';
-import SearchResultsJson from '../serialization/SearchResultsJson';
 
 const RESULTS_PER_PAGE = 20;
 const SEARCH_PARAM_QUERY = 'q';
@@ -133,7 +133,6 @@ const Search = (): JSX.Element => {
     setCurrentPage(getCurrentPageFromSearchParams());
   }, [getCurrentPageFromSearchParams]);
 
-
   if (getSortIndexFromSearchParams() !== sortIndex) {
     setSortIndex(getSortIndexFromSearchParams());
   }
@@ -205,17 +204,23 @@ const Search = (): JSX.Element => {
     [updateSearchParams]
   );
 
-  const handleSortChange = (newSortIndex: number, newSortDirection: SortDirection): void => {
+  const handleSortChange = useCallback(
+    (newSortIndex: number, newSortDirection: SortDirection): void => {
     updateSearchParams(SEARCH_PARAM_SORT_INDEX, newSortIndex.toString(), true);
     updateSearchParams(SEARCH_PARAM_SORT_DIRECTION, newSortDirection.toString(), true);
     setSortIndex(newSortIndex);
     setSortDirection(newSortDirection);
-  };
+    },
+    [updateSearchParams]
+  );
 
-  const handleSearchOfficialOnlyChange = (newSearchOfficialOnly: boolean): void => {
+  const handleSearchOfficialOnlyChange = useCallback(
+    (newSearchOfficialOnly: boolean): void => {
     updateSearchParams(SEARCH_PARAM_FILTER_OFFICIALONLY, newSearchOfficialOnly.toString(), true);
     setSearchOfficialOnly(newSearchOfficialOnly);
-  };
+    },
+    [updateSearchParams]
+  );
 
   const handleCopyToClipboard = useCallback((newContentToCopy: string): void => {
     const handleCopyToClipboardAsync = async (data: string) => {
@@ -236,7 +241,6 @@ const Search = (): JSX.Element => {
   const handleInstallBucketName = useCallback(
     (newInstallBucketName: boolean): void => {
       updateSearchParams(SEARCH_PARAM_OPTION_BUCKETNAME, newInstallBucketName.toString(), true);
-
       setInstallBucketName(newInstallBucketName);
     },
     [updateSearchParams]
@@ -264,9 +268,9 @@ const Search = (): JSX.Element => {
               sortIndex={sortIndex}
               sortDirection={sortDirection}
               searchOfficialOnly={searchOfficialOnly}
+              onSearchOfficialOnlyChange={handleSearchOfficialOnlyChange}
               onResultsChange={handleResultsChange}
               onSortChange={handleSortChange}
-              onSearchOfficialOnlyChange={handleSearchOfficialOnlyChange}
               installBucketName={installBucketName}
               onInstallBucketName={handleInstallBucketName}
             />
@@ -281,10 +285,9 @@ const Search = (): JSX.Element => {
                 key={searchResult.id}
                 result={searchResult}
                 officialRepositories={officialRepositories}
+                installBucketName={installBucketName}
                 onCopyToClipbard={handleCopyToClipboard}
                 onResultSelected={handleResultSelected}
-                installBucketName={installBucketName}
-                onInstallBucketName={handleInstallBucketName}
               />
             ))}
           </Col>
@@ -315,9 +318,8 @@ const Search = (): JSX.Element => {
             <SearchResult
               result={selectedResult}
               officialRepositories={officialRepositories}
-              onCopyToClipbard={handleCopyToClipboard}
               installBucketName={installBucketName}
-              onInstallBucketName={handleInstallBucketName}
+              onCopyToClipbard={handleCopyToClipboard}
             />
           )}
         </Modal.Body>
