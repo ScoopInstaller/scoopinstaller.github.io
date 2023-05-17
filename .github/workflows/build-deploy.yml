@@ -29,6 +29,9 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Code linter
+      run: npm run lint
+
     - name: Build Staging Website
       run: npm run build
       env:
