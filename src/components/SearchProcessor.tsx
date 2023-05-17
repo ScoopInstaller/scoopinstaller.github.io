@@ -25,11 +25,12 @@ type SearchProcessorProps = {
   query: string;
   sortIndex: number;
   sortDirection: SortDirection;
-  searchOfficialOnly: boolean;
-  onSearchOfficialOnlyChange: (searchOfficialOnly: boolean) => void;
+  officialOnly: boolean;
+  onOfficialOnlyChange: (officialOnly: boolean) => void;
+  distinctManifestsOnly: boolean;
+  onDistinctManifestsOnlyChange: (distinctManifestsOnly: boolean) => void;
   installBucketName: boolean;
   onInstallBucketName: (installBucketName: boolean) => void;
-
   resultsPerPage: number;
   onResultsChange: (value?: SearchResultsJson) => void;
   onSortChange: (sortIndex: number, sortDirection: SortDirection) => void;
@@ -92,8 +93,10 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     resultsPerPage,
     sortIndex,
     sortDirection,
-    searchOfficialOnly,
-    onSearchOfficialOnlyChange,
+    officialOnly,
+    onOfficialOnlyChange,
+    distinctManifestsOnly,
+    onDistinctManifestsOnlyChange,
     installBucketName,
     onInstallBucketName,
     onResultsChange,
@@ -107,12 +110,20 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     [onSortChange]
   );
 
-  const toggleSearchOfficialOnly = useCallback(
+  const toggleOfficialOnly = useCallback(
     (e: React.MouseEvent<HTMLElement>): void => {
       e.currentTarget.blur();
-      onSearchOfficialOnlyChange(!searchOfficialOnly);
+      onOfficialOnlyChange(!officialOnly);
     },
-    [searchOfficialOnly, onSearchOfficialOnlyChange]
+    [officialOnly, onOfficialOnlyChange]
+  );
+
+  const toggleDistinctManifestsOnly = useCallback(
+    (e: React.MouseEvent<HTMLElement>): void => {
+      e.currentTarget.blur();
+      onDistinctManifestsOnlyChange(!distinctManifestsOnly);
+    },
+    [distinctManifestsOnly, onDistinctManifestsOnlyChange]
   );
 
   const toggleInstallBucketName = useCallback(
@@ -151,6 +162,15 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
         throw new Error('VITE_APP_AZURESEARCH_KEY is not defined');
       }
 
+      const filters: string[] = [];
+      if (officialOnly) {
+        filters.push('Metadata/OfficialRepositoryNumber eq 1');
+      }
+
+      if (distinctManifestsOnly) {
+        filters.push('Metadata/DuplicateOf eq null');
+      }
+
       const url = `${VITE_APP_AZURESEARCH_URL}/search?api-version=2020-06-30`;
       fetch(url, {
         method: 'POST',
@@ -158,7 +178,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
           count: true,
           search: query.trim(),
           searchMode: 'all',
-          filter: searchOfficialOnly ? 'Metadata/OfficialRepositoryNumber eq 1' : '',
+          filter: filters.join(' and '),
           orderby: sortModes[sortIndex].OrderBy[sortDirection].join(', '),
           skip: (page - 1) * resultsPerPage,
           top: resultsPerPage,
@@ -222,7 +242,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     fetchDataAsync(abortControllerRef.current.signal);
 
     return () => abortControllerRef.current.abort();
-  }, [query, page, sortIndex, sortDirection, searchOfficialOnly, resultsPerPage, onResultsChange]);
+  }, [query, page, sortIndex, sortDirection, officialOnly, distinctManifestsOnly, resultsPerPage, onResultsChange]);
 
   const SortIcon = (sortIconProps: { currentSortIndex: number } & IconBaseProps): JSX.Element => {
     const { currentSortIndex, ...sortIconRest } = sortIconProps;
@@ -240,7 +260,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
 
   const formatSortingAndFiltering = () => {
     const currentSort = sortModes[sortIndex].DisplayName;
-    const currentFilter = searchOfficialOnly ? 'Official buckets only' : 'All buckets';
+    const currentFilter = officialOnly ? 'Official buckets only' : 'All buckets';
     return `${currentSort}, ${currentFilter}`;
   };
 
@@ -272,15 +292,20 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
               ))}
               <Dropdown.Divider />
               <Dropdown.Header>Filtering</Dropdown.Header>
-              <Dropdown.Item as={Button} onClick={(e) => toggleSearchOfficialOnly(e)}>
+              <Dropdown.Item as={Button} onClick={(e) => toggleOfficialOnly(e)}>
                 <Form.Switch className="form-switch-sm">
-                  <Form.Switch.Input checked={searchOfficialOnly} />
+                  <Form.Switch.Input checked={officialOnly} />
                   <Form.Switch.Label>
                     Official buckets only <BucketTypeIcon className="ms-1" official showTooltip={false} />
                   </Form.Switch.Label>
                 </Form.Switch>
               </Dropdown.Item>
-
+              <Dropdown.Item as={Button} onClick={(e) => toggleDistinctManifestsOnly(e)}>
+                <Form.Switch className="form-switch-sm">
+                  <Form.Switch.Input checked={distinctManifestsOnly} />
+                  <Form.Switch.Label>Distinct manifests only</Form.Switch.Label>
+                </Form.Switch>
+              </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Header>Option</Dropdown.Header>
               <Dropdown.Item as={Button} onClick={(e) => toggleInstallBucketName(e)}>
