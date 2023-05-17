@@ -9,10 +9,10 @@ import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
 import supportedSpdxLicenses from 'spdx-license-ids/index.json';
 
-import BucketTypeIcon from './BucketTypeIcon';
-import CopyToClipboardButton from './CopyToClipboardButton';
 import ManifestJson from '../serialization/ManifestJson';
 import Utils from '../utils';
+import BucketTypeIcon from './BucketTypeIcon';
+import CopyToClipboardButton from './CopyToClipboardButton';
 
 const spdxLicenses = supportedSpdxLicenses.concat(deprecatedSpdxLicenses);
 
@@ -22,16 +22,14 @@ dayjs.extend(relativeTime);
 type SearchResultProps = {
   result: ManifestJson;
   officialRepositories: { [key: string]: string };
+  installBucketName: boolean;
   onCopyToClipbard: (content: string) => void;
   onResultSelected?: (result: ManifestJson) => void;
   cardRef?: React.RefObject<HTMLDivElement>;
-
-  installBucketName: boolean;
-  onInstallBucketName: (installBucketName: boolean) => void;
 };
 
 const SearchResult = (props: SearchResultProps): JSX.Element => {
-  const { result, officialRepositories, onCopyToClipbard, onResultSelected, cardRef, installBucketName } = props;
+  const { result, officialRepositories, installBucketName, onCopyToClipbard, onResultSelected, cardRef } = props;
   const homepageRef = useRef<HTMLSpanElement>(null);
   const [homepageTooltipHidden, setHomepageTooltipHidden] = useState<boolean>(false);
 

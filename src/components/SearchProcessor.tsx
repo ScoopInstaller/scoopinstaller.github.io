@@ -5,9 +5,9 @@ import { IconBaseProps } from 'react-icons';
 import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 import { GoSettings } from 'react-icons/go';
 
+import SearchResultsJson from '../serialization/SearchResultsJson';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
-import SearchResultsJson from '../serialization/SearchResultsJson';
 
 export enum SortDirection {
   Ascending,
@@ -26,14 +26,13 @@ type SearchProcessorProps = {
   sortIndex: number;
   sortDirection: SortDirection;
   searchOfficialOnly: boolean;
-
+  onSearchOfficialOnlyChange: (searchOfficialOnly: boolean) => void;
   installBucketName: boolean;
   onInstallBucketName: (installBucketName: boolean) => void;
 
   resultsPerPage: number;
   onResultsChange: (value?: SearchResultsJson) => void;
   onSortChange: (sortIndex: number, sortDirection: SortDirection) => void;
-  onSearchOfficialOnlyChange: (searchOfficialOnly: boolean) => void;
 };
 
 export const sortModes: SortMode[] = [
@@ -94,11 +93,11 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     sortIndex,
     sortDirection,
     searchOfficialOnly,
-    onResultsChange,
-    onSortChange,
     onSearchOfficialOnlyChange,
     installBucketName,
     onInstallBucketName,
+    onResultsChange,
+    onSortChange,
   } = props;
 
   const handleSortChange = useCallback(
