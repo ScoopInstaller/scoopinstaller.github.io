@@ -86,8 +86,8 @@ const Home = (): JSX.Element => {
           (version 5.1 or later) and run:
         </p>
         <SyntaxHighlighter language="powershell">
-          {`> Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
-> irm get.scoop.sh | iex`}
+          {`> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+> Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression`}
         </SyntaxHighlighter>
         <p className="text-center">
           For advanced installation options, check out the{' '}
