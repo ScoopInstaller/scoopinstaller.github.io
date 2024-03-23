@@ -83,7 +83,7 @@ const Home = (): JSX.Element => {
           >
             PowerShell terminal
           </abbr>{' '}
-          (version 5.1 or later) and from the PS C:\> prompt, run:
+          (version 5.1 or later) and from the PS C:\&gt; prompt, run:
         </p>
         <SyntaxHighlighter language="powershell">
           {`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
