@@ -83,11 +83,11 @@ const Home = (): JSX.Element => {
           >
             PowerShell terminal
           </abbr>{' '}
-          (version 5.1 or later) and run:
+          (version 5.1 or later) and from the PS C:\&gt; prompt, run:
         </p>
         <SyntaxHighlighter language="powershell">
-          {`> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-> Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression`}
+          {`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression`}
         </SyntaxHighlighter>
         <p className="text-center">
           For advanced installation options, check out the{' '}

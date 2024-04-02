@@ -3,7 +3,7 @@
 
 # Scoop website
 
-This repository is used to build the Scoop website https://scoopinstaller.github.io
+This repository is used to build the Scoop website https://scoop.sh
 
 
 ### Build this project
