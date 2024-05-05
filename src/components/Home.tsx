@@ -8,9 +8,9 @@ import powershell from 'react-syntax-highlighter/dist/esm/languages/prism/powers
 import darkStyle from 'react-syntax-highlighter/dist/esm/styles/prism/a11y-dark';
 import lightStyle from 'react-syntax-highlighter/dist/esm/styles/prism/ghcolors';
 
-import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
 import AsciinemaCasts, { AsciinemaCastItem } from './AsciinemaCasts';
 import SearchBar from './SearchBar';
+import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
 
 SyntaxHighlighterBase.registerLanguage('powershell', powershell);
 SyntaxHighlighterBase.registerLanguage('json', json);

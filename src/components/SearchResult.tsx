@@ -9,10 +9,10 @@ import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
 import supportedSpdxLicenses from 'spdx-license-ids/index.json';
 
-import ManifestJson from '../serialization/ManifestJson';
-import Utils from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 import CopyToClipboardButton from './CopyToClipboardButton';
+import ManifestJson from '../serialization/ManifestJson';
+import Utils from '../utils';
 
 const spdxLicenses = supportedSpdxLicenses.concat(deprecatedSpdxLicenses);
 
