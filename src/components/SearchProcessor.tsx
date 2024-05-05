@@ -188,6 +188,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
             'NamePartial',
             'NameSuffix',
             'Description',
+            'Notes',
             'Homepage',
             'License',
             'Version',

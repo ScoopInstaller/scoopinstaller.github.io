@@ -26,6 +26,9 @@ class ManifestJson {
   @JsonProperty('Description', String, true)
   description?: string = undefined;
 
+  @JsonProperty('Notes', String, true)
+  notes?: string = undefined;
+
   @JsonProperty('Homepage', String, true)
   homepage?: string = undefined;
 
