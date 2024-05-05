@@ -5,9 +5,9 @@ import { IconBaseProps } from 'react-icons';
 import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 import { GoSettings } from 'react-icons/go';
 
-import SearchResultsJson from '../serialization/SearchResultsJson';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
+import SearchResultsJson from '../serialization/SearchResultsJson';
 
 export enum SortDirection {
   Ascending,
