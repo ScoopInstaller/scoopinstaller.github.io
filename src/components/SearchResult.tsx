@@ -4,15 +4,15 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Card, Col, Container, Form, InputGroup, InputGroupProps, Row } from 'react-bootstrap';
-import { GoLinkExternal, GoBook, GoPackage, GoClock } from 'react-icons/go';
+import { GoLinkExternal, GoBook, GoPackage, GoClock, GoLaw } from 'react-icons/go';
 import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
 import supportedSpdxLicenses from 'spdx-license-ids/index.json';
 
-import ManifestJson from '../serialization/ManifestJson';
-import Utils from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 import CopyToClipboardButton from './CopyToClipboardButton';
+import ManifestJson from '../serialization/ManifestJson';
+import Utils from '../utils';
 
 const spdxLicenses = supportedSpdxLicenses.concat(deprecatedSpdxLicenses);
 
@@ -99,6 +99,7 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
     favicon,
     highlightedName,
     highlightedDescription,
+    notes,
     highlightedLicense,
     highlightedRepository,
     highlightedVersion,
@@ -179,11 +180,17 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
                 )}
                 {license && (
                   <span>
-                    <GoBook title="License" className="me-1" />
+                    <GoLaw title="License" className="me-1" />
                     {(license && spdxLicenses.includes(license) && (
                       <a href={`https://spdx.org/licenses/${license}.html`}>{displayInnerHtml(highlightedLicense)}</a>
                     )) ||
                       displayInnerHtml(highlightedLicense)}
+                  </span>
+                )}
+                {notes && (
+                  <span>
+                    <GoBook title="Notes" className="me-1" />
+                    {notes}
                   </span>
                 )}
               </Row>

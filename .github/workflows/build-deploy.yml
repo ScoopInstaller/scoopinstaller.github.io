@@ -9,7 +9,7 @@ on:
 
 env:
   BUILD_PATH: ${{ github.workspace }}/build
-  NODE_VERSION: '16'
+  NODE_VERSION: '20'
   VITE_APP_AZURESEARCH_KEY: ${{ secrets.VITE_APP_AZURESEARCH_KEY }}
 
 jobs:
@@ -19,10 +19,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Node.js ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
 
@@ -38,7 +38,7 @@ jobs:
         BASE_PATH: /scoopinstaller-dev.github.io/
 
     - name: Upload Staging Website
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: staging_website
         path: ${{ env.BUILD_PATH }}
@@ -49,13 +49,13 @@ jobs:
         BASE_PATH: /
 
     - name: Upload Production Website
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: production_website
         path: ${{ env.BUILD_PATH }}
 
     - name: Upload stats
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: stats
         path: ${{ github.workspace }}/build_stats
@@ -72,13 +72,13 @@ jobs:
 
     steps:
     - name: Download artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
           name: staging_website
           path: ${{ env.BUILD_PATH }}
 
     - name: Deploy website
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         deploy_key: ${{ secrets.GHPAGES_DEPLOY_KEY_DEV }}
         external_repository: ScoopInstaller/scoopinstaller-dev.github.io
@@ -97,13 +97,13 @@ jobs:
 
     steps:
     - name: Download artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
           name: production_website
           path: ${{ env.BUILD_PATH }}
 
     - name: Deploy website
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages

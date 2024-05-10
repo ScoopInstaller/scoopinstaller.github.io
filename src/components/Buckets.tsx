@@ -5,10 +5,10 @@ import Table from 'react-bootstrap/Table';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 
-import BucketsResultsJson from '../serialization/BucketsResultsJson';
-import Utils from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
+import BucketsResultsJson from '../serialization/BucketsResultsJson';
+import Utils from '../utils';
 
 type Bucket = {
   bucket: string;

@@ -4,7 +4,7 @@ import MetadataJson from './MetadataJson';
 
 type HighLight = string | undefined;
 
-type HighLights = { [propertyName: string]: string } | undefined;
+type HighLights = { [propertyName: string]: string[] } | undefined;
 
 @JsonObject('ManifestJson')
 class ManifestJson {
@@ -25,6 +25,9 @@ class ManifestJson {
 
   @JsonProperty('Description', String, true)
   description?: string = undefined;
+
+  @JsonProperty('Notes', String, true)
+  notes?: string = undefined;
 
   @JsonProperty('Homepage', String, true)
   homepage?: string = undefined;
@@ -81,7 +84,7 @@ class ManifestJson {
       return this.highlights && this.highlights[value];
     });
 
-    return match && this.highlights ? this.highlights[match] : fallback;
+    return match && this.highlights ? this.highlights[match].join(' ') : fallback;
   }
 }
 
