@@ -124,7 +124,6 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
       metadata.repository.substring(metadata.repository.lastIndexOf('/') + 1).toLowerCase()
     : `${Utils.extractPathFromUrl(metadata.repository, '_')}`;
   const bucketUrl = metadata.repositoryOfficial ? '' : `${metadata.repository}`;
-  console.log(bucketName, bucketUrl);
   const bucketCommandLine = `${bucketName} ${bucketUrl}`.trim();
 
   return (
