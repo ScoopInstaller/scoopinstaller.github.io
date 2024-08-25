@@ -17,10 +17,11 @@ type SearchStatusProps = {
   resultsCount: number;
   searching: boolean;
   type: SearchStatusType;
+  officialOnly?: boolean;
 };
 
 const SearchStatus = (props: SearchStatusProps): JSX.Element => {
-  const { searching, resultsCount, query, type } = props;
+  const { searching, resultsCount, query, type, officialOnly } = props;
   const typeDescription = SearchStatusTypeMap[type];
 
   if (searching) {
@@ -50,7 +51,16 @@ const SearchStatus = (props: SearchStatusProps): JSX.Element => {
     );
   }
 
-  return <span>No result found{formattedQuery}.</span>;
+  if (officialOnly) {
+    return (
+      <span>
+        No result found{formattedQuery} from <strong>Official buckets</strong>. Try modifying the filters for possible
+        manifests.
+      </span>
+    );
+  } else {
+    return <span>No result found{formattedQuery}.</span>;
+  }
 };
 
 export default React.memo(SearchStatus);

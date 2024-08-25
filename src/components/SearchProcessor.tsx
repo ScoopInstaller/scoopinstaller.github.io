@@ -268,15 +268,16 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
   return (
     <Form>
       <Row>
-        <Col xs={6} className="my-auto">
+        <Col xs={8} className="my-auto">
           <SearchStatus
             query={query}
             resultsCount={resultsCount}
             searching={searching}
             type={SearchStatusType.Applications}
+            officialOnly={officialOnly}
           />
         </Col>
-        <Col xs={6} className="text-end">
+        <Col xs={4} className="text-end">
           <Dropdown autoClose="outside" align="end" drop="end" className="sorting-filtering-button">
             <Dropdown.Toggle size="sm" variant="secondary">
               <GoSettings className="me-2" />
