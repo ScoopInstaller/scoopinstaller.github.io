@@ -15,7 +15,7 @@
     "react-helmet": "^6.1.0",
     "react-icons": "4.3.1",
     "react-image": "^4.0.3",
-    "react-router-dom": "^6.2.1",
+    "react-router-dom": "^7.5.2",
     "react-syntax-highlighter": "^15.5.0",
     "rollup-plugin-visualizer": "^5.8.3",
     "spdx-license-ids": "^3.0.11",
