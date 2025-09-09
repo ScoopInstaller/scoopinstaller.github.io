@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback, useRef } from 'react';
 
 import { Container, Col, Row } from 'react-bootstrap';
 import { Link, useNavigate, createSearchParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ import darkStyle from 'react-syntax-highlighter/dist/esm/styles/prism/a11y-dark'
 import lightStyle from 'react-syntax-highlighter/dist/esm/styles/prism/ghcolors';
 
 import AsciinemaCasts, { AsciinemaCastItem } from './AsciinemaCasts';
+import CopyToClipboardButton from './CopyToClipboardButton';
 import SearchBar from './SearchBar';
 import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
 
@@ -61,6 +62,39 @@ const Home = (): JSX.Element => {
     );
   };
 
+  const handleCopyToClipboard = useCallback((newContentToCopy: string): void => {
+    const handleCopyToClipboardAsync = async (data: string) => {
+      await navigator.clipboard.writeText(data);
+    };
+
+    handleCopyToClipboardAsync(newContentToCopy).finally(() => {});
+  }, []);
+
+  interface SyntaxHighlighterWithCopyBtnProps extends Omit<SyntaxHighlighterProps, 'children'> {
+    code: string;
+  }
+
+  const SyntaxHighlighterWithCopyBtn = (
+    SyntaxHighlighterWithCopyBtnProps: SyntaxHighlighterWithCopyBtnProps
+  ): JSX.Element => {
+    const { code, ...syntaxHighlighterRest } = SyntaxHighlighterWithCopyBtnProps;
+    const copyToClipboardButtonRef = useRef<HTMLButtonElement>(null);
+
+    return (
+      <Col className="copy-command-group position-relative">
+        <CopyToClipboardButton
+          className="copy-command-button position-absolute top-50 end-0 me-2 translate-middle-y"
+          ref={copyToClipboardButtonRef}
+          title="Copy to clipboard"
+          variant="outline-secondary"
+          onClick={() => handleCopyToClipboard(code)}
+        />
+
+        <SyntaxHighlighter {...syntaxHighlighterRest}>{code}</SyntaxHighlighter>
+      </Col>
+    );
+  };
+
   return (
     <>
       <Container className="mt-5 mb-5">
@@ -85,10 +119,11 @@ const Home = (): JSX.Element => {
           </abbr>{' '}
           (version 5.1 or later) and from the PS C:\&gt; prompt, run:
         </p>
-        <SyntaxHighlighter language="powershell">
-          {`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+        <SyntaxHighlighterWithCopyBtn
+          language="powershell"
+          code={`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression`}
-        </SyntaxHighlighter>
+        />
         <p className="text-center">
           For advanced installation options, check out the{' '}
           <a href="https://github.com/ScoopInstaller/Install#readme"> Installer&apos;s Readme</a>.
