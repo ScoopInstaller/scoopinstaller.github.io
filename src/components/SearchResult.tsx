@@ -126,6 +126,10 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
   const bucketUrl = metadata.repositoryOfficial ? '' : `${metadata.repository}`;
   const bucketCommandLine = `${bucketName} ${bucketUrl}`.trim();
 
+  const bucketCommand = `scoop bucket add ${bucketCommandLine}`;
+  const appCommand = `scoop install ${installBucketName ? bucketName + '/' : ''}${name}`;
+  const fullCommand = `${bucketCommand}\n${appCommand}`;
+
   return (
     <Card key={id} className="mb-2" ref={cardRef}>
       <Card.Header>
@@ -196,13 +200,22 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
             </Col>
             <Col lg={6} className="mt-4 mt-lg-0">
               <Row>
-                <CopyToClipboardComponent value={`scoop bucket add ${bucketCommandLine}`} id="bucket-command" />
-              </Row>
-              <Row className="mt-2">
-                <CopyToClipboardComponent
-                  value={`scoop install ${installBucketName ? bucketName + '/' : ''}${name}`}
-                  id="app-command"
-                />
+                <Col className="pe-1">
+                  <Row>
+                    <CopyToClipboardComponent value={`${bucketCommand}`} id="bucket-command" />
+                  </Row>
+                  <Row className="mt-2">
+                    <CopyToClipboardComponent value={`${appCommand}`} id="app-command" />
+                  </Row>
+                </Col>
+                <Col xs="auto" className="copy-command-group ps-1 d-flex">
+                  <CopyToClipboardButton
+                    className="copy-command-button"
+                    title="Copy all to clipboard"
+                    variant="outline-secondary"
+                    onClick={() => handleCopyToClipboard(`${fullCommand}`)}
+                  />
+                </Col>
               </Row>
             </Col>
           </Row>
