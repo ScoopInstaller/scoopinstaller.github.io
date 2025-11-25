@@ -1,9 +1,8 @@
 import { IconContext } from 'react-icons';
 import { Outlet } from 'react-router-dom';
-
+import ColorSchemeProvider from '../colorscheme/ColorSchemeProvider';
 import Footer from './Footer';
 import NavBar from './NavBar';
-import ColorSchemeProvider from '../colorscheme/ColorSchemeProvider';
 
 const Root = (): JSX.Element => {
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Col, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { FaRegHandshake } from 'react-icons/fa';
 import { GoMarkGithub } from 'react-icons/go';
 

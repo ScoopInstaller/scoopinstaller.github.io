@@ -1,18 +1,16 @@
-import React, { useCallback, useState, useRef } from 'react';
-
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Card, Col, Container, Form, InputGroup, InputGroupProps, Row } from 'react-bootstrap';
-import { GoLinkExternal, GoBook, GoPackage, GoClock, GoLaw } from 'react-icons/go';
+import React, { useCallback, useRef, useState } from 'react';
+import { Card, Col, Container, Form, InputGroup, type InputGroupProps, Row } from 'react-bootstrap';
+import { GoBook, GoClock, GoLaw, GoLinkExternal, GoPackage } from 'react-icons/go';
 import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
 import supportedSpdxLicenses from 'spdx-license-ids/index.json';
-
+import type ManifestJson from '../serialization/ManifestJson';
+import Utils from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 import CopyToClipboardButton from './CopyToClipboardButton';
-import ManifestJson from '../serialization/ManifestJson';
-import Utils from '../utils';
 
 const spdxLicenses = supportedSpdxLicenses.concat(deprecatedSpdxLicenses);
 

@@ -1,4 +1,4 @@
-import { JsonObject, JsonProperty, Any } from 'json2typescript';
+import { Any, JsonObject, JsonProperty } from 'json2typescript';
 
 import MetadataJson from './MetadataJson';
 

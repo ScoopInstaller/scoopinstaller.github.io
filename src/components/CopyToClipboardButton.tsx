@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Button } from 'react-bootstrap';
-import { FaRegClipboard, FaCheck } from 'react-icons/fa';
+import { FaCheck, FaRegClipboard } from 'react-icons/fa';
 
 const CLIPBOARD_COPY_NOTIFICATION_DELAY = 1500;
 

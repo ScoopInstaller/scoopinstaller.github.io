@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { BsSun, BsMoon, BsCircleHalf } from 'react-icons/bs';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
+import { BsCircleHalf, BsMoon, BsSun } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
 import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';

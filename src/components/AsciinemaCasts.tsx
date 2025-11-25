@@ -1,4 +1,4 @@
-import React, { useContext, useState, useLayoutEffect, useRef } from 'react';
+import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 
 import 'asciinema-player/dist/bundle/asciinema-player.css';
 import './asciinema-customthemes.css';

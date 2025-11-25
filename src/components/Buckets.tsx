@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { Container, Col, Row, InputGroup, Form } from 'react-bootstrap';
+import { Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-
-import BucketTypeIcon from './BucketTypeIcon';
-import SearchStatus, { SearchStatusType } from './SearchStatus';
 import BucketsResultsJson from '../serialization/BucketsResultsJson';
 import Utils from '../utils';
+import BucketTypeIcon from './BucketTypeIcon';
+import SearchStatus, { SearchStatusType } from './SearchStatus';
 
 type Bucket = {
   bucket: string;

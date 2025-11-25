@@ -1,4 +1,4 @@
-import { JsonObject, JsonConvert, JsonProperty } from 'json2typescript';
+import { JsonConvert, JsonObject, JsonProperty } from 'json2typescript';
 
 import ManifestJson from './ManifestJson';
 
@@ -14,7 +14,7 @@ class SearchResultsJson {
   count = 0;
 
   @JsonProperty('value', [ManifestJson])
-  results: ManifestJson[] = Array<ManifestJson>();
+  results: ManifestJson[] = [] as ManifestJson[];
 }
 
 export default SearchResultsJson;

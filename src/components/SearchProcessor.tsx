@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { Col, Row, Form, Dropdown, Button } from 'react-bootstrap';
-import { IconBaseProps } from 'react-icons';
+import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap';
+import type { IconBaseProps } from 'react-icons';
 import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 import { GoSettings } from 'react-icons/go';
-
+import SearchResultsJson from '../serialization/SearchResultsJson';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
-import SearchResultsJson from '../serialization/SearchResultsJson';
 
 export enum SortDirection {
   Ascending,

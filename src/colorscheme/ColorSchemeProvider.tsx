@@ -1,6 +1,6 @@
 import { useCallback, useLayoutEffect, useState } from 'react';
 
-import { ColorSchemeContext, defaultState, IColorSchemeContext } from './ColorSchemeContext';
+import { ColorSchemeContext, defaultState, type IColorSchemeContext } from './ColorSchemeContext';
 import { ColorSchemeType } from './ColorSchemeType';
 
 const ColorSchemeProvider = (props: { children: React.ReactNode }): JSX.Element => {

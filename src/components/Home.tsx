@@ -1,17 +1,16 @@
-import React, { useContext, useState, useCallback, useRef } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 
-import { Container, Col, Row } from 'react-bootstrap';
-import { Link, useNavigate, createSearchParams } from 'react-router-dom';
-import { PrismLight as SyntaxHighlighterBase, SyntaxHighlighterProps } from 'react-syntax-highlighter';
+import { Col, Container, Row } from 'react-bootstrap';
+import { createSearchParams, Link, useNavigate } from 'react-router-dom';
+import { PrismLight as SyntaxHighlighterBase, type SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
 import powershell from 'react-syntax-highlighter/dist/esm/languages/prism/powershell';
 import darkStyle from 'react-syntax-highlighter/dist/esm/styles/prism/a11y-dark';
 import lightStyle from 'react-syntax-highlighter/dist/esm/styles/prism/ghcolors';
-
-import AsciinemaCasts, { AsciinemaCastItem } from './AsciinemaCasts';
+import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
+import AsciinemaCasts, { type AsciinemaCastItem } from './AsciinemaCasts';
 import CopyToClipboardButton from './CopyToClipboardButton';
 import SearchBar from './SearchBar';
-import { ColorSchemeContext } from '../colorscheme/ColorSchemeContext';
 
 SyntaxHighlighterBase.registerLanguage('powershell', powershell);
 SyntaxHighlighterBase.registerLanguage('json', json);

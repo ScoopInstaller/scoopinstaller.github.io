@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { GoVerified, GoUnverified, GoStar } from 'react-icons/go';
+import { GoStar, GoUnverified, GoVerified } from 'react-icons/go';
 
 import { DELAY_TOOLTIP } from '../constants';
 

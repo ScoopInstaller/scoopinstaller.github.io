@@ -1,6 +1,6 @@
-import { JsonObject, JsonConvert, JsonProperty } from 'json2typescript';
+import { JsonConvert, JsonObject, JsonProperty } from 'json2typescript';
 
-import BucketsResultsFacetJson from './BucketsResultsFacetJson';
+import type BucketsResultsFacetJson from './BucketsResultsFacetJson';
 
 @JsonObject('BucketsResultsJson')
 class BucketsResultsJson {

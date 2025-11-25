@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { JsonConverter, JsonCustomConvert } from 'json2typescript';
+import { JsonConverter, type JsonCustomConvert } from 'json2typescript';
 
 @JsonConverter
 class DateConverter implements JsonCustomConvert<Date> {
