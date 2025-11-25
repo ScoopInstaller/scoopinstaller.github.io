@@ -1,28 +1,22 @@
 {
-	"name": "ScoopInstaller web frontend (Node.js & TypeScript)",
-	// Use TypeScript + Node 24
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:24",
-	"forwardPorts": [
-		3000
-	],
-	"portsAttributes": {
-		"3000": {
-			"label": "Vite dev server",
-			"onAutoForward": "openBrowser"
-		}
-	},
-	"extensions": [
-		"biomejs.biome"
-	],
-	"customizations": {
-		"codespaces": {
-			"openFiles": [
-				"src/App.tsx"
-			]
-		}
-	},
-	// Install required modules
-	"updateContentCommand": "corepack enable && pnpm install",
-	// Start dev server
-	"postAttachCommand": "pnpm run dev"
+  "name": "ScoopInstaller web frontend (Node.js & TypeScript)",
+  // Use TypeScript + Node 24
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Vite dev server",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "extensions": ["biomejs.biome"],
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["src/App.tsx"]
+    }
+  },
+  // Install required modules
+  "updateContentCommand": "corepack enable && pnpm install",
+  // Start dev server
+  "postAttachCommand": "pnpm run dev"
 }

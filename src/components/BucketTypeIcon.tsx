@@ -29,8 +29,8 @@ const BucketTypeIcon = (props: BucketTypeIconProps): JSX.Element => {
               {official
                 ? 'Official bucket'
                 : stars >= POPULAR_REPOSITORY_THRESHOLD
-                ? 'Popular community bucket'
-                : 'Community bucket'}
+                  ? 'Popular community bucket'
+                  : 'Community bucket'}
             </span>
             {props.stars !== undefined && (
               <span className="ms-1">

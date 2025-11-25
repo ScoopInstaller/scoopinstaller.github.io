@@ -2,13 +2,12 @@ mark {
   background-color: rgba(255, 255, 0, 0.5);
 }
 
-
-
-.copy-command-prefix, .copy-command-text {
+.copy-command-prefix,
+.copy-command-text {
   background-color: var(--bs-gray-100) !important;
   border: 0;
   font-family: var(--bs-font-monospace);
-  line-height: 2.0;
+  line-height: 2;
   user-select: none;
   box-shadow: none !important;
 }
@@ -48,15 +47,16 @@ mark {
   background-color: rgba(var(--bs-success-rgb), 0.8) !important;
 }
 
-
-
 .sorting-filtering-button > button:not(:hover) {
   background-color: var(--bs-gray-200);
   border-color: var(--bs-gray-200);
   color: var(--bs-dark);
 }
 
-.sorting-filtering-menu .btn:focus, .sorting-filtering-menu .btn:active, .sorting-filtering-menu .form-check-input:focus, .sorting-filtering-menu .form-check-input:active {
+.sorting-filtering-menu .btn:focus,
+.sorting-filtering-menu .btn:active,
+.sorting-filtering-menu .form-check-input:focus,
+.sorting-filtering-menu .form-check-input:active {
   box-shadow: none;
 }
 
@@ -66,9 +66,8 @@ mark {
 }
 
 .sorting-filtering-menu > .dropdown-item > .form-switch > * {
-  cursor: pointer
+  cursor: pointer;
 }
-
 
 div.valign-items {
   display: flex;
@@ -122,7 +121,8 @@ html.dark .asciinema-player-border {
   border: 0;
 }
 
-html.dark .copy-command-prefix, html.dark .copy-command-text {
+html.dark .copy-command-prefix,
+html.dark .copy-command-text {
   background-color: var(--bs-gray-800) !important;
 }
 
@@ -142,7 +142,7 @@ html.dark .sorting-filtering-menu > .dropdown-item:active {
 }
 
 html.dark .bg-light {
-  background-color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity)) !important;
+  background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
 }
 
 .modal-selected-result > .modal-dialog > .modal-content {
