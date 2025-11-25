@@ -59,8 +59,8 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
         activeKey={currentCast.key}
         onSelect={(k) => setCurrentCast(casts.find((x) => x.key === k) ?? casts[0])}
       >
-        {casts.map((item, i) => (
-          <Nav.Item key={i}>
+        {casts.map((item) => (
+          <Nav.Item key={item.key}>
             <Nav.Link eventKey={item.key}>{item.displayName}</Nav.Link>
           </Nav.Item>
         ))}
