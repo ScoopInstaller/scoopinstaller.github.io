@@ -20,10 +20,6 @@ mark {
   cursor: pointer;
 }
 
-#app-command > * {
-  font-weight: bold;
-}
-
 .copy-command-group > button {
   border: 0;
   margin-left: 0 !important;
@@ -67,6 +63,10 @@ mark {
 
 .sorting-filtering-menu > .dropdown-item > .form-switch > * {
   cursor: pointer;
+}
+
+#app-command > * {
+  font-weight: bold;
 }
 
 div.valign-items {
