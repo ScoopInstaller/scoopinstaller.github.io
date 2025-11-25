@@ -7,7 +7,7 @@ class BucketsResultsJson {
   private static jsonConvert = new JsonConvert();
 
   static Create(jsonObject: unknown): BucketsResultsJson {
-    return BucketsResultsJson.jsonConvert.deserializeObject(jsonObject, BucketsResultsJson);
+    return BucketsResultsJson.jsonConvert.deserializeObject(jsonObject as object, BucketsResultsJson);
   }
 
   @JsonProperty('@odata.count', Number)
