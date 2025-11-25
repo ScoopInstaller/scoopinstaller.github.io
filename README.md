@@ -18,19 +18,20 @@ cd scoopinstaller.github.io
 
 #### Prerequisites
 - Install a recent [Node](https://nodejs.org/en/ "Node") version >= 24.0.0, e.g. `scoop install nodejs-lts`
-- Run `npm update`
+- Install pnpm: `scoop install pnpm` or `npm install -g pnpm`
+- Run `pnpm install`
 
 #### Launch the application
-- Run `npm run dev`
+- Run `pnpm run dev`
 
 Application should run on http://localhost:3000 or https://localhost:5000 to pass CORS checks and query the search database.
 
 #### Build the application
-- Run `npm run build`
+- Run `pnpm run build`
 
 #### Preview the production build
-- Run `npm run preview`
+- Run `pnpm run preview`
 
 ### Contribute to this project
 Pull requests are most welcome!
-Please target the `main` branch and run `npm run build` (or at least `npm run lint`) to ensure your changes compile and match the code guidelines.
+Please target the `main` branch and run `pnpm run build` (or at least `pnpm run lint`) to ensure your changes compile and match the code guidelines.

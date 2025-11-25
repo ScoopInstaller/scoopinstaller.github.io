@@ -22,7 +22,7 @@
 		}
 	},
 	// Install required modules
-	"updateContentCommand": "npm ci",
+	"updateContentCommand": "corepack enable && pnpm install",
 	// Start dev server
-	"postAttachCommand": "npm run dev"
+	"postAttachCommand": "pnpm run dev"
 }

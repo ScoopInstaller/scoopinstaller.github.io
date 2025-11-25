@@ -21,19 +21,25 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup Node.js ${{ env.NODE_VERSION }}
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+
+    - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
+        cache: "pnpm"
 
     - name: Install dependencies
-      run: npm ci
+      run: pnpm install
 
     - name: Code linter
-      run: npm run lint
+      run: pnpm run lint
 
     - name: Build Staging Website
-      run: npm run build
+      run: pnpm run build
       env:
         BASE_PATH: /scoopinstaller-dev.github.io/
 
@@ -44,7 +50,7 @@ jobs:
         path: ${{ env.BUILD_PATH }}
 
     - name: Build Production Website
-      run: npm run build
+      run: pnpm run build
       env:
         BASE_PATH: /
 
