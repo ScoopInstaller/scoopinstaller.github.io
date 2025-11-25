@@ -12,7 +12,15 @@ export default defineConfig({
     APP_COMMIT_HASH: JSON.stringify(commitHash),
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({
+      filename: 'build_stats/stats_treemap.html',
+      open: false,
+      gzipSize: true,
+      template: 'treemap',
+    }),
+  ],
   base: basePath,
   server: {
     port: 3000,
@@ -23,13 +31,5 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
-    rollupOptions: {
-      plugins: [
-        visualizer({
-          filename: 'build_stats/stats_treemap.html',
-          template: 'treemap',
-        }),
-      ],
-    },
   },
 });

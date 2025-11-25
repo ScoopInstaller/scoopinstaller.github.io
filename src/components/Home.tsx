@@ -17,7 +17,7 @@ SyntaxHighlighterBase.registerLanguage('json', json);
 
 const Home = (): JSX.Element => {
   const { isDarkMode } = useContext(ColorSchemeContext);
-  const colorStyle: unknown = isDarkMode ? darkStyle : lightStyle;
+  const colorStyle = isDarkMode ? darkStyle : lightStyle;
 
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState<string>('');

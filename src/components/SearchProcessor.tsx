@@ -2,8 +2,7 @@ import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react
 
 import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap';
 import type { IconBaseProps } from 'react-icons';
-import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
-import { GoSettings } from 'react-icons/go';
+import { FaCog, FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 import SearchResultsJson from '../serialization/SearchResultsJson';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
@@ -279,7 +278,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
         <Col xs={4} className="text-end">
           <Dropdown autoClose="outside" align="end" drop="end" className="sorting-filtering-button">
             <Dropdown.Toggle size="sm" variant="secondary">
-              <GoSettings className="me-2" />
+              <FaCog className="me-2" />
               <span className="d-none d-sm-inline">{formatSortingAndFiltering()}</span>
             </Dropdown.Toggle>
 
