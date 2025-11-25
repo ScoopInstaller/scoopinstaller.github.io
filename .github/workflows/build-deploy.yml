@@ -9,7 +9,7 @@ on:
 
 env:
   BUILD_PATH: ${{ github.workspace }}/build
-  NODE_VERSION: '20'
+  NODE_VERSION: '24'
   VITE_APP_AZURESEARCH_KEY: ${{ secrets.VITE_APP_AZURESEARCH_KEY }}
 
 jobs:

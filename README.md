@@ -17,7 +17,7 @@ cd scoopinstaller.github.io
 ```
 
 #### Prerequisites
-- Install a recent [Node](https://nodejs.org/en/ "Node") version >= 16.0.0, e.g. `scoop install nodejs`
+- Install a recent [Node](https://nodejs.org/en/ "Node") version >= 24.0.0, e.g. `scoop install nodejs-lts`
 - Run `npm update`
 
 #### Launch the application

@@ -1,7 +1,7 @@
 {
 	"name": "ScoopInstaller web frontend (Node.js & TypeScript)",
-	// Use TypeScript + Node 16
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:16",
+	// Use TypeScript + Node 24
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:24",
 	"forwardPorts": [
 		3000
 	],
