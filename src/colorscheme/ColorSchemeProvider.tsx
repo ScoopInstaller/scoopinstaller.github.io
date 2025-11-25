@@ -4,11 +4,34 @@ import { useCallback, useLayoutEffect, useState } from 'react';
 import { ColorSchemeContext, defaultState, type IColorSchemeContext } from './ColorSchemeContext';
 import { ColorSchemeType } from './ColorSchemeType';
 
-const ColorSchemeProvider = (props: { children: React.ReactNode }): JSX.Element => {
-  const CLASS_NAME_LIGHT = 'light';
-  const CLASS_NAME_DARK = 'dark';
-  const PREFERRED_COLOR_SCHEME_STORAGE = 'preferred-color-scheme';
+const CLASS_NAME_LIGHT = 'light';
+const CLASS_NAME_DARK = 'dark';
+const PREFERRED_COLOR_SCHEME_STORAGE = 'preferred-color-scheme';
 
+const toColorSchemeType = (value: boolean | string | null): ColorSchemeType => {
+  if (value === null) {
+    return ColorSchemeType.Auto;
+  }
+
+  if (typeof value === 'boolean') {
+    return value ? ColorSchemeType.Dark : ColorSchemeType.Light;
+  }
+
+  return parseInt(value, 10) as ColorSchemeType;
+};
+
+const updateUI = (colorSchemePreference: ColorSchemeType) => {
+  const documentRoot = document.getElementsByTagName('html')[0];
+  if (colorSchemePreference === ColorSchemeType.Dark) {
+    documentRoot.classList.remove(CLASS_NAME_LIGHT);
+    documentRoot.classList.add(CLASS_NAME_DARK);
+  } else {
+    documentRoot.classList.remove(CLASS_NAME_DARK);
+    documentRoot.classList.add(CLASS_NAME_LIGHT);
+  }
+};
+
+const ColorSchemeProvider = (props: { children: React.ReactNode }): JSX.Element => {
   const [contextState, setContextState] = useState<IColorSchemeContext>(defaultState);
 
   const [browserColorSchemePreference, setBrowserColorSchemePreference] = useState<ColorSchemeType>();
@@ -33,29 +56,6 @@ const ColorSchemeProvider = (props: { children: React.ReactNode }): JSX.Element 
         break;
     }
   }, [userColorSchemePreference, browserColorSchemePreference]);
-
-  const toColorSchemeType = (value: boolean | string | null): ColorSchemeType => {
-    if (value === null) {
-      return ColorSchemeType.Auto;
-    }
-
-    if (typeof value === 'boolean') {
-      return value ? ColorSchemeType.Dark : ColorSchemeType.Light;
-    }
-
-    return parseInt(value, 10) as ColorSchemeType;
-  };
-
-  const updateUI = (colorSchemePreference: ColorSchemeType) => {
-    const documentRoot = document.getElementsByTagName('html')[0];
-    if (colorSchemePreference === ColorSchemeType.Dark) {
-      documentRoot.classList.remove(CLASS_NAME_LIGHT);
-      documentRoot.classList.add(CLASS_NAME_DARK);
-    } else {
-      documentRoot.classList.remove(CLASS_NAME_DARK);
-      documentRoot.classList.add(CLASS_NAME_LIGHT);
-    }
-  };
 
   useLayoutEffect(() => {
     if (userColorSchemePreference === undefined || browserColorSchemePreference === undefined) {
