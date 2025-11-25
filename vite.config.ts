@@ -1,6 +1,5 @@
-import { execSync } from 'child_process';
-
 import react from '@vitejs/plugin-react';
+import { execSync } from 'node:child_process';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 
