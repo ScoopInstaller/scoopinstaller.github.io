@@ -17,12 +17,12 @@ const SearchBar = (props: SearchBarProps): JSX.Element => {
   const delayBeforeSubmit = useRef<NodeJS.Timeout | undefined>(undefined);
   const { query, onQueryChange, onSubmit } = props;
 
-  const clearDelayBeforeSubmitTimeout = (): void => {
+  const clearDelayBeforeSubmitTimeout = useCallback((): void => {
     if (delayBeforeSubmit.current) {
       clearTimeout(delayBeforeSubmit.current);
       delayBeforeSubmit.current = undefined;
     }
-  };
+  }, []);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -34,7 +34,7 @@ const SearchBar = (props: SearchBarProps): JSX.Element => {
         DELAY_SEARCH_AFTER_KEYPRESS
       );
     },
-    [onQueryChange]
+    [onQueryChange, clearDelayBeforeSubmitTimeout]
   );
 
   const handleSubmit = useCallback(
@@ -44,14 +44,14 @@ const SearchBar = (props: SearchBarProps): JSX.Element => {
       clearDelayBeforeSubmitTimeout();
       onSubmit();
     },
-    [onSubmit]
+    [onSubmit, clearDelayBeforeSubmitTimeout]
   );
 
   useEffect(() => {
     searchInputRef.current?.focus();
 
     return () => clearDelayBeforeSubmitTimeout();
-  }, []);
+  }, [clearDelayBeforeSubmitTimeout]);
 
   return (
     <Form onSubmit={handleSubmit} ref={formRef}>
