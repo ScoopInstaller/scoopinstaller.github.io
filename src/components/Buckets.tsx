@@ -5,7 +5,7 @@ import Table from 'react-bootstrap/Table';
 import { Helmet } from '@dr.pogodin/react-helmet';
 import { Link } from 'react-router-dom';
 import BucketsResultsJson from '../serialization/BucketsResultsJson';
-import Utils from '../utils';
+import { extractPathFromUrl } from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
 
@@ -187,7 +187,7 @@ const Buckets = (): JSX.Element => {
                             search: `?q="${encodeURIComponent(item.bucket)}"${item.official ? '' : '&o=false'}`,
                           }}
                         >
-                          {Utils.extractPathFromUrl(item.bucket)}
+                          {extractPathFromUrl(item.bucket)}
                         </Link>{' '}
                         <BucketTypeIcon official={item.official} />
                       </td>

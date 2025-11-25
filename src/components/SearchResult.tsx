@@ -8,7 +8,7 @@ import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
 import supportedSpdxLicenses from 'spdx-license-ids/index.json';
 import type ManifestJson from '../serialization/ManifestJson';
-import Utils from '../utils';
+import { extractPathFromUrl } from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 import CopyToClipboardButton from './CopyToClipboardButton';
 
@@ -120,7 +120,7 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
   const bucketName = metadata.repositoryOfficial
     ? officialRepositories[metadata.repository] ||
       metadata.repository.substring(metadata.repository.lastIndexOf('/') + 1).toLowerCase()
-    : `${Utils.extractPathFromUrl(metadata.repository, '_')}`;
+    : `${extractPathFromUrl(metadata.repository, '_')}`;
   const bucketUrl = metadata.repositoryOfficial ? '' : `${metadata.repository}`;
   const bucketCommandLine = `${bucketName} ${bucketUrl}`.trim();
 
