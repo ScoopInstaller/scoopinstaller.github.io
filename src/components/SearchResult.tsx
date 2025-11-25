@@ -46,6 +46,7 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
     return (
       content && (
         <span
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for syntax highlighting in search results
           dangerouslySetInnerHTML={{
             __html: content,
           }}
