@@ -43,7 +43,7 @@ const Search = (): JSX.Element => {
   }, [searchParams]);
 
   const getCurrentPageFromSearchParams = useCallback((): number => {
-    return parseInt(searchParams.get(SEARCH_PARAM_PAGE) || '1');
+    return parseInt(searchParams.get(SEARCH_PARAM_PAGE) || '1', 10);
   }, [searchParams]);
 
   const getSearchParam = useCallback(
@@ -52,7 +52,7 @@ const Search = (): JSX.Element => {
       if (value) {
         switch (typeof defaultValue) {
           case 'number':
-            return parseInt(value) as T;
+            return parseInt(value, 10) as T;
           case 'boolean':
             return (value === 'true') as T;
           case 'string':

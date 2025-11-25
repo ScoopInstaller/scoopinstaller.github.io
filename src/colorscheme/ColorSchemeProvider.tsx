@@ -43,7 +43,7 @@ const ColorSchemeProvider = (props: { children: React.ReactNode }): JSX.Element 
       return value ? ColorSchemeType.Dark : ColorSchemeType.Light;
     }
 
-    return parseInt(value) as ColorSchemeType;
+    return parseInt(value, 10) as ColorSchemeType;
   };
 
   const updateUI = (colorSchemePreference: ColorSchemeType) => {
