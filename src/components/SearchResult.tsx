@@ -125,7 +125,7 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
   const bucketCommandLine = `${bucketName} ${bucketUrl}`.trim();
 
   const bucketCommand = `scoop bucket add ${bucketCommandLine}`;
-  const appCommand = `scoop install ${installBucketName ? bucketName + '/' : ''}${name}`;
+  const appCommand = `scoop install ${installBucketName ? `${bucketName}/` : ''}${name}`;
   const fullCommand = `${bucketCommand}\n${appCommand}`;
 
   return (
