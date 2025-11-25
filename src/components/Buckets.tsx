@@ -16,44 +16,44 @@ type Bucket = {
 
 const sortModes: string[] = ['Default', 'Name', 'Manifests'];
 
+const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
+  switch (sortOrder) {
+    case 0:
+      return buckets.sort((x, y) => {
+        if (x.official === y.official) {
+          return x.bucket.localeCompare(y.bucket);
+        }
+        if (x.official < y.official) {
+          return 1;
+        }
+
+        return -1;
+      });
+
+    case 1:
+      return buckets.sort((x, y) => x.bucket.localeCompare(y.bucket));
+
+    case 2:
+      return buckets.sort((x, y) => {
+        if (x.manifests === y.manifests) {
+          return 0;
+        }
+        if (x.manifests < y.manifests) {
+          return 1;
+        }
+
+        return -1;
+      });
+    default:
+      throw new Error('Unexpected sort mode');
+  }
+};
+
 const Buckets = (): JSX.Element => {
   const abortControllerRef = useRef<AbortController | null>(null);
   const [searching, setSearching] = useState<boolean>(false);
   const [sortIndex, setSortIndex] = useState<number>(0);
   const [results, setResults] = useState<Bucket[]>([]);
-
-  const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
-    switch (sortOrder) {
-      case 0:
-        return buckets.sort((x, y) => {
-          if (x.official === y.official) {
-            return x.bucket.localeCompare(y.bucket);
-          }
-          if (x.official < y.official) {
-            return 1;
-          }
-
-          return -1;
-        });
-
-      case 1:
-        return buckets.sort((x, y) => x.bucket.localeCompare(y.bucket));
-
-      case 2:
-        return buckets.sort((x, y) => {
-          if (x.manifests === y.manifests) {
-            return 0;
-          }
-          if (x.manifests < y.manifests) {
-            return 1;
-          }
-
-          return -1;
-        });
-      default:
-        throw new Error('Unexpected sort mode');
-    }
-  };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const sortOrder = e.target.selectedIndex;
@@ -137,7 +137,7 @@ const Buckets = (): JSX.Element => {
       });
 
     return () => abortController.abort();
-  }, []);
+  }, [sortIndex]);
 
   return (
     <>
