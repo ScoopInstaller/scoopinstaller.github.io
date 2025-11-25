@@ -1,7 +1,6 @@
-import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
-
-import { Col, Container, Modal, Row } from 'react-bootstrap';
 import { Helmet } from '@dr.pogodin/react-helmet';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
+import { Col, Container, Modal, Row } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { requestIdleCallback } from '../request-idle-callback';
 import type ManifestJson from '../serialization/ManifestJson';

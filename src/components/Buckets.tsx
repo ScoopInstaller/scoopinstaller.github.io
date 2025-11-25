@@ -1,8 +1,7 @@
+import { Helmet } from '@dr.pogodin/react-helmet';
 import React, { type JSX, useEffect, useRef, useState } from 'react';
-
 import { Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
-import { Helmet } from '@dr.pogodin/react-helmet';
 import { Link } from 'react-router-dom';
 import BucketsResultsJson from '../serialization/BucketsResultsJson';
 import { extractPathFromUrl } from '../utils';
