@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { useCallback, useLayoutEffect, useState } from 'react';
 
 import { ColorSchemeContext, defaultState, type IColorSchemeContext } from './ColorSchemeContext';

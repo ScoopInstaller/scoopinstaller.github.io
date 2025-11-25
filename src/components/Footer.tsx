@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { Col, Container, Row } from 'react-bootstrap';
 import { FaRegHandshake } from 'react-icons/fa';

@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import { IconContext } from 'react-icons';
 import { Outlet } from 'react-router-dom';
 import ColorSchemeProvider from '../colorscheme/ColorSchemeProvider';

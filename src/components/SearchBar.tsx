@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef } from 'react';
 
 import { Form, InputGroup } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
@@ -14,7 +14,7 @@ type SearchBarProps = {
 const SearchBar = (props: SearchBarProps): JSX.Element => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const delayBeforeSubmit = useRef<NodeJS.Timeout>();
+  const delayBeforeSubmit = useRef<NodeJS.Timeout | undefined>(undefined);
   const { query, onQueryChange, onSubmit } = props;
 
   const clearDelayBeforeSubmitTimeout = (): void => {

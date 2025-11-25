@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { type JSX, useContext } from 'react';
 
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { BsCircleHalf, BsMoon, BsSun } from 'react-icons/bs';

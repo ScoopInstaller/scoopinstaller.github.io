@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { GoStar, GoUnverified, GoVerified } from 'react-icons/go';

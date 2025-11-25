@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Col, Container, Modal, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet';

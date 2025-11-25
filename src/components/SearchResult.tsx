@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useRef, useState } from 'react';
 import { Card, Col, Container, Form, InputGroup, type InputGroupProps, Row } from 'react-bootstrap';
 import { GoBook, GoClock, GoLaw, GoLinkExternal, GoPackage } from 'react-icons/go';
 import { Img } from 'react-image';
@@ -23,7 +23,7 @@ type SearchResultProps = {
   installBucketName: boolean;
   onCopyToClipbard: (content: string) => void;
   onResultSelected?: (result: ManifestJson) => void;
-  cardRef?: React.RefObject<HTMLDivElement>;
+  cardRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 const SearchResult = (props: SearchResultProps): JSX.Element => {

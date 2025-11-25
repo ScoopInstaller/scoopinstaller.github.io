@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import './App.css';
 import { Helmet } from 'react-helmet';
 import { HashRouter, Route, Routes } from 'react-router-dom';

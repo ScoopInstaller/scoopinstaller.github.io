@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useRef, useState } from 'react';
 
 import { Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useContext, useRef, useState } from 'react';
 
 import { Col, Container, Row } from 'react-bootstrap';
 import { createSearchParams, Link, useNavigate } from 'react-router-dom';

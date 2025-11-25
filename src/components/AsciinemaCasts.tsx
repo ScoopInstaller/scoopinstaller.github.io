@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { type JSX, useContext, useLayoutEffect, useRef, useState } from 'react';
 
 import 'asciinema-player/dist/bundle/asciinema-player.css';
 import './asciinema-customthemes.css';
@@ -22,7 +22,7 @@ const AsciinemaCasts = (props: AsciinemaCastsProps): JSX.Element => {
   const { casts } = props;
 
   const asciiPlayerDivRef = useRef<HTMLDivElement>(null);
-  const asciiPlayerRef = useRef<AsciinemaPlayer.Player>();
+  const asciiPlayerRef = useRef<AsciinemaPlayer.Player | undefined>(undefined);
   const [currentCast, setCurrentCast] = useState<AsciinemaCastItem>(casts[0]);
 
   useLayoutEffect(() => {

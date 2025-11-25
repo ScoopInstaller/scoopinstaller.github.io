@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap';
 import type { IconBaseProps } from 'react-icons';
