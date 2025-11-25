@@ -18,7 +18,7 @@ type Bucket = {
 const sortModes: string[] = ['Default', 'Name', 'Manifests'];
 
 const Buckets = (): JSX.Element => {
-  const abortControllerRef = useRef<AbortController>(new AbortController());
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [searching, setSearching] = useState<boolean>(false);
   const [sortIndex, setSortIndex] = useState<number>(0);
   const [results, setResults] = useState<Bucket[]>([]);
@@ -63,6 +63,10 @@ const Buckets = (): JSX.Element => {
   };
 
   useEffect(() => {
+    // Create a new AbortController for this effect
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
     setSearching(true);
     setResults([]);
 
@@ -115,12 +119,26 @@ const Buckets = (): JSX.Element => {
         );
     };
 
-    fetchAsync(abortControllerRef.current.signal)
-      .then((buckets) => setResults(sortResults(buckets, sortIndex)))
-      .finally(() => setSearching(false));
+    fetchAsync(abortController.signal)
+      .then((buckets) => {
+        if (!abortController.signal.aborted) {
+          setResults(sortResults(buckets, sortIndex));
+        }
+      })
+      .catch((error) => {
+        // Ignore AbortError when component unmounts
+        if (error.name !== 'AbortError') {
+          console.error('Failed to fetch buckets:', error);
+        }
+      })
+      .finally(() => {
+        if (!abortController.signal.aborted) {
+          setSearching(false);
+        }
+      });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    return () => abortControllerRef.current.abort();
+    return () => abortController.abort();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
