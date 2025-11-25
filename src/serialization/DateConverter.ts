@@ -1,9 +1,7 @@
-/* eslint-disable class-methods-use-this */
 import { JsonConverter, type JsonCustomConvert } from 'json2typescript';
 
 @JsonConverter
 class DateConverter implements JsonCustomConvert<Date> {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   serialize(date: Date): unknown {
     throw new Error('Conversion not supported');
   }

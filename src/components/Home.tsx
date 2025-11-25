@@ -110,7 +110,6 @@ const Home = (): JSX.Element => {
         Open a{' '}
         <abbr
           style={{ textDecorationStyle: 'solid' }}
-          /* eslint-disable-next-line max-len */
           title="If you don't know what it is, don't worry, you can use the standard command line after installation. Just search for 'PowerShell' in the Start menu. Windows 7 users must install PowerShell version 5.1 or later manually."
         >
           PowerShell terminal
