@@ -34,20 +34,20 @@ const NavBar = (): JSX.Element => {
             </Nav.Link>
           </Nav>
           <Button onClick={toggleColorScheme} size="sm" variant="secondary">
-            {preferedColorScheme == ColorSchemeType.Auto &&
-              (browserColorScheme == ColorSchemeType.Light ? (
+            {preferedColorScheme === ColorSchemeType.Auto &&
+              (browserColorScheme === ColorSchemeType.Light ? (
                 <BsCircleHalf title="Auto mode. Click to switch to dark mode" />
               ) : (
                 <BsCircleHalf title="Auto mode. Click to switch to light mode" />
               ))}
-            {preferedColorScheme == ColorSchemeType.Light &&
-              (browserColorScheme == ColorSchemeType.Light ? (
+            {preferedColorScheme === ColorSchemeType.Light &&
+              (browserColorScheme === ColorSchemeType.Light ? (
                 <BsSun title="Light mode. Click to switch to OS/browser preferred mode" />
               ) : (
                 <BsSun title="Light mode. Click to switch to dark mode" />
               ))}
-            {preferedColorScheme == ColorSchemeType.Dark &&
-              (browserColorScheme == ColorSchemeType.Light ? (
+            {preferedColorScheme === ColorSchemeType.Dark &&
+              (browserColorScheme === ColorSchemeType.Light ? (
                 <BsMoon title="Dark mode. Click to switch to light mode" />
               ) : (
                 <BsMoon title="Dark mode. Click to switch to OS/browser preferred mode" />

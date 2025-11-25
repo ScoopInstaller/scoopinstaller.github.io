@@ -299,7 +299,7 @@ const Search = (): JSX.Element => {
           <Col>
             {searchResults?.results.map((searchResult: ManifestJson) => (
               <SearchResult
-                cardRef={searchResult.id == selectedResultId ? selectedResultRef : undefined}
+                cardRef={searchResult.id === selectedResultId ? selectedResultRef : undefined}
                 key={searchResult.id}
                 result={searchResult}
                 officialRepositories={officialRepositories}

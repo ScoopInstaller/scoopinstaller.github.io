@@ -39,7 +39,7 @@ const ColorSchemeProvider = (props: { children: React.ReactNode }): JSX.Element 
       return ColorSchemeType.Auto;
     }
 
-    if (typeof value == 'boolean') {
+    if (typeof value === 'boolean') {
       return value ? ColorSchemeType.Dark : ColorSchemeType.Light;
     }
 
