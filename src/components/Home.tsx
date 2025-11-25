@@ -95,65 +95,64 @@ const Home = (): JSX.Element => {
   };
 
   return (
-    <>
-      <Container className="mt-5 mb-5">
-        <h1 className="display-4 text-center">Scoop</h1>
-        <h2 className="fw-light text-center mb-5">A command-line installer for Windows</h2>
+    <Container className="mt-5 mb-5">
+      <h1 className="display-4 text-center">Scoop</h1>
+      <h2 className="fw-light text-center mb-5">A command-line installer for Windows</h2>
 
-        <Row className="justify-content-center mb-5">
-          <Col lg={6}>
-            <SearchBar query={searchQuery} onQueryChange={setSearchQuery} onSubmit={handleSearchQuerySubmit} />
-          </Col>
-        </Row>
+      <Row className="justify-content-center mb-5">
+        <Col lg={6}>
+          <SearchBar query={searchQuery} onQueryChange={setSearchQuery} onSubmit={handleSearchQuerySubmit} />
+        </Col>
+      </Row>
 
-        <h3 className="mb-4 text-center fw-normal">Quickstart</h3>
-        <p className="text-center">
-          Open a{' '}
-          <abbr
-            style={{ textDecorationStyle: 'solid' }}
-            /* eslint-disable-next-line max-len */
-            title="If you don't know what it is, don't worry, you can use the standard command line after installation. Just search for 'PowerShell' in the Start menu. Windows 7 users must install PowerShell version 5.1 or later manually."
-          >
-            PowerShell terminal
-          </abbr>{' '}
-          (version 5.1 or later) and from the PS C:\&gt; prompt, run:
-        </p>
-        <SyntaxHighlighterWithCopyBtn
-          language="powershell"
-          code={`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+      <h3 className="mb-4 text-center fw-normal">Quickstart</h3>
+      <p className="text-center">
+        Open a{' '}
+        <abbr
+          style={{ textDecorationStyle: 'solid' }}
+          /* eslint-disable-next-line max-len */
+          title="If you don't know what it is, don't worry, you can use the standard command line after installation. Just search for 'PowerShell' in the Start menu. Windows 7 users must install PowerShell version 5.1 or later manually."
+        >
+          PowerShell terminal
+        </abbr>{' '}
+        (version 5.1 or later) and from the PS C:\&gt; prompt, run:
+      </p>
+      <SyntaxHighlighterWithCopyBtn
+        language="powershell"
+        code={`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression`}
-        />
-        <p className="text-center">
-          For advanced installation options, check out the{' '}
-          <a href="https://github.com/ScoopInstaller/Install#readme"> Installer&apos;s Readme</a>.
-        </p>
+      />
+      <p className="text-center">
+        For advanced installation options, check out the{' '}
+        <a href="https://github.com/ScoopInstaller/Install#readme"> Installer&apos;s Readme</a>.
+      </p>
 
-        <h3 className="mt-5 mb-4 text-center fw-normal">What does Scoop do?</h3>
+      <h3 className="mt-5 mb-4 text-center fw-normal">What does Scoop do?</h3>
 
-        <Row>
-          <Col lg={6}>
-            Scoop installs programs you know and love, from the command line with a minimal amount of friction. It:
-            <br />
-            <br />
-            <ul>
-              <li>Eliminates permission popup windows</li>
-              <li>Hides GUI wizard-style installers</li>
-              <li>Prevents PATH pollution from installing lots of programs</li>
-              <li>Avoids unexpected side-effects from installing and uninstalling programs</li>
-              <li>Finds and installs dependencies automatically</li>
-              <li>Performs all the extra setup steps itself to get a working program</li>
-            </ul>
-          </Col>
-          <Col lg={6}>
-            <AsciinemaCasts casts={CASTS_CONFIG} />
-          </Col>
-        </Row>
-        <hr />
+      <Row>
+        <Col lg={6}>
+          Scoop installs programs you know and love, from the command line with a minimal amount of friction. It:
+          <br />
+          <br />
+          <ul>
+            <li>Eliminates permission popup windows</li>
+            <li>Hides GUI wizard-style installers</li>
+            <li>Prevents PATH pollution from installing lots of programs</li>
+            <li>Avoids unexpected side-effects from installing and uninstalling programs</li>
+            <li>Finds and installs dependencies automatically</li>
+            <li>Performs all the extra setup steps itself to get a working program</li>
+          </ul>
+        </Col>
+        <Col lg={6}>
+          <AsciinemaCasts casts={CASTS_CONFIG} />
+        </Col>
+      </Row>
+      <hr />
 
-        <Row>
-          <Col lg={6}>
-            <SyntaxHighlighter language="powershell">
-              {`> dir ~\\scoop
+      <Row>
+        <Col lg={6}>
+          <SyntaxHighlighter language="powershell">
+            {`> dir ~\\scoop
 
     Directory: C:\\Users\\User\\scoop
 
@@ -165,27 +164,27 @@ d----          02-04-2022    16:06                cache
 da---          30-03-2022    21:32                persist
 da---          02-04-2022    16:06                shims
 d----          20-02-2022    01:22                workspace`}
-            </SyntaxHighlighter>
-          </Col>
-          <Col lg={6}>
-            Scoop downloads and manages packages in a portable way, keeping them neatly isolated in{' '}
-            <code className="bg-light">~\scoop</code>. It won&apos;t install files outside its home, and you can place a
-            Scoop installation wherever you like.
-          </Col>
-        </Row>
-        <hr />
+          </SyntaxHighlighter>
+        </Col>
+        <Col lg={6}>
+          Scoop downloads and manages packages in a portable way, keeping them neatly isolated in{' '}
+          <code className="bg-light">~\scoop</code>. It won&apos;t install files outside its home, and you can place a
+          Scoop installation wherever you like.
+        </Col>
+      </Row>
+      <hr />
 
-        <Row>
-          <Col lg={6}>
-            For terminal applications, Scoop creates <i>shims</i>, a kind of command-line shortcuts, inside the{' '}
-            <code className="bg-light">~\scoop\shims</code> folder, which is accessible in the PATH. For graphical
-            applications, Scoop creates program shortcuts in a dedicated Start menu folder, called &apos;Scoop
-            Apps&apos;. This way, packages are always cleanly uninstalled and you can be sure what tools are currently
-            in your PATH and in your Start menu.
-          </Col>
-          <Col lg={6}>
-            <SyntaxHighlighter language="json">
-              {`> scoop search python
+      <Row>
+        <Col lg={6}>
+          For terminal applications, Scoop creates <i>shims</i>, a kind of command-line shortcuts, inside the{' '}
+          <code className="bg-light">~\scoop\shims</code> folder, which is accessible in the PATH. For graphical
+          applications, Scoop creates program shortcuts in a dedicated Start menu folder, called &apos;Scoop Apps&apos;.
+          This way, packages are always cleanly uninstalled and you can be sure what tools are currently in your PATH
+          and in your Start menu.
+        </Col>
+        <Col lg={6}>
+          <SyntaxHighlighter language="json">
+            {`> scoop search python
 Results from local buckets...
 
 Name      Version  Source Binaries
@@ -200,15 +199,15 @@ Creating shim for 'python.exe'.
 
 > python -c "print('Hello from Python installed by Scoop!')"
 Hello from Python installed by Scoop!`}
-            </SyntaxHighlighter>
-          </Col>
-        </Row>
+          </SyntaxHighlighter>
+        </Col>
+      </Row>
 
-        <h3 className="mt-5 mb-4 text-center fw-normal">Discovering Packages</h3>
-        <Row>
-          <Col lg={6}>
-            <SyntaxHighlighter language="json">
-              {`> scoop search mongo
+      <h3 className="mt-5 mb-4 text-center fw-normal">Discovering Packages</h3>
+      <Row>
+        <Col lg={6}>
+          <SyntaxHighlighter language="json">
+            {`> scoop search mongo
 Results from local buckets...
 
 Name                   Version Source Binaries
@@ -226,24 +225,24 @@ Name         Source
 ----         ------
 citra-canary games
 citra        games`}
-            </SyntaxHighlighter>
-          </Col>
-          <Col lg={6}>
-            Scoop packages exist as a part of Git repositories, called <i>buckets</i>. In addition to the builtin{' '}
-            <code className="bg-light">search</code> sub-command, the <Link to="/apps">package search</Link> can be used
-            to search all Scoop manifests on GitHub.
-            <br />
-            <br />
-            The list of all Scoop buckets on GitHub can be browsed <Link to="/buckets">here</Link>.
-          </Col>
-        </Row>
+          </SyntaxHighlighter>
+        </Col>
+        <Col lg={6}>
+          Scoop packages exist as a part of Git repositories, called <i>buckets</i>. In addition to the builtin{' '}
+          <code className="bg-light">search</code> sub-command, the <Link to="/apps">package search</Link> can be used
+          to search all Scoop manifests on GitHub.
+          <br />
+          <br />
+          The list of all Scoop buckets on GitHub can be browsed <Link to="/buckets">here</Link>.
+        </Col>
+      </Row>
 
-        <h3 className="mt-5 mb-4 text-center fw-normal">Creating Packages</h3>
-        <Row>
-          <Col lg={6}>Scoop allows you to trivially create your own packages.</Col>
-          <Col lg={6}>
-            <SyntaxHighlighter language="powershell">
-              {`> scoop create https://example.com/foobar/1.2.3/foobar-package.zip
+      <h3 className="mt-5 mb-4 text-center fw-normal">Creating Packages</h3>
+      <Row>
+        <Col lg={6}>Scoop allows you to trivially create your own packages.</Col>
+        <Col lg={6}>
+          <SyntaxHighlighter language="powershell">
+            {`> scoop create https://example.com/foobar/1.2.3/foobar-package.zip
 1) foobar
 2) 1.2.3
 3) foobar-package.zip
@@ -253,15 +252,15 @@ App name: 1
 3) foobar-package.zip
 Version: 2
 Created 'C:\\Users\\User\\Desktop\\foobar.json'.`}
-            </SyntaxHighlighter>
-          </Col>
-        </Row>
-        <hr />
+          </SyntaxHighlighter>
+        </Col>
+      </Row>
+      <hr />
 
-        <Row>
-          <Col lg={6}>
-            <SyntaxHighlighter language="json">
-              {`> scoop cat gifski
+      <Row>
+        <Col lg={6}>
+          <SyntaxHighlighter language="json">
+            {`> scoop cat gifski
 {
     "version": "1.6.4",
     "description": "GIF encoder based on libimagequant (pngquant).",
@@ -276,22 +275,20 @@ Created 'C:\\Users\\User\\Desktop\\foobar.json'.`}
         "url": "https://gif.ski/gifski-$version.zip"
     }
 }`}
-            </SyntaxHighlighter>
-          </Col>
-          <Col lg={6}>
-            Scoop manifests are simple JSON files, which can be optionally complemented with inline PowerShell
-            statements.
-          </Col>
-        </Row>
+          </SyntaxHighlighter>
+        </Col>
+        <Col lg={6}>
+          Scoop manifests are simple JSON files, which can be optionally complemented with inline PowerShell statements.
+        </Col>
+      </Row>
 
-        <h3 className="mt-5 mb-4 text-center fw-normal">Documentation</h3>
-        <p className="text-center">
-          Looking for something specific, or ready to dive into Scoop internals? Check out{' '}
-          <a href="https://github.com/ScoopInstaller/Scoop#readme">Scoop&apos;s Readme</a> or refer to the{' '}
-          <a href="https://github.com/ScoopInstaller/Scoop/wiki">Wiki</a>.
-        </p>
-      </Container>
-    </>
+      <h3 className="mt-5 mb-4 text-center fw-normal">Documentation</h3>
+      <p className="text-center">
+        Looking for something specific, or ready to dive into Scoop internals? Check out{' '}
+        <a href="https://github.com/ScoopInstaller/Scoop#readme">Scoop&apos;s Readme</a> or refer to the{' '}
+        <a href="https://github.com/ScoopInstaller/Scoop/wiki">Wiki</a>.
+      </p>
+    </Container>
   );
 };
 

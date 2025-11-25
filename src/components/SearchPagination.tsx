@@ -11,7 +11,7 @@ type SearchPaginationProps = {
   onPageChange: (newPage: number) => void;
 };
 
-const SearchPagination = (props: SearchPaginationProps): JSX.Element => {
+const SearchPagination = (props: SearchPaginationProps): JSX.Element | null => {
   const { currentPage, resultsCount, resultsPerPage, onPageChange } = props;
 
   const changePage = (page: number): void => {
@@ -70,7 +70,7 @@ const SearchPagination = (props: SearchPaginationProps): JSX.Element => {
     }
   }
 
-  return <></>;
+  return null;
 };
 
 export default React.memo(SearchPagination);
