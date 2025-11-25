@@ -11,9 +11,6 @@ importers:
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
-      '@vitejs/plugin-react':
-        specifier: ^5.1.1
-        version: 5.1.1(vite@7.2.4(@types/node@24.10.1))
       asciinema-player:
         specifier: ^3.0.1
         version: 3.12.1
@@ -50,15 +47,9 @@ importers:
       react-syntax-highlighter:
         specifier: ^16.1.0
         version: 16.1.0(react@19.2.0)
-      rollup-plugin-visualizer:
-        specifier: ^6.0.5
-        version: 6.0.5(rollup@4.53.3)
       spdx-license-ids:
         specifier: ^3.0.11
         version: 3.0.22
-      vite:
-        specifier: ^7.2.4
-        version: 7.2.4(@types/node@24.10.1)
       web-vitals:
         specifier: ^5.1.0
         version: 5.1.0
@@ -90,9 +81,18 @@ importers:
       '@types/react-syntax-highlighter':
         specifier: ^15.5.13
         version: 15.5.13
+      '@vitejs/plugin-react':
+        specifier: ^5.1.1
+        version: 5.1.1(vite@7.2.4(@types/node@24.10.1))
+      rollup-plugin-visualizer:
+        specifier: ^6.0.5
+        version: 6.0.5(rollup@4.53.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
+      vite:
+        specifier: ^7.2.4
+        version: 7.2.4(@types/node@24.10.1)
 
 packages:
 

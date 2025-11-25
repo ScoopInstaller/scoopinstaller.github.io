@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^6.9.1",
-    "@vitejs/plugin-react": "^5.1.1",
     "asciinema-player": "^3.0.1",
     "bootstrap": "^5.3.8",
     "dayjs": "^1.11.19",
@@ -17,9 +16,7 @@
     "react-image": "^4.0.3",
     "react-router-dom": "^7.9.6",
     "react-syntax-highlighter": "^16.1.0",
-    "rollup-plugin-visualizer": "^6.0.5",
     "spdx-license-ids": "^3.0.11",
-    "vite": "^7.2.4",
     "web-vitals": "^5.1.0"
   },
   "scripts": {
@@ -52,6 +49,9 @@
     "@types/react-dom": "^19.2.3",
     "@types/react-helmet": "^6.1.5",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "typescript": "^5.9.3"
+    "@vitejs/plugin-react": "^5.1.1",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
   }
 }
