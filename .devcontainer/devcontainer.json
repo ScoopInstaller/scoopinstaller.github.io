@@ -12,7 +12,7 @@
 		}
 	},
 	"extensions": [
-		"dbaeumer.vscode-eslint"
+		"biomejs.biome"
 	],
 	"customizations": {
 		"codespaces": {
