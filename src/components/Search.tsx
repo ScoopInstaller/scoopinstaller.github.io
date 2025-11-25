@@ -200,7 +200,7 @@ const Search = (): JSX.Element => {
     //We should use useTransition or useDeferredValue after updating to v18 instead of this
     idleCallbackId.current = requestIdleCallback(() => setSearchResults(e));
   }, []);
-  useEffect(() => () => cancelIdleCallback(idleCallbackId.current), [idleCallbackId]);
+  useEffect(() => () => cancelIdleCallback(idleCallbackId.current), []);
 
   const handlePageChange = useCallback(
     (newCurrentPage: number): void => {
