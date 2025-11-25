@@ -81,7 +81,7 @@ class ManifestJson {
 
   tryGetHighlights(propertyNames: string[], fallback?: string): HighLight {
     const match = propertyNames.find((value: string) => {
-      return this.highlights && this.highlights[value];
+      return this.highlights?.[value];
     });
 
     return match && this.highlights ? this.highlights[match].join(' ') : fallback;

@@ -2,7 +2,7 @@ import { JsonConverter, type JsonCustomConvert } from 'json2typescript';
 
 @JsonConverter
 class DateConverter implements JsonCustomConvert<Date> {
-  serialize(date: Date): unknown {
+  serialize(_date: Date): unknown {
     throw new Error('Conversion not supported');
   }
 

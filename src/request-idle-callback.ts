@@ -1,7 +1,7 @@
 // Shim from https://developers.google.com/web/updates/2015/08/using-requestidlecallback
 export const requestIdleCallback =
   window.requestIdleCallback ||
-  function ric(cb: any) {
+  function ric(cb: IdleRequestCallback) {
     const start = Date.now();
 
     return setTimeout(() => {
