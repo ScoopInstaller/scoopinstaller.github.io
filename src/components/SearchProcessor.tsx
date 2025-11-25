@@ -294,7 +294,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
               <Dropdown.Header>Filtering</Dropdown.Header>
               <Dropdown.Item as={Button} onClick={(e) => toggleOfficialOnly(e)}>
                 <Form.Switch className="form-switch-sm">
-                  <Form.Switch.Input checked={officialOnly} />
+                  <Form.Switch.Input checked={officialOnly} readOnly />
                   <Form.Switch.Label>
                     Official buckets only <BucketTypeIcon className="ms-1" official showTooltip={false} />
                   </Form.Switch.Label>
@@ -302,7 +302,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
               </Dropdown.Item>
               <Dropdown.Item as={Button} onClick={(e) => toggleDistinctManifestsOnly(e)}>
                 <Form.Switch className="form-switch-sm">
-                  <Form.Switch.Input checked={distinctManifestsOnly} />
+                  <Form.Switch.Input checked={distinctManifestsOnly} readOnly />
                   <Form.Switch.Label>Distinct manifests only</Form.Switch.Label>
                 </Form.Switch>
               </Dropdown.Item>
@@ -310,7 +310,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
               <Dropdown.Header>Option</Dropdown.Header>
               <Dropdown.Item as={Button} onClick={(e) => toggleInstallBucketName(e)}>
                 <Form.Switch className="form-switch-sm">
-                  <Form.Switch.Input checked={installBucketName} />
+                  <Form.Switch.Input checked={installBucketName} readOnly />
                   <Form.Switch.Label>Show bucket name</Form.Switch.Label>
                 </Form.Switch>
               </Dropdown.Item>
