@@ -1,5 +1,4 @@
-import { execSync } from 'child_process';
-
+import { execSync } from 'node:child_process';
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
@@ -13,7 +12,15 @@ export default defineConfig({
     APP_COMMIT_HASH: JSON.stringify(commitHash),
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({
+      filename: 'build_stats/stats_treemap.html',
+      open: false,
+      gzipSize: true,
+      template: 'treemap',
+    }),
+  ],
   base: basePath,
   server: {
     port: 3000,
@@ -25,12 +32,23 @@ export default defineConfig({
   build: {
     outDir: 'build',
     rollupOptions: {
-      plugins: [
-        visualizer({
-          filename: 'build_stats/stats_treemap.html',
-          template: 'treemap',
-        }),
-      ],
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (/\/(react-bootstrap|popper)/.test(id)) {
+              return 'bootstrap-vendor';
+            }
+
+            if (/\/(react)/.test(id)) {
+              return 'react-vendor';
+            }
+
+            if (/\/asciinema-player/.test(id)) {
+              return 'asciinema-vendor';
+            }
+          }
+        },
+      },
     },
   },
 });

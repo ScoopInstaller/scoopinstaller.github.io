@@ -1,18 +1,16 @@
-import React, { useCallback, useState, useRef } from 'react';
-
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Card, Col, Container, Form, InputGroup, InputGroupProps, Row } from 'react-bootstrap';
-import { GoLinkExternal, GoBook, GoPackage, GoClock, GoLaw } from 'react-icons/go';
+import React, { type JSX, useCallback, useRef, useState } from 'react';
+import { Card, Col, Container, Form, InputGroup, type InputGroupProps, Row } from 'react-bootstrap';
+import { GoBook, GoClock, GoLaw, GoLinkExternal, GoPackage } from 'react-icons/go';
 import { Img } from 'react-image';
 import deprecatedSpdxLicenses from 'spdx-license-ids/deprecated.json';
 import supportedSpdxLicenses from 'spdx-license-ids/index.json';
-
+import type ManifestJson from '../serialization/ManifestJson';
+import { extractPathFromUrl } from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 import CopyToClipboardButton from './CopyToClipboardButton';
-import ManifestJson from '../serialization/ManifestJson';
-import Utils from '../utils';
 
 const spdxLicenses = supportedSpdxLicenses.concat(deprecatedSpdxLicenses);
 
@@ -25,7 +23,7 @@ type SearchResultProps = {
   installBucketName: boolean;
   onCopyToClipbard: (content: string) => void;
   onResultSelected?: (result: ManifestJson) => void;
-  cardRef?: React.RefObject<HTMLDivElement>;
+  cardRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 const SearchResult = (props: SearchResultProps): JSX.Element => {
@@ -48,6 +46,7 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
     return (
       content && (
         <span
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for syntax highlighting in search results
           dangerouslySetInnerHTML={{
             __html: content,
           }}
@@ -122,12 +121,12 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
   const bucketName = metadata.repositoryOfficial
     ? officialRepositories[metadata.repository] ||
       metadata.repository.substring(metadata.repository.lastIndexOf('/') + 1).toLowerCase()
-    : `${Utils.extractPathFromUrl(metadata.repository, '_')}`;
+    : `${extractPathFromUrl(metadata.repository, '_')}`;
   const bucketUrl = metadata.repositoryOfficial ? '' : `${metadata.repository}`;
   const bucketCommandLine = `${bucketName} ${bucketUrl}`.trim();
 
   const bucketCommand = `scoop bucket add ${bucketCommandLine}`;
-  const appCommand = `scoop install ${installBucketName ? bucketName + '/' : ''}${name}`;
+  const appCommand = `scoop install ${installBucketName ? `${bucketName}/` : ''}${name}`;
   const fullCommand = `${bucketCommand}\n${appCommand}`;
 
   return (

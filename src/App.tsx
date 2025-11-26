@@ -1,6 +1,8 @@
+import type { JSX } from 'react';
+
 import './App.css';
-import { Helmet } from 'react-helmet';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { Helmet } from '@dr.pogodin/react-helmet';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
 import Buckets from './components/Buckets';
 import Home from './components/Home';

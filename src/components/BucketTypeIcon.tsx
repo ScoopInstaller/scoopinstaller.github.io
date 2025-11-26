@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { GoVerified, GoUnverified, GoStar } from 'react-icons/go';
+import { GoStar, GoUnverified, GoVerified } from 'react-icons/go';
 
 import { DELAY_TOOLTIP } from '../constants';
 
@@ -29,8 +29,8 @@ const BucketTypeIcon = (props: BucketTypeIconProps): JSX.Element => {
               {official
                 ? 'Official bucket'
                 : stars >= POPULAR_REPOSITORY_THRESHOLD
-                ? 'Popular community bucket'
-                : 'Community bucket'}
+                  ? 'Popular community bucket'
+                  : 'Community bucket'}
             </span>
             {props.stars !== undefined && (
               <span className="ms-1">

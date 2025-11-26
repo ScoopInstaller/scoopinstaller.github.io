@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-
-import { Container, Row, Col, Modal } from 'react-bootstrap';
-import { Helmet } from 'react-helmet';
+import { Helmet } from '@dr.pogodin/react-helmet';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
+import { Col, Container, Modal, Row } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
-
+import { requestIdleCallback } from '../request-idle-callback';
+import type ManifestJson from '../serialization/ManifestJson';
+import type SearchResultsJson from '../serialization/SearchResultsJson';
 import SearchBar from './SearchBar';
 import SearchPagination from './SearchPagination';
-import SearchProcessor, { SortDirection, sortModes } from './SearchProcessor';
+import SearchProcessor, { type SortDirection, sortModes } from './SearchProcessor';
 import SearchResult from './SearchResult';
-import { requestIdleCallback } from '../request-idle-callback';
-import ManifestJson from '../serialization/ManifestJson';
-import SearchResultsJson from '../serialization/SearchResultsJson';
 
 const RESULTS_PER_PAGE = 20;
 const SEARCH_PARAM_QUERY = 'q';
@@ -45,7 +43,7 @@ const Search = (): JSX.Element => {
   }, [searchParams]);
 
   const getCurrentPageFromSearchParams = useCallback((): number => {
-    return parseInt(searchParams.get(SEARCH_PARAM_PAGE) || '1');
+    return parseInt(searchParams.get(SEARCH_PARAM_PAGE) || '1', 10);
   }, [searchParams]);
 
   const getSearchParam = useCallback(
@@ -54,7 +52,7 @@ const Search = (): JSX.Element => {
       if (value) {
         switch (typeof defaultValue) {
           case 'number':
-            return parseInt(value) as T;
+            return parseInt(value, 10) as T;
           case 'boolean':
             return (value === 'true') as T;
           case 'string':
@@ -140,21 +138,37 @@ const Search = (): JSX.Element => {
     setCurrentPage(getCurrentPageFromSearchParams());
   }, [getCurrentPageFromSearchParams]);
 
-  if (getSortIndexFromSearchParams() !== sortIndex) {
-    setSortIndex(getSortIndexFromSearchParams());
-  }
-  if (getSortDirectionFromSearchParams(getSortIndexFromSearchParams()) !== sortDirection) {
-    setSortIndex(getSortDirectionFromSearchParams(getSortIndexFromSearchParams()));
-  }
-  if (getOfficialOnlyFromSearchParams() !== officialOnly) {
-    setOfficialOnly(getOfficialOnlyFromSearchParams());
-  }
-  if (getDistinctManifestsOnlyFromSearchParams() !== distinctManifestsOnly) {
-    setDistinctManifestsOnly(getDistinctManifestsOnlyFromSearchParams());
-  }
-  if (getInstallBucketNameFromSearchParams() !== installBucketName) {
-    setInstallBucketName(getInstallBucketNameFromSearchParams());
-  }
+  useEffect(() => {
+    const newSortIndex = getSortIndexFromSearchParams();
+    if (newSortIndex !== sortIndex) {
+      setSortIndex(newSortIndex);
+    }
+    const newSortDirection = getSortDirectionFromSearchParams(newSortIndex);
+    if (newSortDirection !== sortDirection) {
+      setSortDirection(newSortDirection);
+    }
+  }, [getSortIndexFromSearchParams, getSortDirectionFromSearchParams, sortIndex, sortDirection]);
+
+  useEffect(() => {
+    const newOfficialOnly = getOfficialOnlyFromSearchParams();
+    if (newOfficialOnly !== officialOnly) {
+      setOfficialOnly(newOfficialOnly);
+    }
+  }, [getOfficialOnlyFromSearchParams, officialOnly]);
+
+  useEffect(() => {
+    const newDistinctManifestsOnly = getDistinctManifestsOnlyFromSearchParams();
+    if (newDistinctManifestsOnly !== distinctManifestsOnly) {
+      setDistinctManifestsOnly(newDistinctManifestsOnly);
+    }
+  }, [getDistinctManifestsOnlyFromSearchParams, distinctManifestsOnly]);
+
+  useEffect(() => {
+    const newInstallBucketName = getInstallBucketNameFromSearchParams();
+    if (newInstallBucketName !== installBucketName) {
+      setInstallBucketName(newInstallBucketName);
+    }
+  }, [getInstallBucketNameFromSearchParams, installBucketName]);
 
   useEffect(() => {
     if (searchResults?.results && selectedResultId) {
@@ -202,7 +216,7 @@ const Search = (): JSX.Element => {
     //We should use useTransition or useDeferredValue after updating to v18 instead of this
     idleCallbackId.current = requestIdleCallback(() => setSearchResults(e));
   }, []);
-  useEffect(() => () => cancelIdleCallback(idleCallbackId.current), [idleCallbackId]);
+  useEffect(() => () => cancelIdleCallback(idleCallbackId.current), []);
 
   const handlePageChange = useCallback(
     (newCurrentPage: number): void => {
@@ -300,7 +314,7 @@ const Search = (): JSX.Element => {
           <Col>
             {searchResults?.results.map((searchResult: ManifestJson) => (
               <SearchResult
-                cardRef={searchResult.id == selectedResultId ? selectedResultRef : undefined}
+                cardRef={searchResult.id === selectedResultId ? selectedResultRef : undefined}
                 key={searchResult.id}
                 result={searchResult}
                 officialRepositories={officialRepositories}

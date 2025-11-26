@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-
-import { Container, Col, Row, InputGroup, Form } from 'react-bootstrap';
+import { Helmet } from '@dr.pogodin/react-helmet';
+import React, { type JSX, useEffect, useState } from 'react';
+import { Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
-import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-
+import BucketsResultsJson from '../serialization/BucketsResultsJson';
+import { extractPathFromUrl } from '../utils';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
-import BucketsResultsJson from '../serialization/BucketsResultsJson';
-import Utils from '../utils';
 
 type Bucket = {
   bucket: string;
@@ -18,52 +16,53 @@ type Bucket = {
 
 const sortModes: string[] = ['Default', 'Name', 'Manifests'];
 
+const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
+  const sorted = [...buckets];
+  switch (sortOrder) {
+    case 0:
+      return sorted.sort((x, y) => {
+        if (x.official === y.official) {
+          return x.bucket.localeCompare(y.bucket);
+        }
+        if (x.official < y.official) {
+          return 1;
+        }
+
+        return -1;
+      });
+
+    case 1:
+      return sorted.sort((x, y) => x.bucket.localeCompare(y.bucket));
+
+    case 2:
+      return sorted.sort((x, y) => {
+        if (x.manifests === y.manifests) {
+          return 0;
+        }
+        if (x.manifests < y.manifests) {
+          return 1;
+        }
+
+        return -1;
+      });
+    default:
+      throw new Error('Unexpected sort mode');
+  }
+};
+
 const Buckets = (): JSX.Element => {
-  const abortControllerRef = useRef<AbortController>(new AbortController());
   const [searching, setSearching] = useState<boolean>(false);
-  const [sortIndex, setSortIndex] = useState<number>(0);
   const [results, setResults] = useState<Bucket[]>([]);
-
-  const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
-    switch (sortOrder) {
-      case 0:
-        return buckets.sort((x, y) => {
-          if (x.official === y.official) {
-            return x.bucket.localeCompare(y.bucket);
-          }
-          if (x.official < y.official) {
-            return 1;
-          }
-
-          return -1;
-        });
-
-      case 1:
-        return buckets.sort((x, y) => x.bucket.localeCompare(y.bucket));
-
-      case 2:
-        return buckets.sort((x, y) => {
-          if (x.manifests === y.manifests) {
-            return 0;
-          }
-          if (x.manifests < y.manifests) {
-            return 1;
-          }
-
-          return -1;
-        });
-      default:
-        throw new Error('Unexpected sort mode');
-    }
-  };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const sortOrder = e.target.selectedIndex;
-    setSortIndex(sortOrder);
     setResults((previousResults) => sortResults(previousResults, sortOrder));
   };
 
   useEffect(() => {
+    // Create a new AbortController for this effect
+    const abortController = new AbortController();
+
     setSearching(true);
     setResults([]);
 
@@ -116,14 +115,25 @@ const Buckets = (): JSX.Element => {
         );
     };
 
-    fetchAsync(abortControllerRef.current.signal)
-      .then((buckets) => setResults(sortResults(buckets, sortIndex)))
-      .finally(() => setSearching(false));
+    fetchAsync(abortController.signal)
+      .then((buckets) => {
+        if (!abortController.signal.aborted) {
+          setResults(sortResults(buckets, 0));
+        }
+      })
+      .catch((error) => {
+        // Ignore AbortError when component unmounts
+        if (error.name !== 'AbortError') {
+          console.error('Failed to fetch buckets:', error);
+        }
+      })
+      .finally(() => {
+        if (!abortController.signal.aborted) {
+          setSearching(false);
+        }
+      });
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    return () => abortControllerRef.current.abort();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => abortController.abort();
   }, []);
 
   return (
@@ -170,7 +180,7 @@ const Buckets = (): JSX.Element => {
                             search: `?q="${encodeURIComponent(item.bucket)}"${item.official ? '' : '&o=false'}`,
                           }}
                         >
-                          {Utils.extractPathFromUrl(item.bucket)}
+                          {extractPathFromUrl(item.bucket)}
                         </Link>{' '}
                         <BucketTypeIcon official={item.official} />
                       </td>

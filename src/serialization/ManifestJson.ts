@@ -1,4 +1,4 @@
-import { JsonObject, JsonProperty, Any } from 'json2typescript';
+import { Any, JsonObject, JsonProperty } from 'json2typescript';
 
 import MetadataJson from './MetadataJson';
 
@@ -81,7 +81,7 @@ class ManifestJson {
 
   tryGetHighlights(propertyNames: string[], fallback?: string): HighLight {
     const match = propertyNames.find((value: string) => {
-      return this.highlights && this.highlights[value];
+      return this.highlights?.[value];
     });
 
     return match && this.highlights ? this.highlights[match].join(' ') : fallback;

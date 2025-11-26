@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
-import { Col, Row, Form, Dropdown, Button } from 'react-bootstrap';
-import { IconBaseProps } from 'react-icons';
-import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
-import { GoSettings } from 'react-icons/go';
-
+import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap';
+import type { IconBaseProps } from 'react-icons';
+import { FaCog, FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
+import SearchResultsJson from '../serialization/SearchResultsJson';
 import BucketTypeIcon from './BucketTypeIcon';
 import SearchStatus, { SearchStatusType } from './SearchStatus';
-import SearchResultsJson from '../serialization/SearchResultsJson';
 
 export enum SortDirection {
   Ascending,
@@ -280,7 +278,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
         <Col xs={4} className="text-end">
           <Dropdown autoClose="outside" align="end" drop="end" className="sorting-filtering-button">
             <Dropdown.Toggle size="sm" variant="secondary">
-              <GoSettings className="me-2" />
+              <FaCog className="me-2" />
               <span className="d-none d-sm-inline">{formatSortingAndFiltering()}</span>
             </Dropdown.Toggle>
 
@@ -296,7 +294,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
               <Dropdown.Header>Filtering</Dropdown.Header>
               <Dropdown.Item as={Button} onClick={(e) => toggleOfficialOnly(e)}>
                 <Form.Switch className="form-switch-sm">
-                  <Form.Switch.Input checked={officialOnly} />
+                  <Form.Switch.Input checked={officialOnly} readOnly />
                   <Form.Switch.Label>
                     Official buckets only <BucketTypeIcon className="ms-1" official showTooltip={false} />
                   </Form.Switch.Label>
@@ -304,7 +302,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
               </Dropdown.Item>
               <Dropdown.Item as={Button} onClick={(e) => toggleDistinctManifestsOnly(e)}>
                 <Form.Switch className="form-switch-sm">
-                  <Form.Switch.Input checked={distinctManifestsOnly} />
+                  <Form.Switch.Input checked={distinctManifestsOnly} readOnly />
                   <Form.Switch.Label>Distinct manifests only</Form.Switch.Label>
                 </Form.Switch>
               </Dropdown.Item>
@@ -312,7 +310,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
               <Dropdown.Header>Option</Dropdown.Header>
               <Dropdown.Item as={Button} onClick={(e) => toggleInstallBucketName(e)}>
                 <Form.Switch className="form-switch-sm">
-                  <Form.Switch.Input checked={installBucketName} />
+                  <Form.Switch.Input checked={installBucketName} readOnly />
                   <Form.Switch.Label>Show bucket name</Form.Switch.Label>
                 </Form.Switch>
               </Dropdown.Item>

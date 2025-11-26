@@ -1,13 +1,13 @@
-import { JsonObject, JsonConvert, JsonProperty } from 'json2typescript';
+import { JsonConvert, JsonObject, JsonProperty } from 'json2typescript';
 
-import BucketsResultsFacetJson from './BucketsResultsFacetJson';
+import type BucketsResultsFacetJson from './BucketsResultsFacetJson';
 
 @JsonObject('BucketsResultsJson')
 class BucketsResultsJson {
   private static jsonConvert = new JsonConvert();
 
   static Create(jsonObject: unknown): BucketsResultsJson {
-    return BucketsResultsJson.jsonConvert.deserializeObject(jsonObject, BucketsResultsJson);
+    return BucketsResultsJson.jsonConvert.deserializeObject(jsonObject as object, BucketsResultsJson);
   }
 
   @JsonProperty('@odata.count', Number)
