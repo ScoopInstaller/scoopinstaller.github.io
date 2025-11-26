@@ -1,5 +1,5 @@
-import { act, render, screen } from '@testing-library/react';
-import { useContext } from 'react';
+import { act, render as rtlRender, screen } from '@testing-library/react';
+import { type ReactElement, useContext } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ColorSchemeContext } from './ColorSchemeContext';
 import ColorSchemeProvider from './ColorSchemeProvider';
@@ -21,6 +21,8 @@ function TestComponent() {
   );
 }
 
+const renderWithoutProviders = (ui: ReactElement) => rtlRender(ui);
+
 describe('ColorSchemeProvider', () => {
   let mockDocumentRoot: { classList: { add: ReturnType<typeof vi.fn>; remove: ReturnType<typeof vi.fn> } };
   let mockMatchMedia: ReturnType<typeof vi.fn>;
@@ -41,9 +43,14 @@ describe('ColorSchemeProvider', () => {
       },
     };
 
-    vi.spyOn(document, 'getElementsByTagName').mockReturnValue([
-      mockDocumentRoot as unknown as HTMLElement,
-    ] as HTMLCollectionOf<HTMLHtmlElement>);
+    const mockHtmlCollection = {
+      0: mockDocumentRoot as unknown as HTMLHtmlElement,
+      length: 1,
+      item: vi.fn(() => mockDocumentRoot as unknown as HTMLHtmlElement),
+      namedItem: vi.fn(() => null),
+    } as unknown as HTMLCollectionOf<HTMLHtmlElement>;
+
+    vi.spyOn(document, 'getElementsByTagName').mockReturnValue(mockHtmlCollection);
 
     // Mock window.matchMedia
     mockMatchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -79,7 +86,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      render(
+      renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -99,7 +106,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      render(
+      renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -121,7 +128,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      render(
+      renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -143,7 +150,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      render(
+      renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -162,7 +169,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      render(
+      renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -185,7 +192,7 @@ describe('ColorSchemeProvider', () => {
 
       localStorage.setItem('preferred-color-scheme', ColorSchemeType.Dark.toString());
 
-      render(
+      renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -203,7 +210,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      render(
+      renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -223,7 +230,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      const { rerender } = render(
+      const { rerender } = renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -252,7 +259,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      const { rerender } = render(
+      const { rerender } = renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -283,7 +290,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      const { rerender } = render(
+      const { rerender } = renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -314,7 +321,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      const { rerender } = render(
+      const { rerender } = renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -345,7 +352,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      const { rerender } = render(
+      const { rerender } = renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -376,7 +383,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      const { rerender } = render(
+      const { rerender } = renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -409,7 +416,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      render(
+      renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -434,7 +441,7 @@ describe('ColorSchemeProvider', () => {
         dispatchEvent: vi.fn(),
       });
 
-      const { rerender } = render(
+      const { rerender } = renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>

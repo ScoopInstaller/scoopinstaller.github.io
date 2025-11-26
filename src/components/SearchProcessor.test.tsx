@@ -1,32 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { mockSearchResponse } from '../__tests__/mocks/fixtures';
+import { SEARCH_API_URL, server } from '../__tests__/server';
 import SearchProcessor, { SortDirection, sortModes } from './SearchProcessor';
-
-// Setup MSW server for this test file
-const SEARCH_API_URL = 'https://scoopsearch.search.windows.net/indexes/apps/docs';
-
-const server = setupServer(
-	http.post(`${SEARCH_API_URL}/search`, async ({ request }) => {
-		const body = (await request.json()) as {
-			search?: string;
-			filter?: string;
-			orderby?: string;
-			skip?: number;
-			top?: number;
-		};
-
-		// Return different responses based on search query
-		if (body.search === 'error') {
-			return HttpResponse.json({ error: 'Search failed' }, { status: 500 });
-		}
-
-		return HttpResponse.json(mockSearchResponse);
-	}),
-);
 
 describe('SearchProcessor', () => {
 	const mockOnResultsChange = vi.fn();
@@ -50,24 +28,6 @@ describe('SearchProcessor', () => {
 		onResultsChange: mockOnResultsChange,
 		onSortChange: mockOnSortChange,
 	};
-
-	beforeAll(() => {
-		// Set environment variables
-		vi.stubEnv('VITE_APP_AZURESEARCH_URL', SEARCH_API_URL);
-		vi.stubEnv('VITE_APP_AZURESEARCH_KEY', 'test-api-key');
-
-		server.listen({ onUnhandledRequest: 'error' });
-	});
-
-	afterEach(() => {
-		server.resetHandlers();
-		vi.clearAllMocks();
-	});
-
-	afterAll(() => {
-		server.close();
-		vi.unstubAllEnvs();
-	});
 
 	describe('rendering', () => {
 		it('should render search status and controls', async () => {
