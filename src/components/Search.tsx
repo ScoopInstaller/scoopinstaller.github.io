@@ -142,7 +142,7 @@ const Search = (): JSX.Element => {
     setSortIndex(getSortIndexFromSearchParams());
   }
   if (getSortDirectionFromSearchParams(getSortIndexFromSearchParams()) !== sortDirection) {
-    setSortIndex(getSortDirectionFromSearchParams(getSortIndexFromSearchParams()));
+    setSortDirection(getSortDirectionFromSearchParams(getSortIndexFromSearchParams()));
   }
   if (getOfficialOnlyFromSearchParams() !== officialOnly) {
     setOfficialOnly(getOfficialOnlyFromSearchParams());
