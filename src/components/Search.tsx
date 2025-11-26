@@ -138,21 +138,37 @@ const Search = (): JSX.Element => {
     setCurrentPage(getCurrentPageFromSearchParams());
   }, [getCurrentPageFromSearchParams]);
 
-  if (getSortIndexFromSearchParams() !== sortIndex) {
-    setSortIndex(getSortIndexFromSearchParams());
-  }
-  if (getSortDirectionFromSearchParams(getSortIndexFromSearchParams()) !== sortDirection) {
-    setSortDirection(getSortDirectionFromSearchParams(getSortIndexFromSearchParams()));
-  }
-  if (getOfficialOnlyFromSearchParams() !== officialOnly) {
-    setOfficialOnly(getOfficialOnlyFromSearchParams());
-  }
-  if (getDistinctManifestsOnlyFromSearchParams() !== distinctManifestsOnly) {
-    setDistinctManifestsOnly(getDistinctManifestsOnlyFromSearchParams());
-  }
-  if (getInstallBucketNameFromSearchParams() !== installBucketName) {
-    setInstallBucketName(getInstallBucketNameFromSearchParams());
-  }
+  useEffect(() => {
+    const newSortIndex = getSortIndexFromSearchParams();
+    if (newSortIndex !== sortIndex) {
+      setSortIndex(newSortIndex);
+    }
+    const newSortDirection = getSortDirectionFromSearchParams(newSortIndex);
+    if (newSortDirection !== sortDirection) {
+      setSortDirection(newSortDirection);
+    }
+  }, [getSortIndexFromSearchParams, getSortDirectionFromSearchParams, sortIndex, sortDirection]);
+
+  useEffect(() => {
+    const newOfficialOnly = getOfficialOnlyFromSearchParams();
+    if (newOfficialOnly !== officialOnly) {
+      setOfficialOnly(newOfficialOnly);
+    }
+  }, [getOfficialOnlyFromSearchParams, officialOnly]);
+
+  useEffect(() => {
+    const newDistinctManifestsOnly = getDistinctManifestsOnlyFromSearchParams();
+    if (newDistinctManifestsOnly !== distinctManifestsOnly) {
+      setDistinctManifestsOnly(newDistinctManifestsOnly);
+    }
+  }, [getDistinctManifestsOnlyFromSearchParams, distinctManifestsOnly]);
+
+  useEffect(() => {
+    const newInstallBucketName = getInstallBucketNameFromSearchParams();
+    if (newInstallBucketName !== installBucketName) {
+      setInstallBucketName(newInstallBucketName);
+    }
+  }, [getInstallBucketNameFromSearchParams, installBucketName]);
 
   useEffect(() => {
     if (searchResults?.results && selectedResultId) {
