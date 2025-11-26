@@ -2,7 +2,7 @@ import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import type { ComponentProps, ReactNode } from 'react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import type ManifestJson from '../serialization/ManifestJson';
 import type SearchResultsJson from '../serialization/SearchResultsJson';
 import Search from './Search';
@@ -122,7 +122,7 @@ beforeEach(() => {
   mockSearchResult.mockClear();
   mockSearchPagination.mockClear();
 
-  (globalThis.fetch as unknown as vi.Mock) = vi.fn().mockResolvedValue({
+  (globalThis.fetch as unknown as Mock) = vi.fn().mockResolvedValue({
     json: vi.fn().mockResolvedValue({ Official: 'main' }),
   });
 
