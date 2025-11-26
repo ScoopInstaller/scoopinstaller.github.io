@@ -53,12 +53,10 @@ const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
 const Buckets = (): JSX.Element => {
   const abortControllerRef = useRef<AbortController | null>(null);
   const [searching, setSearching] = useState<boolean>(false);
-  const [sortIndex, setSortIndex] = useState<number>(0);
   const [results, setResults] = useState<Bucket[]>([]);
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const sortOrder = e.target.selectedIndex;
-    setSortIndex(sortOrder);
     setResults((previousResults) => sortResults(previousResults, sortOrder));
   };
 
@@ -122,7 +120,7 @@ const Buckets = (): JSX.Element => {
     fetchAsync(abortController.signal)
       .then((buckets) => {
         if (!abortController.signal.aborted) {
-          setResults(sortResults(buckets, sortIndex));
+          setResults(sortResults(buckets, 0));
         }
       })
       .catch((error) => {
@@ -138,7 +136,7 @@ const Buckets = (): JSX.Element => {
       });
 
     return () => abortController.abort();
-  }, [sortIndex]);
+  }, []);
 
   return (
     <>
