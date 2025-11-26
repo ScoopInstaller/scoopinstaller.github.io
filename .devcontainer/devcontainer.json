@@ -9,8 +9,10 @@
       "onAutoForward": "openBrowser"
     }
   },
-  "extensions": ["biomejs.biome"],
   "customizations": {
+    "vscode": {
+      "extensions": ["biomejs.biome"]
+    },
     "codespaces": {
       "openFiles": ["src/App.tsx"]
     }
