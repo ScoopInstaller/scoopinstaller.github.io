@@ -18,7 +18,7 @@
     }
   },
   // Install required modules
-  "updateContentCommand": "corepack enable && pnpm install",
+  "updateContentCommand": "corepack enable && pnpm install --frozen-lockfile",
   // Start dev server
   "postAttachCommand": "pnpm run dev"
 }
