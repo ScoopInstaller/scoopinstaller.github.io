@@ -1,5 +1,5 @@
 import { Helmet } from '@dr.pogodin/react-helmet';
-import React, { type JSX, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 import { Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import { Link } from 'react-router-dom';
@@ -51,7 +51,6 @@ const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
 };
 
 const Buckets = (): JSX.Element => {
-  const abortControllerRef = useRef<AbortController | null>(null);
   const [searching, setSearching] = useState<boolean>(false);
   const [results, setResults] = useState<Bucket[]>([]);
 
@@ -63,7 +62,6 @@ const Buckets = (): JSX.Element => {
   useEffect(() => {
     // Create a new AbortController for this effect
     const abortController = new AbortController();
-    abortControllerRef.current = abortController;
 
     setSearching(true);
     setResults([]);
