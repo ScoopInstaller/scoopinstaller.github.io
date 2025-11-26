@@ -17,9 +17,10 @@ type Bucket = {
 const sortModes: string[] = ['Default', 'Name', 'Manifests'];
 
 const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
+  const sorted = [...buckets];
   switch (sortOrder) {
     case 0:
-      return buckets.sort((x, y) => {
+      return sorted.sort((x, y) => {
         if (x.official === y.official) {
           return x.bucket.localeCompare(y.bucket);
         }
@@ -31,10 +32,10 @@ const sortResults = (buckets: Bucket[], sortOrder: number): Bucket[] => {
       });
 
     case 1:
-      return buckets.sort((x, y) => x.bucket.localeCompare(y.bucket));
+      return sorted.sort((x, y) => x.bucket.localeCompare(y.bucket));
 
     case 2:
-      return buckets.sort((x, y) => {
+      return sorted.sort((x, y) => {
         if (x.manifests === y.manifests) {
           return 0;
         }
