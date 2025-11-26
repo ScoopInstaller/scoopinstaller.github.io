@@ -201,6 +201,7 @@ const Search = (): JSX.Element => {
   const handleQueryChange = useCallback(
     (newQuery: string): void => {
       updateSearchParams(SEARCH_PARAM_QUERY, newQuery, false);
+      updateSearchParams(SEARCH_PARAM_PAGE, '1', false);
       setSearchBarQuery(newQuery);
       setCurrentPage(1);
     },
