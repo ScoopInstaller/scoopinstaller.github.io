@@ -35,10 +35,6 @@ export default defineConfig({
       output: {
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
-            if (/\/(react-bootstrap|popper)/.test(id)) {
-              return 'bootstrap-vendor';
-            }
-
             if (/\/(react)/.test(id)) {
               return 'react-vendor';
             }
