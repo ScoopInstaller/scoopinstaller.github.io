@@ -1,60 +1,24 @@
 import '@testing-library/jest-dom';
+import './polyfills';
 import { cleanup } from '@testing-library/react';
-import { afterEach, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, vi } from 'vitest';
+import { SEARCH_API_URL, server } from './server';
 
-// Clean up after each test
+beforeAll(() => {
+  server.listen({ onUnhandledRequest: 'error' });
+  vi.stubEnv('VITE_APP_AZURESEARCH_URL', SEARCH_API_URL);
+  vi.stubEnv('VITE_APP_AZURESEARCH_KEY', 'test-api-key');
+});
+
 afterEach(() => {
+  server.resetHandlers();
   cleanup();
+  localStorage.clear();
+  vi.clearAllMocks();
 });
 
-// Mock window.matchMedia (used by ColorSchemeProvider)
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: vi.fn().mockImplementation((query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(), // deprecated
-    removeListener: vi.fn(), // deprecated
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
+afterAll(() => {
+  server.close();
+  vi.unstubAllEnvs();
 });
 
-// Mock localStorage for tests
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-
-  return {
-    getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => {
-      store[key] = value.toString();
-    },
-    removeItem: (key: string) => {
-      delete store[key];
-    },
-    clear: () => {
-      store = {};
-    },
-    get length() {
-      return Object.keys(store).length;
-    },
-    key: (index: number) => {
-      const keys = Object.keys(store);
-      return keys[index] || null;
-    },
-  };
-})();
-
-Object.defineProperty(global, 'localStorage', {
-  value: localStorageMock,
-  configurable: true,
-});
-
-// Mock clipboard API
-Object.assign(navigator, {
-  clipboard: {
-    writeText: vi.fn(),
-  },
-});
