@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Root from './Root';
@@ -13,7 +14,7 @@ vi.mock('./Footer', () => ({
 }));
 
 vi.mock('../colorscheme/ColorSchemeProvider', () => ({
-  default: ({ children }: { children: React.ReactNode }) => <div data-testid="color-scheme-provider">{children}</div>,
+  default: ({ children }: { children: ReactNode }) => <div data-testid="color-scheme-provider">{children}</div>,
 }));
 
 describe('Root', () => {

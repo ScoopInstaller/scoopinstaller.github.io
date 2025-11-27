@@ -45,7 +45,7 @@ describe('Buckets', () => {
         const body = (await request.json()) as { filter?: string };
 
         // Return official buckets for official filter
-        if (body.filter?.includes('1')) {
+        if (body.filter?.includes('Metadata/OfficialRepositoryNumber eq 1')) {
           return HttpResponse.json(mockOfficialBucketsResponse);
         }
 

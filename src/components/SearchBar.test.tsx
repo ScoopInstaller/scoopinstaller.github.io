@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import type { ComponentProps } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import SearchBar from './SearchBar';
 
 describe('SearchBar', () => {
@@ -24,54 +24,58 @@ describe('SearchBar', () => {
     expect(screen.getByPlaceholderText('Search an app')).toHaveFocus();
   });
 
-  it('updates the query and eventually submits after the debounce', () => {
-    vi.useFakeTimers();
-    const { props } = setup();
-    const input = screen.getByPlaceholderText('Search an app');
-
-    fireEvent.change(input, { target: { value: 'git' } });
-
-    expect(props.onQueryChange).toHaveBeenCalledWith('git');
-
-    act(() => {
-      vi.advanceTimersByTime(250);
+  describe('debounce behavior', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
     });
 
-    expect(props.onSubmit).toHaveBeenCalledTimes(1);
-    vi.useRealTimers();
-  });
-
-  it('clears pending submissions when the component unmounts', () => {
-    vi.useFakeTimers();
-    const { unmount, props } = setup();
-    const input = screen.getByPlaceholderText('Search an app');
-
-    fireEvent.change(input, { target: { value: 'hello' } });
-    unmount();
-
-    act(() => {
-      vi.runAllTimers();
+    afterEach(() => {
+      vi.useRealTimers();
     });
 
-    expect(props.onSubmit).not.toHaveBeenCalled();
-    vi.useRealTimers();
-  });
+    it('updates the query and eventually submits after the debounce', () => {
+      const { props } = setup();
+      const input = screen.getByPlaceholderText('Search an app');
 
-  it('submits immediately via form submission and cancels the pending timer', () => {
-    vi.useFakeTimers();
-    const { props } = setup();
-    const input = screen.getByPlaceholderText('Search an app');
+      fireEvent.change(input, { target: { value: 'git' } });
 
-    fireEvent.change(input, { target: { value: 'node' } });
-    fireEvent.submit(input.closest('form') as HTMLFormElement);
+      expect(props.onQueryChange).toHaveBeenCalledWith('git');
 
-    expect(props.onSubmit).toHaveBeenCalledTimes(1);
+      act(() => {
+        vi.advanceTimersByTime(250);
+      });
 
-    act(() => {
-      vi.runAllTimers();
+      expect(props.onSubmit).toHaveBeenCalledTimes(1);
     });
 
-    expect(props.onSubmit).toHaveBeenCalledTimes(1);
-    vi.useRealTimers();
+    it('clears pending submissions when the component unmounts', () => {
+      const { unmount, props } = setup();
+      const input = screen.getByPlaceholderText('Search an app');
+
+      fireEvent.change(input, { target: { value: 'hello' } });
+      unmount();
+
+      act(() => {
+        vi.runAllTimers();
+      });
+
+      expect(props.onSubmit).not.toHaveBeenCalled();
+    });
+
+    it('submits immediately via form submission and cancels the pending timer', () => {
+      const { props } = setup();
+      const input = screen.getByPlaceholderText('Search an app');
+
+      fireEvent.change(input, { target: { value: 'node' } });
+      fireEvent.submit(input.closest('form') as HTMLFormElement);
+
+      expect(props.onSubmit).toHaveBeenCalledTimes(1);
+
+      act(() => {
+        vi.runAllTimers();
+      });
+
+      expect(props.onSubmit).toHaveBeenCalledTimes(1);
+    });
   });
 });

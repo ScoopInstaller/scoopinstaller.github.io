@@ -130,7 +130,7 @@ describe('SearchPagination', () => {
 
       // With 20 pages and currentPage=1, we should see ellipsis before the last page
       const ellipsis = screen.queryAllByText('…');
-      expect(ellipsis.length).toBeGreaterThanOrEqual(0);
+      expect(ellipsis.length).toBe(1);
     });
 
     it('shows ellipsis for large page counts when on last page', () => {
@@ -138,7 +138,7 @@ describe('SearchPagination', () => {
 
       // With 20 pages and currentPage=20, we should see ellipsis after the first page
       const ellipsis = screen.queryAllByText('…');
-      expect(ellipsis.length).toBeGreaterThanOrEqual(0);
+      expect(ellipsis.length).toBe(1);
     });
 
     it('shows ellipsis on both sides when in the middle of many pages', () => {
@@ -146,7 +146,7 @@ describe('SearchPagination', () => {
 
       // With 20 pages and currentPage=10, we should see ellipsis on both sides
       const ellipsis = screen.queryAllByText('…');
-      expect(ellipsis.length).toBeGreaterThanOrEqual(0);
+      expect(ellipsis.length).toBe(2);
     });
   });
 

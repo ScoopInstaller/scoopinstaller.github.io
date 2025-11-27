@@ -19,9 +19,9 @@ describe('DateConverter', () => {
       const result = converter.deserialize(dateString);
 
       expect(result).toBeInstanceOf(Date);
-      expect(result.getFullYear()).toBe(2024);
-      expect(result.getMonth()).toBe(0); // January = 0
-      expect(result.getDate()).toBe(15);
+      expect(result.getUTCFullYear()).toBe(2024);
+      expect(result.getUTCMonth()).toBe(0); // January = 0
+      expect(result.getUTCDate()).toBe(15);
     });
 
     it('should deserialize date-only string', () => {
@@ -29,9 +29,9 @@ describe('DateConverter', () => {
       const result = converter.deserialize(dateString);
 
       expect(result).toBeInstanceOf(Date);
-      expect(result.getFullYear()).toBe(2024);
-      expect(result.getMonth()).toBe(0);
-      expect(result.getDate()).toBe(15);
+      expect(result.getUTCFullYear()).toBe(2024);
+      expect(result.getUTCMonth()).toBe(0);
+      expect(result.getUTCDate()).toBe(15);
     });
 
     it('should handle various date formats', () => {

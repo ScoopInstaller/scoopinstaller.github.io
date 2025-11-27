@@ -127,6 +127,8 @@ beforeEach(() => {
   });
 
   (window as unknown as { scrollTo: () => void }).scrollTo = vi.fn();
+
+  localStorage.clear();
 });
 
 describe('Search', () => {
@@ -246,6 +248,5 @@ describe('Search', () => {
     });
 
     expect(screen.getByTestId('location-display').textContent).not.toContain('id=');
-    vi.useRealTimers();
   });
 });

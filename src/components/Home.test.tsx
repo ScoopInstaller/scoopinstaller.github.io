@@ -115,17 +115,15 @@ describe('Home', () => {
   });
 
   describe('color scheme', () => {
-    it('applies light style in light mode', () => {
+    it('renders correctly in light mode', () => {
       renderHome({ isDarkMode: false });
 
-      // Component should render without error in light mode
       expect(screen.getByText('Scoop')).toBeInTheDocument();
     });
 
-    it('applies dark style in dark mode', () => {
+    it('renders correctly in dark mode', () => {
       renderHome({ isDarkMode: true });
 
-      // Component should render without error in dark mode
       expect(screen.getByText('Scoop')).toBeInTheDocument();
     });
   });

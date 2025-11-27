@@ -28,6 +28,12 @@ describe('Footer', () => {
   it('renders version and commit hash', () => {
     render(<Footer />);
 
-    expect(screen.getByText(/\//)).toBeInTheDocument();
+    // Check for the exact version and commit hash using the build-time constants
+    expect(APP_VERSION).toBeDefined();
+    expect(APP_COMMIT_HASH).toBeDefined();
+
+    // Check they exist in the document
+    expect(screen.getByText(APP_VERSION, { exact: false })).toBeInTheDocument();
+    expect(screen.getByText(APP_COMMIT_HASH.trim(), { exact: false })).toBeInTheDocument();
   });
 });

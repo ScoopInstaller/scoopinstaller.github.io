@@ -262,9 +262,8 @@ describe('SearchProcessor', () => {
 
       // Find and click the button containing "Official buckets only"
       const officialOnlyButton = screen.getByText(/Official buckets only/i).closest('button');
-      if (officialOnlyButton) {
-        await user.click(officialOnlyButton);
-      }
+      expect(officialOnlyButton).toBeInstanceOf(HTMLButtonElement);
+      await user.click(officialOnlyButton as HTMLButtonElement);
 
       expect(mockOnOfficialOnlyChange).toHaveBeenCalledWith(true);
     });
@@ -279,9 +278,8 @@ describe('SearchProcessor', () => {
 
       // Find and click the button containing "Distinct manifests only"
       const distinctButton = screen.getByText(/Distinct manifests only/i).closest('button');
-      if (distinctButton) {
-        await user.click(distinctButton);
-      }
+      expect(distinctButton).toBeInstanceOf(HTMLButtonElement);
+      await user.click(distinctButton as HTMLButtonElement);
 
       expect(mockOnDistinctManifestsOnlyChange).toHaveBeenCalledWith(true);
     });
@@ -296,9 +294,8 @@ describe('SearchProcessor', () => {
 
       // Find and click the button containing "Show bucket name"
       const bucketNameButton = screen.getByText(/Show bucket name/i).closest('button');
-      if (bucketNameButton) {
-        await user.click(bucketNameButton);
-      }
+      expect(bucketNameButton).toBeInstanceOf(HTMLButtonElement);
+      await user.click(bucketNameButton as HTMLButtonElement);
 
       expect(mockOnInstallBucketName).toHaveBeenCalledWith(true);
     });
@@ -313,9 +310,8 @@ describe('SearchProcessor', () => {
 
       // Click on Name sort - get all buttons and find the one with just "Name"
       const nameButtons = screen.getAllByRole('button').filter((button) => button.textContent?.trim() === 'Name');
-      if (nameButtons.length > 0) {
-        await user.click(nameButtons[0]);
-      }
+      expect(nameButtons.length).toBeGreaterThan(0);
+      await user.click(nameButtons[0]);
 
       expect(mockOnSortChange).toHaveBeenCalledWith(1, SortDirection.Ascending);
     });
@@ -339,6 +335,8 @@ describe('SearchProcessor', () => {
 
   describe('abort controller', () => {
     it('should abort previous request when query changes', async () => {
+      const abortSpy = vi.spyOn(AbortController.prototype, 'abort');
+
       const { rerender } = render(<SearchProcessor {...defaultProps} query="git" />);
 
       await waitFor(() => {
@@ -346,13 +344,21 @@ describe('SearchProcessor', () => {
       });
 
       mockOnResultsChange.mockClear();
+      abortSpy.mockClear();
 
-      // Change query
+      // Change query - should abort previous request
       rerender(<SearchProcessor {...defaultProps} query="nodejs" />);
+
+      // Verify abort was called when query changed - this proves the abort mechanism works
+      // Note: The exact number of calls may vary based on React's rendering behavior and
+      // state updates, but the important thing is that abort IS called to cancel the previous request
+      expect(abortSpy).toHaveBeenCalled();
 
       await waitFor(() => {
         expect(mockOnResultsChange).toHaveBeenCalled();
       });
+
+      abortSpy.mockRestore();
     });
   });
 });
