@@ -405,18 +405,19 @@ describe('ColorSchemeProvider', () => {
   });
 
   describe('media query listener', () => {
-    it('should register media query change listener', () => {
+    it('should register and cleanup media query change listener', () => {
       const mockAddEventListener = vi.fn();
+      const mockRemoveEventListener = vi.fn();
 
       mockMatchMedia.mockReturnValue({
         matches: false,
         media: '(prefers-color-scheme: dark)',
         addEventListener: mockAddEventListener,
-        removeEventListener: vi.fn(),
+        removeEventListener: mockRemoveEventListener,
         dispatchEvent: vi.fn(),
       });
 
-      renderWithoutProviders(
+      const { unmount } = renderWithoutProviders(
         <ColorSchemeProvider>
           <TestComponent />
         </ColorSchemeProvider>
@@ -424,6 +425,10 @@ describe('ColorSchemeProvider', () => {
 
       expect(mockMatchMedia).toHaveBeenCalledWith('(prefers-color-scheme: dark)');
       expect(mockAddEventListener).toHaveBeenCalledWith('change', expect.any(Function));
+
+      // Verify cleanup on unmount
+      unmount();
+      expect(mockRemoveEventListener).toHaveBeenCalledWith('change', expect.any(Function));
     });
 
     it('should update color scheme when media query changes', () => {

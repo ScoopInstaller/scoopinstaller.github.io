@@ -86,12 +86,18 @@ const ColorSchemeProvider = (props: { children: React.ReactNode }): JSX.Element 
 
   useLayoutEffect(() => {
     const browserColorSchemeMediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-    browserColorSchemeMediaQueryList.addEventListener('change', (e) => {
+    const handleChange = (e: MediaQueryListEvent) => {
       setBrowserColorSchemePreference(toColorSchemeType(e.matches));
-    });
+    };
+
+    browserColorSchemeMediaQueryList.addEventListener('change', handleChange);
 
     setBrowserColorSchemePreference(toColorSchemeType(browserColorSchemeMediaQueryList.matches));
     setUserColorSchemePreference(toColorSchemeType(localStorage.getItem(PREFERRED_COLOR_SCHEME_STORAGE)));
+
+    return () => {
+      browserColorSchemeMediaQueryList.removeEventListener('change', handleChange);
+    };
   }, []);
 
   return <ColorSchemeContext.Provider value={contextState}>{props.children}</ColorSchemeContext.Provider>;
