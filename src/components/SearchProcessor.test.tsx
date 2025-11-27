@@ -334,6 +334,22 @@ describe('SearchProcessor', () => {
   });
 
   describe('abort controller', () => {
+    it('should not abort on initial render', async () => {
+      const abortSpy = vi.spyOn(AbortController.prototype, 'abort');
+
+      render(<SearchProcessor {...defaultProps} query="git" />);
+
+      await waitFor(() => {
+        expect(mockOnResultsChange).toHaveBeenCalled();
+      });
+
+      // No abort should be called on initial render - we only abort when
+      // cancelling a previous request, and there is none on first render
+      expect(abortSpy).not.toHaveBeenCalled();
+
+      abortSpy.mockRestore();
+    });
+
     it('should abort previous request when query changes', async () => {
       const abortSpy = vi.spyOn(AbortController.prototype, 'abort');
 
@@ -346,12 +362,12 @@ describe('SearchProcessor', () => {
       mockOnResultsChange.mockClear();
       abortSpy.mockClear();
 
-      // Change query - should abort previous request
+      // Change query - should abort previous request via cleanup function
       rerender(<SearchProcessor {...defaultProps} query="nodejs" />);
 
-      // Verify abort was called when query changed - this proves the abort mechanism works
-      // Note: The exact number of calls may vary based on React's rendering behavior and
-      // state updates, but the important thing is that abort IS called to cancel the previous request
+      // Verify abort was called when query changed.
+      // Note: The call count includes both our cleanup abort and Node's internal
+      // fetch (undici) abort signal propagation. We only care that abort IS called.
       expect(abortSpy).toHaveBeenCalled();
 
       await waitFor(() => {

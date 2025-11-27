@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Button, Col, Dropdown, Form, Row } from 'react-bootstrap';
 import type { IconBaseProps } from 'react-icons';
@@ -84,7 +84,6 @@ const { VITE_APP_AZURESEARCH_URL, VITE_APP_AZURESEARCH_KEY } = import.meta.env;
 const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
   const [resultsCount, setResultsCount] = useState<number>(0);
   const [searching, setSearching] = useState<boolean>(false);
-  const abortControllerRef = useRef<AbortController>(new AbortController());
   const {
     query,
     page,
@@ -146,8 +145,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
   );
 
   useEffect(() => {
-    abortControllerRef.current.abort();
-    abortControllerRef.current = new AbortController();
+    const abortController = new AbortController();
 
     const fetchDataAsync = (abortSignal: AbortSignal): void => {
       setSearching(true);
@@ -238,9 +236,9 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
         });
     };
 
-    fetchDataAsync(abortControllerRef.current.signal);
+    fetchDataAsync(abortController.signal);
 
-    return () => abortControllerRef.current.abort();
+    return () => abortController.abort();
   }, [query, page, sortIndex, sortDirection, officialOnly, distinctManifestsOnly, resultsPerPage, onResultsChange]);
 
   const SortIcon = (sortIconProps: { currentSortIndex: number } & IconBaseProps): JSX.Element => {
