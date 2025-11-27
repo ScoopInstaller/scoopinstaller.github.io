@@ -38,10 +38,7 @@ jobs:
     - name: Code linter
       run: pnpm run lint
 
-    - name: Run tests
-      run: pnpm test:run
-
-    - name: Generate coverage report
+    - name: Run tests and generate coverage report
       run: pnpm test:coverage
 
     - name: Upload coverage report
