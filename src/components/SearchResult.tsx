@@ -21,21 +21,21 @@ type SearchResultProps = {
   result: ManifestJson;
   officialRepositories: { [key: string]: string };
   installBucketName: boolean;
-  onCopyToClipbard: (content: string) => void;
+  onCopyToClipboard: (content: string) => void;
   onResultSelected?: (result: ManifestJson) => void;
   cardRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 const SearchResult = (props: SearchResultProps): JSX.Element => {
-  const { result, officialRepositories, installBucketName, onCopyToClipbard, onResultSelected, cardRef } = props;
+  const { result, officialRepositories, installBucketName, onCopyToClipboard, onResultSelected, cardRef } = props;
   const homepageRef = useRef<HTMLSpanElement>(null);
   const [homepageTooltipHidden, setHomepageTooltipHidden] = useState<boolean>(false);
 
   const handleCopyToClipboard = useCallback(
     (content: string): void => {
-      onCopyToClipbard(content);
+      onCopyToClipboard(content);
     },
-    [onCopyToClipbard]
+    [onCopyToClipboard]
   );
 
   const handleSelected = useCallback((): void => {

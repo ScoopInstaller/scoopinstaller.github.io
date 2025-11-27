@@ -320,7 +320,7 @@ const Search = (): JSX.Element => {
                 result={searchResult}
                 officialRepositories={officialRepositories}
                 installBucketName={installBucketName}
-                onCopyToClipbard={handleCopyToClipboard}
+                onCopyToClipboard={handleCopyToClipboard}
                 onResultSelected={handleResultSelected}
               />
             ))}
@@ -353,7 +353,7 @@ const Search = (): JSX.Element => {
               result={selectedResult}
               officialRepositories={officialRepositories}
               installBucketName={installBucketName}
-              onCopyToClipbard={handleCopyToClipboard}
+              onCopyToClipboard={handleCopyToClipboard}
             />
           )}
         </Modal.Body>

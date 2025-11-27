@@ -20,7 +20,7 @@ describe('SearchResult', () => {
     result: jsonConvert.deserializeObject(mockManifest, ManifestJsonClass),
     officialRepositories,
     installBucketName: false,
-    onCopyToClipbard: mockOnCopyToClipboard,
+    onCopyToClipboard: mockOnCopyToClipboard,
     onResultSelected: mockOnResultSelected,
   };
 
