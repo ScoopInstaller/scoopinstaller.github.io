@@ -201,6 +201,7 @@ const Search = (): JSX.Element => {
   const handleQueryChange = useCallback(
     (newQuery: string): void => {
       updateSearchParams(SEARCH_PARAM_QUERY, newQuery, false);
+      updateSearchParams(SEARCH_PARAM_PAGE, '1', false);
       setSearchBarQuery(newQuery);
       setCurrentPage(1);
     },
@@ -319,7 +320,7 @@ const Search = (): JSX.Element => {
                 result={searchResult}
                 officialRepositories={officialRepositories}
                 installBucketName={installBucketName}
-                onCopyToClipbard={handleCopyToClipboard}
+                onCopyToClipboard={handleCopyToClipboard}
                 onResultSelected={handleResultSelected}
               />
             ))}
@@ -352,7 +353,7 @@ const Search = (): JSX.Element => {
               result={selectedResult}
               officialRepositories={officialRepositories}
               installBucketName={installBucketName}
-              onCopyToClipbard={handleCopyToClipboard}
+              onCopyToClipboard={handleCopyToClipboard}
             />
           )}
         </Modal.Body>
