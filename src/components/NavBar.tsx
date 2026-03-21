@@ -16,7 +16,7 @@ const NavBar = (): JSX.Element => {
         <Navbar.Brand as={Link} to="/">
           <img
             alt=""
-            src="https://avatars.githubusercontent.com/u/16618068?s=30"
+            src="https://avatars.githubusercontent.com/u/16618068?s=128"
             width="30"
             height="30"
             className="d-inline-block align-top rounded me-2"
