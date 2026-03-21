@@ -79,8 +79,6 @@ export const sortModes: SortMode[] = [
   },
 ];
 
-const { VITE_APP_AZURESEARCH_URL, VITE_APP_AZURESEARCH_KEY } = import.meta.env;
-
 const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
   const [resultsCount, setResultsCount] = useState<number>(0);
   const [searching, setSearching] = useState<boolean>(false);
@@ -148,6 +146,8 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
     const abortController = new AbortController();
 
     const fetchDataAsync = (abortSignal: AbortSignal): void => {
+      const { VITE_APP_AZURESEARCH_URL, VITE_APP_AZURESEARCH_KEY } = import.meta.env;
+
       setSearching(true);
 
       if (!VITE_APP_AZURESEARCH_URL) {
