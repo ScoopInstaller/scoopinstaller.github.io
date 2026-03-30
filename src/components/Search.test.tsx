@@ -122,9 +122,7 @@ beforeEach(() => {
   mockSearchResult.mockClear();
   mockSearchPagination.mockClear();
 
-  (globalThis.fetch as unknown as Mock) = vi.fn().mockResolvedValue({
-    json: vi.fn().mockResolvedValue({ Official: 'main' }),
-  });
+  (globalThis.fetch as unknown as Mock) = vi.fn();
 
   (window as unknown as { scrollTo: () => void }).scrollTo = vi.fn();
 

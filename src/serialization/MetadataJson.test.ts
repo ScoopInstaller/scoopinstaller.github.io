@@ -14,6 +14,7 @@ describe('MetadataJson', () => {
       const metadata = {
         Repository: 'ScoopInstaller/Main',
         OfficialRepository: true,
+        OfficialRepositoryName: 'main',
         RepositoryStars: 5000,
         BranchName: 'master',
         FilePath: 'bucket/git.json',
@@ -25,6 +26,7 @@ describe('MetadataJson', () => {
 
       expect(result.repository).toBe('ScoopInstaller/Main');
       expect(result.repositoryOfficial).toBe(true);
+      expect(result.officialRepositoryName).toBe('main');
       expect(result.stars).toBe(5000);
       expect(result.branchName).toBe('master');
       expect(result.filePath).toBe('bucket/git.json');
@@ -46,6 +48,7 @@ describe('MetadataJson', () => {
 
       expect(result.repository).toBe('user/repo');
       expect(result.repositoryOfficial).toBe(false);
+      expect(result.officialRepositoryName).toBe('');
       expect(result.stars).toBe(0);
       expect(result.branchName).toBe('');
     });
@@ -66,6 +69,7 @@ describe('MetadataJson', () => {
       expect(result.committed.getFullYear()).toBe(2024);
       expect(result.committed.getMonth()).toBe(0); // January = 0
       expect(result.committed.getDate()).toBe(15);
+      expect(result.officialRepositoryName).toBe('');
     });
   });
 
@@ -74,6 +78,7 @@ describe('MetadataJson', () => {
       const metadata = {
         Repository: 'ScoopInstaller/Main',
         OfficialRepository: true,
+        OfficialRepositoryName: 'main',
         RepositoryStars: 5000,
         FilePath: 'bucket/app.json',
         Committed: '2024-01-01T00:00:00Z',
@@ -83,6 +88,7 @@ describe('MetadataJson', () => {
       const result = jsonConvert.deserializeObject(metadata, MetadataJson);
 
       expect(result.repositoryOfficial).toBe(true);
+      expect(result.officialRepositoryName).toBe('main');
     });
 
     it('should correctly identify non-official repository', () => {
@@ -98,6 +104,7 @@ describe('MetadataJson', () => {
       const result = jsonConvert.deserializeObject(metadata, MetadataJson);
 
       expect(result.repositoryOfficial).toBe(false);
+      expect(result.officialRepositoryName).toBe('');
     });
   });
 
@@ -121,6 +128,7 @@ describe('MetadataJson', () => {
       const metadata = {
         Repository: 'popular/repo',
         OfficialRepository: true,
+        OfficialRepositoryName: 'extras',
         RepositoryStars: 999999,
         FilePath: 'bucket/app.json',
         Committed: '2024-01-01T00:00:00Z',
@@ -130,6 +138,7 @@ describe('MetadataJson', () => {
       const result = jsonConvert.deserializeObject(metadata, MetadataJson);
 
       expect(result.stars).toBe(999999);
+      expect(result.officialRepositoryName).toBe('extras');
     });
   });
 });

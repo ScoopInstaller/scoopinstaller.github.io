@@ -10,6 +10,9 @@ class MetadataJson {
   @JsonProperty('OfficialRepository', Boolean)
   repositoryOfficial = false;
 
+  @JsonProperty('OfficialRepositoryName', String, true)
+  officialRepositoryName?: string = '';
+
   @JsonProperty('RepositoryStars', Number)
   stars = 0;
 

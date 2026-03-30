@@ -20,6 +20,7 @@ export const mockSearchResponse = {
       Metadata: {
         Repository: 'ScoopInstaller/Main',
         OfficialRepository: true,
+        OfficialRepositoryName: 'main',
         RepositoryStars: 5000,
         BranchName: 'master',
         FilePath: 'bucket/git.json',
@@ -44,6 +45,7 @@ export const mockSearchResponse = {
       Metadata: {
         Repository: 'ScoopInstaller/Extras',
         OfficialRepository: true,
+        OfficialRepositoryName: 'extras',
         RepositoryStars: 3500,
         BranchName: 'master',
         FilePath: 'bucket/github.json',
@@ -78,6 +80,7 @@ export const mockManifest = {
   Metadata: {
     Repository: 'ScoopInstaller/Main',
     OfficialRepository: true,
+    OfficialRepositoryName: 'main',
     RepositoryStars: 5000,
     BranchName: 'master',
     FilePath: 'bucket/nodejs.json',
@@ -116,20 +119,6 @@ export const mockBucketsResponse = {
     },
   ],
 };
-
-// Mock GitHub buckets.json response
-export const mockGitHubBucketsJson = [
-  {
-    name: 'main',
-    repository: 'https://github.com/ScoopInstaller/Main',
-    official: true,
-  },
-  {
-    name: 'extras',
-    repository: 'https://github.com/ScoopInstaller/Extras',
-    official: true,
-  },
-];
 
 // Mock error response
 export const mockErrorResponse = {

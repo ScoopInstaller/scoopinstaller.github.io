@@ -19,7 +19,6 @@ dayjs.extend(relativeTime);
 
 type SearchResultProps = {
   result: ManifestJson;
-  officialRepositories: { [key: string]: string };
   installBucketName: boolean;
   onCopyToClipboard: (content: string) => void;
   onResultSelected?: (result: ManifestJson) => void;
@@ -27,7 +26,7 @@ type SearchResultProps = {
 };
 
 const SearchResult = (props: SearchResultProps): JSX.Element => {
-  const { result, officialRepositories, installBucketName, onCopyToClipboard, onResultSelected, cardRef } = props;
+  const { result, installBucketName, onCopyToClipboard, onResultSelected, cardRef } = props;
   const homepageRef = useRef<HTMLSpanElement>(null);
   const [homepageTooltipHidden, setHomepageTooltipHidden] = useState<boolean>(false);
 
@@ -113,13 +112,15 @@ const SearchResult = (props: SearchResultProps): JSX.Element => {
 
   // Use known repository name for official repositories and keep only organization+repo for community repositories
   const formattedHighlightedRepository = metadata.repositoryOfficial
-    ? highlightedRepository?.toString().replace(metadata.repository, officialRepositories[metadata.repository])
+    ? highlightedRepository
+        ?.toString()
+        .replace(metadata.repository, metadata.officialRepositoryName || metadata.repository)
     : highlightedRepository?.toString().replace(/^(<mark>|)(?:.*?\/){3}(.+)$/, '$1$2');
 
   const versionPrefix = version.length > 0 && /^\d/.test(version) && 'v';
 
   const bucketName = metadata.repositoryOfficial
-    ? officialRepositories[metadata.repository] ||
+    ? metadata.officialRepositoryName ||
       metadata.repository.substring(metadata.repository.lastIndexOf('/') + 1).toLowerCase()
     : `${extractPathFromUrl(metadata.repository, '_')}`;
   const bucketUrl = metadata.repositoryOfficial ? '' : `${metadata.repository}`;

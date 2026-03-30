@@ -191,6 +191,7 @@ const SearchProcessor = (props: SearchProcessorProps): JSX.Element => {
             'Metadata/Repository',
             'Metadata/FilePath',
             'Metadata/OfficialRepository',
+            'Metadata/OfficialRepositoryName',
             'Metadata/RepositoryStars',
             'Metadata/Committed',
             'Metadata/Sha',

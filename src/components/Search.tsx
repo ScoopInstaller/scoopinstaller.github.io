@@ -123,7 +123,6 @@ const Search = (): JSX.Element => {
   );
   const [installBucketName, setInstallBucketName] = useState<boolean>(getInstallBucketNameFromSearchParams());
   const [searchResults, setSearchResults] = useState<SearchResultsJson>();
-  const [officialRepositories, setOfficialRepositories] = useState<{ [key: string]: string }>({});
   const [selectedResult, setSelectedResult] = useState<ManifestJson | null>();
   const [selectedResultId, setSelectedResultId] = useState<string>(getSelectedResultFromSearchParams);
   const selectedResultRef = useRef<HTMLDivElement>(null);
@@ -183,20 +182,6 @@ const Search = (): JSX.Element => {
 
     updateSearchParams(SEARCH_PARAM_SELECTED_RESULT, selectedResultId, false);
   }, [selectedResultId, searchResults, updateSearchParams]);
-
-  useEffect(() => {
-    fetch('https://cdn.jsdelivr.net/gh/ScoopInstaller/Scoop/buckets.json')
-      .then((response) => response.json())
-      .then((response) => {
-        const json = response as { [key: string]: string };
-        const mapping: { [key: string]: string } = {};
-        Object.keys(json).forEach((key) => {
-          mapping[json[key]] = key;
-        });
-        setOfficialRepositories(mapping);
-      })
-      .catch((error) => console.log(error));
-  }, []);
 
   const handleQueryChange = useCallback(
     (newQuery: string): void => {
@@ -318,7 +303,6 @@ const Search = (): JSX.Element => {
                 cardRef={searchResult.id === selectedResultId ? selectedResultRef : undefined}
                 key={searchResult.id}
                 result={searchResult}
-                officialRepositories={officialRepositories}
                 installBucketName={installBucketName}
                 onCopyToClipboard={handleCopyToClipboard}
                 onResultSelected={handleResultSelected}
@@ -351,7 +335,6 @@ const Search = (): JSX.Element => {
           {selectedResult && (
             <SearchResult
               result={selectedResult}
-              officialRepositories={officialRepositories}
               installBucketName={installBucketName}
               onCopyToClipboard={handleCopyToClipboard}
             />

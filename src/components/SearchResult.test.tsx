@@ -11,14 +11,8 @@ describe('SearchResult', () => {
   const mockOnCopyToClipboard = vi.fn();
   const mockOnResultSelected = vi.fn();
 
-  const officialRepositories = {
-    'ScoopInstaller/Main': 'main',
-    'ScoopInstaller/Extras': 'extras',
-  };
-
   const defaultProps = {
     result: jsonConvert.deserializeObject(mockManifest, ManifestJsonClass),
-    officialRepositories,
     installBucketName: false,
     onCopyToClipboard: mockOnCopyToClipboard,
     onResultSelected: mockOnResultSelected,
