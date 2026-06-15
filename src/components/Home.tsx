@@ -118,8 +118,8 @@ const Home = (): JSX.Element => {
       </p>
       <SyntaxHighlighterWithCopyBtn
         language="powershell"
-        code={`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression`}
+        code={`Set-ExecutionPolicy RemoteSigned CurrentUser -Force
+irm get.scoop.sh | iex`}
       />
       <p className="text-center">
         For advanced installation options, check out the{' '}
