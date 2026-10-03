@@ -29,11 +29,18 @@
     <link rel="search" type="application/opensearchdescription+xml" title="Scoop Installer" href="/opensearch.xml" />
 
     <meta name="color-scheme" content="light dark" />
+    <script>
+      (function () {
+        var p = localStorage.getItem('preferred-color-scheme');
+        var dark = p === null ? window.matchMedia('(prefers-color-scheme: dark)').matches : p === '2';
+        document.documentElement.classList.add(dark ? 'dark' : 'light');
+      })();
+    </script>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-nightshade.min.css"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="/assets/index-5cKdAWxo.js"></script>
+    <script type="module" crossorigin src="/assets/index-DX9gSGsI.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/react-vendor-CYmLC4H2.js">
     <link rel="modulepreload" crossorigin href="/assets/asciinema-vendor-kWILOJmN.js">
     <link rel="stylesheet" crossorigin href="/assets/asciinema-vendor-mXGf6gSX.css">
