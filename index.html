@@ -30,7 +30,7 @@
 
     <meta name="color-scheme" content="light dark" />
     <script>
-      (function () {
+      (() => {
         var p = localStorage.getItem('preferred-color-scheme');
         var dark = p === null ? window.matchMedia('(prefers-color-scheme: dark)').matches : p === '2';
         document.documentElement.classList.add(dark ? 'dark' : 'light');
