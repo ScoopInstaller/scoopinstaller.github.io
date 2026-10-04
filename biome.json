@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.7/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -17,7 +17,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "style": {
         "noNonNullAssertion": "warn",
         "useImportType": "warn"
@@ -34,13 +34,25 @@
         "noExplicitAny": "warn"
       },
       "a11y": {
-        "recommended": true,
+        "preset": "recommended",
         "useKeyWithClickEvents": "off",
         "useKeyWithMouseEvents": "off",
         "noStaticElementInteractions": "off"
       }
     }
   },
+  "overrides": [
+    {
+      "includes": ["public/**/*.svg"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noSvgWithoutTitle": "off"
+          }
+        }
+      }
+    }
+  ],
   "javascript": {
     "formatter": {
       "quoteStyle": "single",

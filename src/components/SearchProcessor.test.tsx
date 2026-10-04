@@ -334,8 +334,13 @@ describe('SearchProcessor', () => {
   });
 
   describe('abort controller', () => {
+    // Inspect the signals passed to fetch rather than spying on AbortController.prototype.abort,
+    // which is also called internally by msw and undici.
+    const getFetchSignals = (fetchSpy: { mock: { calls: Parameters<typeof fetch>[] } }) =>
+      fetchSpy.mock.calls.map(([, init]) => init?.signal);
+
     it('should not abort on initial render', async () => {
-      const abortSpy = vi.spyOn(AbortController.prototype, 'abort');
+      const fetchSpy = vi.spyOn(globalThis, 'fetch');
 
       render(<SearchProcessor {...defaultProps} query="git" />);
 
@@ -345,13 +350,15 @@ describe('SearchProcessor', () => {
 
       // No abort should be called on initial render - we only abort when
       // cancelling a previous request, and there is none on first render
-      expect(abortSpy).not.toHaveBeenCalled();
+      const signals = getFetchSignals(fetchSpy);
+      expect(signals).toHaveLength(1);
+      expect(signals[0]?.aborted).toBe(false);
 
-      abortSpy.mockRestore();
+      fetchSpy.mockRestore();
     });
 
     it('should abort previous request when query changes', async () => {
-      const abortSpy = vi.spyOn(AbortController.prototype, 'abort');
+      const fetchSpy = vi.spyOn(globalThis, 'fetch');
 
       const { rerender } = render(<SearchProcessor {...defaultProps} query="git" />);
 
@@ -360,21 +367,20 @@ describe('SearchProcessor', () => {
       });
 
       mockOnResultsChange.mockClear();
-      abortSpy.mockClear();
 
       // Change query - should abort previous request via cleanup function
       rerender(<SearchProcessor {...defaultProps} query="nodejs" />);
-
-      // Verify abort was called when query changed.
-      // Note: The call count includes both our cleanup abort and Node's internal
-      // fetch (undici) abort signal propagation. We only care that abort IS called.
-      expect(abortSpy).toHaveBeenCalled();
 
       await waitFor(() => {
         expect(mockOnResultsChange).toHaveBeenCalled();
       });
 
-      abortSpy.mockRestore();
+      const signals = getFetchSignals(fetchSpy);
+      expect(signals).toHaveLength(2);
+      expect(signals[0]?.aborted).toBe(true);
+      expect(signals[1]?.aborted).toBe(false);
+
+      fetchSpy.mockRestore();
     });
   });
 });

@@ -1,0 +1,3 @@
+peerDependencyRules:
+  allowedVersions:
+    '@vitest/mocker>msw': '3'
