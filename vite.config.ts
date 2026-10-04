@@ -31,18 +31,19 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            if (/\/(react)/.test(id)) {
-              return 'react-vendor';
-            }
-
-            if (/\/asciinema-player/.test(id)) {
-              return 'asciinema-vendor';
-            }
-          }
+        codeSplitting: {
+          groups: [
+            {
+              name: 'react-vendor',
+              test: /node_modules.*\/react/,
+            },
+            {
+              name: 'asciinema-vendor',
+              test: /node_modules.*\/asciinema-player/,
+            },
+          ],
         },
       },
     },

@@ -1,0 +1,9 @@
+allowBuilds:
+  esbuild: false
+
+overrides:
+  esbuild: '>=0.28.1'
+
+peerDependencyRules:
+  allowedVersions:
+    '@vitest/mocker>msw': '3'

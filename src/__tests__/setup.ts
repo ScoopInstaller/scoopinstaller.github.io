@@ -1,11 +1,11 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import './polyfills';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import { SEARCH_API_URL, server } from './server';
 
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
+  server.listen({ onUnhandledFrame: 'error' });
   vi.stubEnv('VITE_APP_AZURESEARCH_URL', SEARCH_API_URL);
   vi.stubEnv('VITE_APP_AZURESEARCH_KEY', 'test-api-key');
 });

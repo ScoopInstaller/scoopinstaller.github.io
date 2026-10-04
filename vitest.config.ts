@@ -1,5 +1,5 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
-import viteConfig from './vite.config';
+import viteConfig from './vite.config.ts';
 
 export default mergeConfig(
   viteConfig,
@@ -28,7 +28,6 @@ export default mergeConfig(
           'src/reportWebVitals.ts',
           'src/index.tsx',
         ],
-        all: true,
         thresholds: {
           lines: 80,
           functions: 80,
